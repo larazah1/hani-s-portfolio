@@ -397,6 +397,7 @@ export const publications: Publication[] = [
     year: 2016,
     type: "Journal Article",
     area: "Volcanology",
+    url: "https://www.researchgate.net/publication/284114516_Emplacement_conditions_of_the_1256_AD_Al-Madinah_lava_flow_field_in_Harrat_Rahat_Kingdom_of_Saudi_Arabia_-_Insights_from_surface_morphology_and_lava_flow_simulations",
   },
   {
     id: "pub-25",
@@ -407,6 +408,7 @@ export const publications: Publication[] = [
     type: "Journal Article",
     area: "Volcanology",
     doi: "10.1016/j.jseaes.2016.01.023",
+    url: "https://www.academia.edu/79641698/Imaging_of_magma_intrusions_beneath_Harrat_Al_Madinah_in_Saudi_Arabia",
   },
   {
     id: "pub-26",
@@ -418,6 +420,7 @@ export const publications: Publication[] = [
     type: "Journal Article",
     area: "Seismic Hazard Assessment",
     doi: "10.1007/s10950-016-9555-y",
+    url: "https://www.researchgate.net/publication/292342309_On_the_development_of_a_seismic_source_zonation_model_for_seismic_hazard_assessment_in_western_Saudi_Arabia",
   },
   {
     id: "pub-27",
@@ -428,6 +431,7 @@ export const publications: Publication[] = [
     year: 2016,
     type: "Journal Article",
     area: "Seismology",
+    url: "https://repository.kaust.edu.sa/items/cfed2960-8faa-4fe8-8ba8-f45da6bd62b6",
   },
   {
     id: "pub-28",
@@ -438,6 +442,7 @@ export const publications: Publication[] = [
     year: 2010,
     type: "Journal Article",
     area: "Geophysics",
+    url: "https://www.researchgate.net/publication/252322351_Broad_accommodation_of_rift-related_extension_recorded_by_dyke_intrusion_in_Saudi_Arabia",
   },
   {
     id: "pub-29",
@@ -447,6 +452,7 @@ export const publications: Publication[] = [
     year: 2007,
     type: "Journal Article",
     area: "Seismology",
+    url: "https://pubs.geoscienceworld.org/ssa/srl/article-abstract/78/4/439/143376/The-Saudi-National-Seismic-Network",
   },
   {
     id: "pub-30",
@@ -466,6 +472,7 @@ export const publications: Publication[] = [
     year: 2003,
     type: "Report",
     area: "Geophysics",
+    url: "https://www.academia.edu/88319699/Aeromagnetic_data_over_Harrat_Lunayyir_and_surrounding_areas_western_Saudi_Arabia",
   },
   {
     id: "pub-32",
@@ -476,6 +483,7 @@ export const publications: Publication[] = [
     year: 2001,
     type: "Report",
     area: "Mineral Exploration",
+    url: "https://www.researchgate.net/publication/238382833_The_Ar_Rayn_Terrane_Geotectonic_Implications_of_Unique_Metallogeny_in_the_Arabian_Shield",
   },
   {
     id: "pub-33",
