@@ -1,4 +1,4 @@
-import { ExternalLink, Eye, Newspaper, Video as VideoIcon, Mic } from "lucide-react";
+import { ExternalLink, Eye, Newspaper, Play, Video as VideoIcon, Mic } from "lucide-react";
 import type { MediaItem } from "@/content/site";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -11,10 +11,20 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 
-function youTubeEmbedUrl(url?: string) {
+function youTubeVideoId(url?: string) {
   if (!url) return null;
   const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]{6,})/);
-  return match ? `https://www.youtube.com/embed/${match[1]}` : null;
+  return match ? match[1] : null;
+}
+
+function youTubeEmbedUrl(url?: string) {
+  const id = youTubeVideoId(url);
+  return id ? `https://www.youtube.com/embed/${id}` : null;
+}
+
+function youTubeThumbnailUrl(url?: string) {
+  const id = youTubeVideoId(url);
+  return id ? `https://img.youtube.com/vi/${id}/hqdefault.jpg` : null;
 }
 
 function typeMeta(type: MediaItem["type"]) {
@@ -30,6 +40,26 @@ function typeMeta(type: MediaItem["type"]) {
 
 function MediaThumb({ item }: { item: MediaItem }) {
   const { icon: Icon } = typeMeta(item.type);
+  const thumbnail = youTubeThumbnailUrl(item.videoUrl);
+
+  if (thumbnail) {
+    return (
+      <div className="relative aspect-[16/9] overflow-hidden rounded-md border border-border bg-secondary/60">
+        <img
+          src={thumbnail}
+          alt=""
+          loading="lazy"
+          className="h-full w-full object-cover"
+        />
+        <div className="absolute inset-0 flex items-center justify-center bg-black/15 transition-colors group-hover:bg-black/25">
+          <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white/90 shadow-soft">
+            <Play className="h-4 w-4 translate-x-[1px] text-surface-deep" fill="currentColor" />
+          </span>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex aspect-[16/9] items-center justify-center rounded-md border border-border bg-secondary/60">
       <Icon className="h-8 w-8 text-muted-foreground/60" strokeWidth={1.25} />
