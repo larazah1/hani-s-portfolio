@@ -204,6 +204,7 @@ export const publications: Publication[] = [
     year: 2019,
     type: "Journal Article",
     area: "Seismology",
+    url: "https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2018JB017131",
   },
   {
     id: "pub-7",
@@ -213,6 +214,7 @@ export const publications: Publication[] = [
     year: 2019,
     type: "Journal Article",
     area: "Volcanology",
+    url: "https://academic.oup.com/gji/article/219/3/1532/5551483",
   },
   {
     id: "pub-8",
@@ -222,6 +224,7 @@ export const publications: Publication[] = [
     year: 2019,
     type: "Journal Article",
     area: "Geophysics",
+    url: "https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2019JB017903",
   },
   {
     id: "pub-9",
@@ -231,6 +234,7 @@ export const publications: Publication[] = [
     year: 2019,
     type: "Journal Article",
     area: "Seismic Hazard Assessment",
+    url: "https://ouci.dntb.gov.ua/en/works/7nEmP8m9/",
     featured: true,
   },
   {
@@ -242,6 +246,7 @@ export const publications: Publication[] = [
     year: 2018,
     type: "Journal Article",
     area: "Volcanology",
+    url: "https://www.sciencedirect.com/science/article/abs/pii/S0040195118303834",
     featured: true,
   },
   {
@@ -253,6 +258,7 @@ export const publications: Publication[] = [
     year: 2018,
     type: "Journal Article",
     area: "Volcanology",
+    url: "https://pubs.usgs.gov/publication/70201168",
     featured: true,
   },
   {
@@ -264,6 +270,7 @@ export const publications: Publication[] = [
     year: 2018,
     type: "Journal Article",
     area: "Seismology",
+    url: "https://repository.kaust.edu.sa/items/29dcafeb-16da-41a7-bbba-273b80dbf021",
   },
   {
     id: "pub-13",
@@ -274,6 +281,7 @@ export const publications: Publication[] = [
     year: 2018,
     type: "Journal Article",
     area: "Seismic Hazard Assessment",
+    url: "https://www.semanticscholar.org/paper/Generation-of-stochastic-earthquake-ground-motion-a-Sokolov-Zahran/aab2a35fbf50db1d4a88efee371d865d5d2392ba",
   },
   {
     id: "pub-14",
@@ -283,6 +291,7 @@ export const publications: Publication[] = [
     year: 2018,
     type: "Scientific Book",
     area: "Seismic Hazard Assessment",
+    url: "https://my.lap-publishing.com/catalog/details/store/tr/book/978-3-659-43709-0/integrated-studies-for-assessment-of-seismic-hazard-in-harrat-lunayyir",
   },
   {
     id: "pub-15",
@@ -293,6 +302,7 @@ export const publications: Publication[] = [
     year: 2018,
     type: "Journal Article",
     area: "Seismic Hazard Assessment",
+    url: "https://www.researchgate.net/publication/323699564_Seismic_microzonation_of_Ubhur_district_Jeddah_Saudi_Arabia_using_HV_spectral_ratio",
   },
   {
     id: "pub-16",
@@ -303,6 +313,7 @@ export const publications: Publication[] = [
     year: 2018,
     type: "Journal Article",
     area: "Volcanology",
+    url: "https://pubs.usgs.gov/publication/70198364",
   },
   {
     id: "pub-17",
@@ -313,6 +324,7 @@ export const publications: Publication[] = [
     year: 2018,
     type: "Journal Article",
     area: "Seismology",
+    url: "https://www.researchgate.net/publication/326093068_Two-stage_Red_Sea_rifting_inferred_from_mantle_earthquakes_in_Neoproterozoic_lithosphere",
   },
   {
     id: "pub-18",
@@ -323,6 +335,7 @@ export const publications: Publication[] = [
     year: 2018,
     type: "Journal Article",
     area: "Volcanology",
+    url: "https://pubs.usgs.gov/publication/70196286",
   },
   {
     id: "pub-19",
@@ -332,6 +345,7 @@ export const publications: Publication[] = [
     year: 2017,
     type: "Journal Article",
     area: "Seismic Hazard Assessment",
+    url: "https://www.sciencedirect.com/science/article/abs/pii/S0267726117301975",
   },
   {
     id: "pub-20",
@@ -341,6 +355,7 @@ export const publications: Publication[] = [
     year: 2017,
     type: "Journal Article",
     area: "Geophysics",
+    url: "https://www.researchgate.net/publication/313022835_Aeromagnetic_data_over_Harrat_Lunayyir_and_surrounding_areas_western_Saudi_Arabia",
   },
   {
     id: "pub-21",
@@ -351,6 +366,7 @@ export const publications: Publication[] = [
     year: 2017,
     type: "Journal Article",
     area: "Geophysics",
+    url: "https://link.springer.com/article/10.1007/s12594-017-0626-7",
   },
   {
     id: "pub-22",
@@ -361,6 +377,7 @@ export const publications: Publication[] = [
     year: 2017,
     type: "Journal Article",
     area: "Seismology",
+    url: "https://www.researchgate.net/publication/318654917_Upper_mantle_velocity_structure_beneath_the_Arabian_Shield_from_Rayleigh_surface_wave_tomography_and_its_implications",
   },
   {
     id: "pub-23",
