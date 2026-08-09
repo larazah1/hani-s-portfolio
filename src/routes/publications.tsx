@@ -1,11 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { Section, EmptyNote } from "@/components/site/Section";
-import { publications } from "@/content/site";
+import { PublicationCard } from "@/components/site/PublicationCard";
+import { publications, type Publication } from "@/content/site";
 
 const title = "Publications — Dr. Hani Mahmoud Zahran";
 const description =
-  "Peer-reviewed articles, scientific books, conference papers and reports authored by Dr. Hani Mahmoud Zahran.";
+  "Research, studies and scientific contributions spanning geophysics, seismology, seismic hazards and geological sciences by Dr. Hani Mahmoud Zahran.";
 
 export const Route = createFileRoute("/publications")({
   head: () => ({
@@ -21,12 +22,31 @@ export const Route = createFileRoute("/publications")({
   component: PublicationsPage,
 });
 
+const selectClass =
+  "rounded-sm border border-input bg-card px-4 py-2.5 text-sm outline-none focus:border-accent";
+
+const GROUPS: { heading: string; types: Publication["type"][] }[] = [
+  { heading: "Journal Articles", types: ["Journal Article"] },
+  { heading: "Scientific Books", types: ["Scientific Book"] },
+  { heading: "Reports & Other", types: ["Report", "Conference Paper", "Other"] },
+];
+
 function PublicationsPage() {
   const [query, setQuery] = useState("");
+  const [year, setYear] = useState("All");
   const [type, setType] = useState("All");
+  const [area, setArea] = useState("All");
 
+  const years = useMemo(
+    () => ["All", ...Array.from(new Set(publications.map((p) => p.year))).sort((a, b) => b - a)],
+    [],
+  );
   const types = useMemo(
     () => ["All", ...Array.from(new Set(publications.map((p) => p.type)))],
+    [],
+  );
+  const areas = useMemo(
+    () => ["All", ...Array.from(new Set(publications.map((p) => p.area))).sort()],
     [],
   );
 
@@ -34,52 +54,70 @@ function PublicationsPage() {
     const matchesQuery = `${p.title} ${p.authors} ${p.journal}`
       .toLowerCase()
       .includes(query.toLowerCase());
-    return matchesQuery && (type === "All" || p.type === type);
+    const matchesYear = year === "All" || p.year === Number(year);
+    const matchesType = type === "All" || p.type === type;
+    const matchesArea = area === "All" || p.area === area;
+    return matchesQuery && matchesYear && matchesType && matchesArea;
   });
 
   return (
     <Section eyebrow="Research output" title="Publications">
-      <div className="mb-8 grid gap-3 sm:grid-cols-[minmax(0,1fr)_auto]">
+      <p className="-mt-4 mb-8 max-w-2xl text-sm text-muted-foreground">
+        Research, studies, and scientific contributions spanning geophysics, seismology, seismic
+        hazards, and geological sciences.
+      </p>
+
+      <div className="mb-10 grid gap-3 sm:grid-cols-[minmax(0,1fr)_auto_auto_auto]">
         <input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search by title, author or journal"
-          className="w-full rounded-sm border border-input bg-card px-4 py-2.5 text-sm outline-none focus:border-accent"
+          placeholder="Search publications"
+          className={selectClass}
         />
-        <select
-          value={type}
-          onChange={(e) => setType(e.target.value)}
-          className="rounded-sm border border-input bg-card px-4 py-2.5 text-sm outline-none focus:border-accent"
-        >
+        <select value={year} onChange={(e) => setYear(e.target.value)} className={selectClass}>
+          {years.map((y) => (
+            <option key={y} value={y}>
+              {y === "All" ? "All years" : y}
+            </option>
+          ))}
+        </select>
+        <select value={type} onChange={(e) => setType(e.target.value)} className={selectClass}>
           {types.map((t) => (
-            <option key={t} value={t}>{t}</option>
+            <option key={t} value={t}>
+              {t === "All" ? "All types" : t}
+            </option>
+          ))}
+        </select>
+        <select value={area} onChange={(e) => setArea(e.target.value)} className={selectClass}>
+          {areas.map((a) => (
+            <option key={a} value={a}>
+              {a === "All" ? "All areas" : a}
+            </option>
           ))}
         </select>
       </div>
 
       {filtered.length === 0 ? (
-        <EmptyNote>No publications to show yet.</EmptyNote>
+        <EmptyNote>No publications match your filters.</EmptyNote>
       ) : (
-        <ul className="divide-y divide-border rounded-md border border-border bg-card">
-          {filtered.map((p) => (
-            <li key={p.id} className="px-6 py-5">
-              <p className="eyebrow">{p.year} · {p.type} · {p.area}</p>
-              <h3 className="mt-1.5 text-lg leading-snug">{p.title}</h3>
-              <p className="mt-1 text-sm text-muted-foreground">{p.authors}</p>
-              <p className="text-sm text-muted-foreground">{p.journal}</p>
-              {(p.url || p.doi) && (
-                <a
-                  href={p.url ?? `https://doi.org/${p.doi}`}
-                  target="_blank"
-                  rel="noreferrer noopener"
-                  className="mt-2 inline-block text-sm underline underline-offset-4"
-                >
-                  View publication
-                </a>
-              )}
-            </li>
-          ))}
-        </ul>
+        <div className="space-y-14">
+          {GROUPS.map((group) => {
+            const items = filtered.filter((p) => group.types.includes(p.type));
+            if (items.length === 0) return null;
+            return (
+              <div key={group.heading}>
+                <h3 className="mb-5 font-[family-name:var(--font-display)] text-2xl font-bold">
+                  {group.heading}
+                </h3>
+                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                  {items.map((p) => (
+                    <PublicationCard key={p.id} publication={p} />
+                  ))}
+                </div>
+              </div>
+            );
+          })}
+        </div>
       )}
     </Section>
   );

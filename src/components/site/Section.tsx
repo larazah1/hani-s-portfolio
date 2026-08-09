@@ -12,11 +12,11 @@ export function Section({
   className?: string;
 }) {
   return (
-    <section className={`mx-auto max-w-6xl px-5 py-16 md:py-20 ${className}`}>
+    <section className={`mx-auto max-w-6xl px-5 py-10 md:py-14 ${className}`}>
       {(eyebrow || title) && (
         <header className="mb-8 max-w-2xl">
           {eyebrow && <p className="eyebrow">{eyebrow}</p>}
-          {title && <h2 className="mt-3 text-3xl md:text-4xl">{title}</h2>}
+          {title && <h2 className="mt-3 text-3xl font-bold md:text-4xl">{title}</h2>}
         </header>
       )}
       {children}

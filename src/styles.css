@@ -168,3 +168,9 @@
   text-transform: uppercase;
   color: var(--muted-foreground);
 }
+
+/* Restrained topographic-contour motif for dark surfaces. */
+@utility bg-contour-pattern {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='160' viewBox='0 0 240 160'%3E%3Cg fill='none' stroke='%23ffffff' stroke-opacity='0.05' stroke-width='1'%3E%3Cpath d='M-20 30 Q 40 5 100 30 T 220 30 T 340 30'/%3E%3Cpath d='M-20 70 Q 40 45 100 70 T 220 70 T 340 70'/%3E%3Cpath d='M-20 110 Q 40 85 100 110 T 220 110 T 340 110'/%3E%3Cpath d='M-20 150 Q 40 125 100 150 T 220 150 T 340 150'/%3E%3C/g%3E%3C/svg%3E");
+  background-repeat: repeat;
+}

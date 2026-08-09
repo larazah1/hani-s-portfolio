@@ -57,12 +57,16 @@ function AboutPage() {
         {education.length === 0 ? (
           <EmptyNote>Education entries will appear here once added.</EmptyNote>
         ) : (
-          <div className="grid gap-4 md:grid-cols-2">
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {education.map((e) => (
               <article key={`${e.degree}-${e.year}`} className="rounded-md border border-border bg-card p-6">
                 <p className="eyebrow">{e.year}</p>
-                <h3 className="mt-2 text-lg">{e.degree} · {e.field}</h3>
-                <p className="text-sm text-muted-foreground">{e.university}, {e.location}</p>
+                <h3 className="mt-2 text-lg font-semibold">
+                  {e.degree} · {e.field}
+                </h3>
+                <p className="text-sm text-muted-foreground">
+                  {e.university}, {e.location}
+                </p>
                 {e.description && <p className="mt-2 text-sm text-muted-foreground">{e.description}</p>}
               </article>
             ))}
@@ -78,8 +82,10 @@ function AboutPage() {
             {career.map((c) => (
               <li key={`${c.position}-${c.start}`} className="relative pb-10 pl-8">
                 <span className="absolute -left-[5px] top-2 h-2.5 w-2.5 rounded-full bg-accent" />
-                <p className="eyebrow">{c.start} — {c.end}</p>
-                <h3 className="mt-1 text-xl">{c.position}</h3>
+                <p className="eyebrow">
+                  {c.start} — {c.end}
+                </p>
+                <h3 className="mt-1 text-xl font-semibold">{c.position}</h3>
                 <p className="text-sm text-muted-foreground">{c.organization}</p>
               </li>
             ))}
@@ -97,9 +103,9 @@ function AboutPage() {
         ) : (
           <ul className="divide-y divide-border rounded-md border border-border bg-card">
             {memberships.map((m) => (
-              <li key={m.organization} className="px-6 py-4">
-                <p className="text-base">{m.organization}</p>
-                <p className="text-sm text-muted-foreground">{m.position} · {m.period}</p>
+              <li key={m.title} className="px-6 py-4">
+                <p className="text-base font-semibold">{m.title}</p>
+                {m.period && <p className="text-sm text-muted-foreground">{m.period}</p>}
               </li>
             ))}
           </ul>
