@@ -59,7 +59,10 @@ function AboutPage() {
         ) : (
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {education.map((e) => (
-              <article key={`${e.degree}-${e.year}`} className="rounded-md border border-border bg-card p-6">
+              <article
+                key={`${e.degree}-${e.year}`}
+                className="rounded-md border border-border bg-card p-6"
+              >
                 <p className="eyebrow">{e.year}</p>
                 <h3 className="mt-2 text-lg font-semibold">
                   {e.degree} · {e.field}
@@ -67,7 +70,9 @@ function AboutPage() {
                 <p className="text-sm text-muted-foreground">
                   {e.university}, {e.location}
                 </p>
-                {e.description && <p className="mt-2 text-sm text-muted-foreground">{e.description}</p>}
+                {e.description && (
+                  <p className="mt-2 text-sm text-muted-foreground">{e.description}</p>
+                )}
               </article>
             ))}
           </div>
@@ -94,7 +99,10 @@ function AboutPage() {
       </Section>
 
       <Section eyebrow="Research" title="Research specialties">
-        <List items={researchSpecialties} empty="Research specialties will appear here once added." />
+        <List
+          items={researchSpecialties}
+          empty="Research specialties will appear here once added."
+        />
       </Section>
 
       <Section eyebrow="Affiliations" title="Memberships & committees">

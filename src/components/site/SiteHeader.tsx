@@ -42,11 +42,17 @@ export function SiteHeader() {
         </nav>
 
         <div className="hidden shrink-0 items-center gap-4 border-l border-border pl-4 text-sm text-muted-foreground lg:flex">
-          <a href={`tel:${profile.phone.replace(/\s+/g, "")}`} className="flex items-center gap-1.5 transition-colors hover:text-foreground">
+          <a
+            href={`tel:${profile.phone.replace(/\s+/g, "")}`}
+            className="flex items-center gap-1.5 transition-colors hover:text-foreground"
+          >
             <Phone className="h-3.5 w-3.5" />
             {profile.phone}
           </a>
-          <a href={`mailto:${profile.email}`} className="flex items-center gap-1.5 transition-colors hover:text-foreground">
+          <a
+            href={`mailto:${profile.email}`}
+            className="flex items-center gap-1.5 transition-colors hover:text-foreground"
+          >
             <Mail className="h-3.5 w-3.5" />
             {profile.email}
           </a>
@@ -62,7 +68,10 @@ export function SiteHeader() {
               <Menu className="h-4 w-4" />
             </button>
           </SheetTrigger>
-          <SheetContent side="right" className="flex w-[85vw] max-w-sm flex-col gap-0 p-0 sm:max-w-sm">
+          <SheetContent
+            side="right"
+            className="flex w-[85vw] max-w-sm flex-col gap-0 p-0 sm:max-w-sm"
+          >
             <SheetTitle className="border-b border-border px-6 py-5 font-[family-name:var(--font-display)] text-base font-semibold">
               {profile.name}
             </SheetTitle>
@@ -73,7 +82,10 @@ export function SiteHeader() {
                   to={item.to}
                   onClick={() => setOpen(false)}
                   className="border-b border-border/60 px-6 py-4 text-base text-muted-foreground transition-colors hover:bg-secondary/60 hover:text-foreground"
-                  activeProps={{ className: "border-b border-border/60 px-6 py-4 text-base text-foreground bg-secondary/60" }}
+                  activeProps={{
+                    className:
+                      "border-b border-border/60 px-6 py-4 text-base text-foreground bg-secondary/60",
+                  }}
                   activeOptions={{ exact: item.to === "/" }}
                 >
                   {item.label}
@@ -81,7 +93,10 @@ export function SiteHeader() {
               ))}
             </nav>
             <div className="space-y-3 border-t border-border px-6 py-5 text-sm text-muted-foreground">
-              <a href={`tel:${profile.phone.replace(/\s+/g, "")}`} className="flex items-center gap-2">
+              <a
+                href={`tel:${profile.phone.replace(/\s+/g, "")}`}
+                className="flex items-center gap-2"
+              >
                 <Phone className="h-4 w-4" />
                 {profile.phone}
               </a>

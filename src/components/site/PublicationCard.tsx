@@ -15,7 +15,13 @@ function publicationHref(p: Publication) {
   return p.url ?? (p.doi ? `https://doi.org/${p.doi}` : undefined);
 }
 
-function GoToPublicationButton({ publication, className }: { publication: Publication; className?: string }) {
+function GoToPublicationButton({
+  publication,
+  className,
+}: {
+  publication: Publication;
+  className?: string;
+}) {
   const href = publicationHref(publication);
   if (!href) {
     return (

@@ -214,8 +214,8 @@ function Index() {
 
       <Section eyebrow="Selected Research" title="My Publications">
         <p className="-mt-2 mb-8 max-w-2xl text-sm text-muted-foreground">
-          Selected research and scientific contributions in geophysics, seismology, seismic hazards, and
-          the geology of Saudi Arabia.
+          Selected research and scientific contributions in geophysics, seismology, seismic hazards,
+          and the geology of Saudi Arabia.
         </p>
         {featuredPublications.length === 0 ? (
           <EmptyNote>Featured publications will appear here once added.</EmptyNote>

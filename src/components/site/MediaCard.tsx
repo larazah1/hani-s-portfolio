@@ -45,12 +45,7 @@ function MediaThumb({ item }: { item: MediaItem }) {
   if (thumbnail) {
     return (
       <div className="relative aspect-[16/9] overflow-hidden rounded-md border border-border bg-secondary/60">
-        <img
-          src={thumbnail}
-          alt=""
-          loading="lazy"
-          className="h-full w-full object-cover"
-        />
+        <img src={thumbnail} alt="" loading="lazy" className="h-full w-full object-cover" />
         <div className="absolute inset-0 flex items-center justify-center bg-black/15 transition-colors group-hover:bg-black/25">
           <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white/90 shadow-soft">
             <Play className="h-4 w-4 translate-x-[1px] text-surface-deep" fill="currentColor" />
@@ -73,7 +68,7 @@ export function MediaCard({ item }: { item: MediaItem }) {
   const embed = youTubeEmbedUrl(item.videoUrl);
 
   return (
-    <article className="flex h-full flex-col overflow-hidden rounded-lg border border-border bg-card shadow-soft transition-all hover:-translate-y-0.5 hover:border-accent/50 hover:shadow-md">
+    <article className="group flex h-full flex-col overflow-hidden rounded-lg border border-border bg-card shadow-soft transition-all hover:-translate-y-0.5 hover:border-accent/50 hover:shadow-md">
       <div className="p-4 pb-0">
         <MediaThumb item={item} />
       </div>

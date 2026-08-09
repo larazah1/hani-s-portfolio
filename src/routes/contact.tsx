@@ -161,7 +161,10 @@ function ContactPage() {
           <aside className="space-y-4 text-sm">
             <div>
               <p className="eyebrow">Email</p>
-              <a href={`mailto:${profile.email}`} className="mt-1 flex items-center gap-2 hover:underline">
+              <a
+                href={`mailto:${profile.email}`}
+                className="mt-1 flex items-center gap-2 hover:underline"
+              >
                 <Mail className="h-4 w-4 shrink-0" />
                 {profile.email}
               </a>

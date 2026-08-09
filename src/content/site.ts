@@ -165,7 +165,8 @@ export const publications: Publication[] = [
     year: 2023,
     type: "Journal Article",
     area: "Seismology",
-    summary: "An investigation of teleseismic P-wave attenuation structure beneath the Arabian Plate.",
+    summary:
+      "An investigation of teleseismic P-wave attenuation structure beneath the Arabian Plate.",
     featured: true,
   },
   {
@@ -285,7 +286,8 @@ export const publications: Publication[] = [
   },
   {
     id: "pub-15",
-    title: "Seismic microzonation of Ubhur district, Jeddah, Saudi Arabia, using H/V spectral ratio",
+    title:
+      "Seismic microzonation of Ubhur district, Jeddah, Saudi Arabia, using H/V spectral ratio",
     authors: "Zahran H.M. et al.",
     journal: "Arabian Journal of Geosciences",
     year: 2018,
@@ -304,7 +306,8 @@ export const publications: Publication[] = [
   },
   {
     id: "pub-17",
-    title: "Two-stage Red Sea rifting inferred from mantle earthquakes in Neoproterozoic lithosphere",
+    title:
+      "Two-stage Red Sea rifting inferred from mantle earthquakes in Neoproterozoic lithosphere",
     authors: "Zahran H.M. et al.",
     journal: "Earth and Planetary Science Letters",
     year: 2018,
@@ -313,7 +316,8 @@ export const publications: Publication[] = [
   },
   {
     id: "pub-18",
-    title: "Volcanic history of the northernmost part of the Harrat Rahat volcanic field, Saudi Arabia",
+    title:
+      "Volcanic history of the northernmost part of the Harrat Rahat volcanic field, Saudi Arabia",
     authors: "Zahran H.M. et al.",
     journal: "Geosphere",
     year: 2018,
@@ -350,7 +354,8 @@ export const publications: Publication[] = [
   },
   {
     id: "pub-22",
-    title: "Upper mantle velocity structure beneath the Arabian shield from Rayleigh surface wave tomography and its implications",
+    title:
+      "Upper mantle velocity structure beneath the Arabian shield from Rayleigh surface wave tomography and its implications",
     authors: "Zahran H.M. et al.",
     journal: "Journal of Geophysical Research: Solid Earth",
     year: 2017,
@@ -388,7 +393,8 @@ export const publications: Publication[] = [
   },
   {
     id: "pub-26",
-    title: "On the development of a seismic source zonation model for seismic hazard assessment in western Saudi Arabia",
+    title:
+      "On the development of a seismic source zonation model for seismic hazard assessment in western Saudi Arabia",
     authors: "Zahran H.M., Sokolov V., Roobol M.J., Stewart I.C.F., El-Hadidy S.Y., El-Hadidy M.",
     journal: "Journal of Seismology",
     year: 2016,
@@ -398,7 +404,8 @@ export const publications: Publication[] = [
   },
   {
     id: "pub-27",
-    title: "The lithospheric shear-wave velocity structure of Saudi Arabia: Young volcanism in an old shield",
+    title:
+      "The lithospheric shear-wave velocity structure of Saudi Arabia: Young volcanism in an old shield",
     authors: "Zahran H.M. et al.",
     journal: "Tectonophysics",
     year: 2016,
@@ -407,7 +414,8 @@ export const publications: Publication[] = [
   },
   {
     id: "pub-28",
-    title: "Broad accommodation of rift-related extension recorded by dyke intrusion in Saudi Arabia",
+    title:
+      "Broad accommodation of rift-related extension recorded by dyke intrusion in Saudi Arabia",
     authors: "Zahran H.M. et al.",
     journal: "Nature Geoscience",
     year: 2010,
@@ -425,7 +433,8 @@ export const publications: Publication[] = [
   },
   {
     id: "pub-30",
-    title: "Gamma-Ray Exposure Maps From Airborne Spectrometric Data (Open-File Report SGS-OF-2006-9)",
+    title:
+      "Gamma-Ray Exposure Maps From Airborne Spectrometric Data (Open-File Report SGS-OF-2006-9)",
     authors: "Zahran H.M., Stewart I.C.F.",
     journal: "Saudi Geological Survey",
     year: 2006,
@@ -443,7 +452,8 @@ export const publications: Publication[] = [
   },
   {
     id: "pub-32",
-    title: "The Ar Rayn Terrane: Geotectonic Implications of Unique Metallogeny in the Arabian Shield (Report SGS-OF-2002-8)",
+    title:
+      "The Ar Rayn Terrane: Geotectonic Implications of Unique Metallogeny in the Arabian Shield (Report SGS-OF-2002-8)",
     authors: "Zahran H.M. et al.",
     journal: "Saudi Geological Survey",
     year: 2001,
@@ -452,7 +462,8 @@ export const publications: Publication[] = [
   },
   {
     id: "pub-33",
-    title: "Detail mineral exploration studies in Shatban prospect, Western Saudi Arabia (Master Thesis)",
+    title:
+      "Detail mineral exploration studies in Shatban prospect, Western Saudi Arabia (Master Thesis)",
     authors: "Zahran H.M., Sadek H.S.",
     journal: "King Abdulaziz University",
     year: 1999,
@@ -542,7 +553,7 @@ export const media: MediaItem[] = [
   },
   {
     id: "media-9",
-    title: "\"المساحة الجيولوجية\": الزلزال الذي حدث وسط البحر الأحمر ضعيف جدا ولا تأثير له",
+    title: '"المساحة الجيولوجية": الزلزال الذي حدث وسط البحر الأحمر ضعيف جدا ولا تأثير له',
     source: "Al-Madina",
     date: "Jul 28, 2024",
     type: "News Feature",
@@ -582,7 +593,7 @@ export const media: MediaItem[] = [
   },
   {
     id: "media-14",
-    title: "\"المساحة الجيولوجية\": دول الخليج العربي بعيدة عن نشاط الزلازل المدمرة",
+    title: '"المساحة الجيولوجية": دول الخليج العربي بعيدة عن نشاط الزلازل المدمرة',
     source: "Almnatiq",
     date: "Mar 6, 2023",
     type: "News Feature",
@@ -599,7 +610,7 @@ export const media: MediaItem[] = [
   },
   {
     id: "media-16",
-    title: "\"زهران\" يكشف سبب الهزات الأرضية بأملج ويتوقع استمرارها لفترة بلا خطورة",
+    title: '"زهران" يكشف سبب الهزات الأرضية بأملج ويتوقع استمرارها لفترة بلا خطورة',
     source: "Sabq",
     date: "Nov 12, 2018",
     type: "News Feature",
@@ -631,7 +642,7 @@ export const media: MediaItem[] = [
   },
   {
     id: "media-20",
-    title: "زلزال ثان يضرب \"النماص\" السعودية",
+    title: 'زلزال ثان يضرب "النماص" السعودية',
     source: "Elaph",
     date: "Nov 4, 2017",
     type: "News Feature",
@@ -639,7 +650,7 @@ export const media: MediaItem[] = [
   },
   {
     id: "media-21",
-    title: "مدير عام المركز الوطني للزلازل: اتهام الدكتور عشقي \"مرفوض\"",
+    title: 'مدير عام المركز الوطني للزلازل: اتهام الدكتور عشقي "مرفوض"',
     source: "Okaz",
     date: "Oct 18, 2017",
     type: "News Feature",
@@ -647,7 +658,7 @@ export const media: MediaItem[] = [
   },
   {
     id: "media-22",
-    title: "\"زهران\" ينفي شائعة حدوث زلزال ضخم بالمنطقة",
+    title: '"زهران" ينفي شائعة حدوث زلزال ضخم بالمنطقة',
     source: "Slaati",
     date: "2017",
     type: "News Feature",
@@ -655,7 +666,7 @@ export const media: MediaItem[] = [
   },
   {
     id: "media-23",
-    title: "\"زهران\": دراسة تتوقع تعرض \"حرة الشاقة\" لهزات أرضية",
+    title: '"زهران": دراسة تتوقع تعرض "حرة الشاقة" لهزات أرضية',
     source: "mz-mz",
     date: "2017",
     type: "News Feature",
@@ -680,7 +691,7 @@ export const media: MediaItem[] = [
   },
   {
     id: "media-26",
-    title: "62 زلزالاً بـ \"جازان\" تُثير المواطنين",
+    title: '62 زلزالاً بـ "جازان" تُثير المواطنين',
     source: "Elaph",
     date: "Aug 5, 2014",
     type: "News Feature",
@@ -736,7 +747,7 @@ export const media: MediaItem[] = [
   },
   {
     id: "media-33",
-    title: "التفاف كامل بين المسؤولين والمواطنين لاحتواء \"هزات العيص\"",
+    title: 'التفاف كامل بين المسؤولين والمواطنين لاحتواء "هزات العيص"',
     source: "Al Madina",
     date: "Aug 14, 2010",
     type: "News Feature",
@@ -768,7 +779,7 @@ export const media: MediaItem[] = [
   },
   {
     id: "media-37",
-    title: "2300 زلزال سنويًّا بالشرقية السعودية نتيجة \"سحب\" البترول",
+    title: '2300 زلزال سنويًّا بالشرقية السعودية نتيجة "سحب" البترول',
     source: "Al Fajer TV",
     date: "n.d.",
     type: "News Feature",
@@ -826,7 +837,8 @@ export const education: EducationEntry[] = [
     university: "King Abdulaziz University",
     location: "Jeddah, Saudi Arabia",
     year: "1999",
-    description: "Thesis: Detail mineral exploration studies in Shatban prospect, Western Saudi Arabia.",
+    description:
+      "Thesis: Detail mineral exploration studies in Shatban prospect, Western Saudi Arabia.",
   },
   {
     degree: "BSc",
@@ -886,5 +898,5 @@ export const biography: string[] = [
   "Dr. Hani Mahmoud Zahran is a geophysicist and seismologist with more than three decades of experience across governmental and research sectors. He currently serves as Technical Advisor for the Vice President of Geological Programs at the Saudi Geological Survey.",
   "His career at the Saudi Geological Survey spans more than two decades, including roles as Manager of the Disaster and Crisis Center, Consultant for Earthquakes and Volcanoes, and General Manager of the National Center for Earthquake and Volcanoes (2005–2019), where he led the Kingdom's national seismic and volcanic monitoring programs.",
   "He began his career as a Geophysicist with the French Geological Survey (BRGM) from 1993 to 1999, and has served as a Research Collaborator with the United States Geological Survey (USGS) since 2015. He holds a PhD in Geophysics and Seismology from King Abdulaziz University.",
-  "\"Understanding the forces that shape our planet not only prepares us for today's challenges but also empowers safeguarding the future.\"",
+  '"Understanding the forces that shape our planet not only prepares us for today\'s challenges but also empowers safeguarding the future."',
 ];

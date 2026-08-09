@@ -41,10 +41,7 @@ function PublicationsPage() {
     () => ["All", ...Array.from(new Set(publications.map((p) => p.year))).sort((a, b) => b - a)],
     [],
   );
-  const types = useMemo(
-    () => ["All", ...Array.from(new Set(publications.map((p) => p.type)))],
-    [],
-  );
+  const types = useMemo(() => ["All", ...Array.from(new Set(publications.map((p) => p.type)))], []);
   const areas = useMemo(
     () => ["All", ...Array.from(new Set(publications.map((p) => p.area))).sort()],
     [],

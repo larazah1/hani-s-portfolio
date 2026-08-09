@@ -15,11 +15,21 @@ export function SiteFooter() {
         <div>
           <p className="eyebrow !text-current opacity-60">Quick Links</p>
           <ul className="mt-4 space-y-2 text-sm opacity-80">
-            <li><Link to="/">Home</Link></li>
-            <li><Link to="/about">About</Link></li>
-            <li><Link to="/publications">Publications</Link></li>
-            <li><Link to="/interviews">Interviews &amp; Articles</Link></li>
-            <li><Link to="/contact">Contact</Link></li>
+            <li>
+              <Link to="/">Home</Link>
+            </li>
+            <li>
+              <Link to="/about">About</Link>
+            </li>
+            <li>
+              <Link to="/publications">Publications</Link>
+            </li>
+            <li>
+              <Link to="/interviews">Interviews &amp; Articles</Link>
+            </li>
+            <li>
+              <Link to="/contact">Contact</Link>
+            </li>
           </ul>
         </div>
 
@@ -34,7 +44,9 @@ export function SiteFooter() {
             <ul className="mt-4 flex flex-wrap gap-4 text-sm opacity-80">
               {socialLinks.map((s) => (
                 <li key={s.url}>
-                  <a href={s.url} target="_blank" rel="noreferrer noopener">{s.label}</a>
+                  <a href={s.url} target="_blank" rel="noreferrer noopener">
+                    {s.label}
+                  </a>
                 </li>
               ))}
             </ul>
