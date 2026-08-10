@@ -76,7 +76,7 @@ const expertiseIcons: Record<string, LucideIcon> = {
 
 function Index() {
   const featuredPublications = publications.filter((p) => p.featured);
-  const featuredMedia = media.filter((m) => m.featured).slice(0, 4);
+  const featuredMedia = media.filter((m) => m.featured);
   const featuredRecs = recommendations.filter((r) => r.featured).slice(0, 3);
   const currentRole = career[0];
 
@@ -248,11 +248,19 @@ function Index() {
         {featuredMedia.length === 0 ? (
           <EmptyNote>Featured interviews and articles will appear here once added.</EmptyNote>
         ) : (
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {featuredMedia.map((m) => (
-              <MediaCard key={m.id} item={m} />
-            ))}
-          </div>
+          <Carousel opts={{ align: "start" }} className="w-full">
+            <CarouselContent>
+              {featuredMedia.map((m) => (
+                <CarouselItem key={m.id} className="sm:basis-1/2 lg:basis-1/3">
+                  <MediaCard item={m} />
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <div className="mt-6 flex justify-end gap-2">
+              <CarouselPrevious className="static h-9 w-9 translate-y-0" />
+              <CarouselNext className="static h-9 w-9 translate-y-0" />
+            </div>
+          </Carousel>
         )}
         <div className="mt-8">
           <Button asChild variant="outline">

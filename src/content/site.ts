@@ -512,6 +512,7 @@ export type MediaItem = {
   description?: string;
   videoUrl?: string;
   articleUrl?: string;
+  thumbnail?: string;
   featured?: boolean;
 };
 export const media: MediaItem[] = [
@@ -581,6 +582,7 @@ export const media: MediaItem[] = [
     date: "Oct 24, 2024",
     type: "News Feature",
     articleUrl: "https://garbnews.net/news/s/81392",
+    thumbnail: "https://garbnews.net/contents/newsm/81392_0.jpg",
     featured: true,
   },
   {
@@ -590,6 +592,8 @@ export const media: MediaItem[] = [
     date: "Jul 28, 2024",
     type: "News Feature",
     articleUrl: "https://www.al-madina.com/article/897748/",
+    thumbnail:
+      "https://cdnx.premiumread.com/?url=https://www.al-madina.com/uploads/images/2024/07/28/thumbs/2327733.jpg&w=800&q=100&f=jpg",
   },
   {
     id: "media-10",
@@ -606,6 +610,8 @@ export const media: MediaItem[] = [
     date: "Jul 28, 2024",
     type: "News Feature",
     articleUrl: "https://nabd.com/s/139256313-2d1d86/",
+    thumbnail:
+      "https://pbs.twimg.com/amplify_video_thumb/1806659330583740417/img/5Rl8ssxIuGVS9hWN.jpg",
   },
   {
     id: "media-12",
@@ -614,6 +620,8 @@ export const media: MediaItem[] = [
     date: "Jul 27, 2024",
     type: "News Feature",
     articleUrl: "https://x.com/alekhbariyatv/status/1817285826893504777",
+    thumbnail:
+      "https://pbs.twimg.com/amplify_video_thumb/1806659330583740417/img/5Rl8ssxIuGVS9hWN.jpg",
   },
   {
     id: "media-13",
@@ -626,10 +634,10 @@ export const media: MediaItem[] = [
   {
     id: "media-14",
     title: '"المساحة الجيولوجية": دول الخليج العربي بعيدة عن نشاط الزلازل المدمرة',
-    source: "Almnatiq",
+    source: "Watan",
     date: "Mar 6, 2023",
     type: "News Feature",
-    articleUrl: "https://almnatiq.net/",
+    articleUrl: "https://ksa-wats.com/592630",
   },
   {
     id: "media-15",
@@ -647,6 +655,8 @@ export const media: MediaItem[] = [
     date: "Nov 12, 2018",
     type: "News Feature",
     articleUrl: "https://sabq.org/saudia/prkmxt",
+    thumbnail:
+      "https://imagedelivery.net/nU9Yamkp250UHNYBIVAE6w/29ea9a4c-2047-403c-8d68-006390476100/public",
   },
   {
     id: "media-17",
@@ -655,6 +665,8 @@ export const media: MediaItem[] = [
     date: "Nov 12, 2018",
     type: "News Feature",
     articleUrl: "https://www.al-madina.com/article/598414/",
+    thumbnail:
+      "https://cdnx.premiumread.com/?url=https://www.al-madina.com/uploads/images/2018/11/12/1508100.jpg&w=800&q=100&f=jpg",
   },
   {
     id: "media-18",
@@ -663,6 +675,7 @@ export const media: MediaItem[] = [
     date: "Nov 4, 2017",
     type: "News Feature",
     articleUrl: "https://www.okaz.com.sa/local/na/1586658",
+    thumbnail: "https://www.okaz.com.sa/uploads/images/2017/11/04/573864.jpg",
   },
   {
     id: "media-19",
@@ -671,6 +684,7 @@ export const media: MediaItem[] = [
     date: "Nov 4, 2017",
     type: "News Feature",
     articleUrl: "https://www.wtniaat.com/news-action-s-id-20561.htm",
+    thumbnail: "https://www.wtniaat.com/contents/newsm/20561_0.jpg",
   },
   {
     id: "media-20",
@@ -679,6 +693,7 @@ export const media: MediaItem[] = [
     date: "Nov 4, 2017",
     type: "News Feature",
     articleUrl: "https://elaph.com/Web/News/2017/11/1175282.html",
+    thumbnail: "https://s1.elaph.com/resources/images/Politics/2017/11/week1/namas.jpg",
   },
   {
     id: "media-21",
@@ -687,6 +702,7 @@ export const media: MediaItem[] = [
     date: "Oct 18, 2017",
     type: "News Feature",
     articleUrl: "https://www.okaz.com.sa/local/na/1581650",
+    thumbnail: "https://www.okaz.com.sa/uploads/images/2017/10/18/550560.png",
   },
   {
     id: "media-22",
@@ -695,6 +711,8 @@ export const media: MediaItem[] = [
     date: "2017",
     type: "News Feature",
     articleUrl: "https://slaati.com/2017/11/14/p914215.html",
+    thumbnail:
+      "https://cp.slaati.com//wp-content/uploads/2017/11/d62ded44-8224-400a-a182-60eb4595886d.jpg",
   },
   {
     id: "media-23",
@@ -703,6 +721,7 @@ export const media: MediaItem[] = [
     date: "2017",
     type: "News Feature",
     articleUrl: "https://mz-mz.net/1005347/",
+    thumbnail: "https://mz-mz.net/wp-content/up/5a7b31e74486b.jpg",
   },
   {
     id: "media-24",
@@ -711,6 +730,7 @@ export const media: MediaItem[] = [
     date: "Jun 28, 2015",
     type: "News Feature",
     articleUrl: "https://www.alyaum.com/articles/1014940/",
+    thumbnail: "https://www.alyaum.com/uploads/imported_images/media/article/28_dnmcz39.jpg",
   },
   {
     id: "media-25",
@@ -728,6 +748,7 @@ export const media: MediaItem[] = [
     date: "Aug 5, 2014",
     type: "News Feature",
     articleUrl: "https://www.sarayanews.com/article/267053",
+    thumbnail: "https://www.sarayanews.com/image.php?token=c8b512961f5939ec09a15c165aac3020",
   },
   {
     id: "media-27",
@@ -736,6 +757,7 @@ export const media: MediaItem[] = [
     date: "Aug 4, 2014",
     type: "News Feature",
     articleUrl: "https://www.skynewsarabia.com/middle-east/678825",
+    thumbnail: "https://www.skynewsarabia.com/images/v1/2013/10/12/459171/1200/630/1-459171.jpg",
   },
   {
     id: "media-28",
@@ -744,6 +766,8 @@ export const media: MediaItem[] = [
     date: "Jan 26, 2014",
     type: "News Feature",
     articleUrl: "https://arabic.cnn.com/middleeast/2014/01/26/saudiearthquake",
+    thumbnail:
+      "https://cnn-arabic-images.cnn.io/cloudinary/image/upload/w_1100,h_578,c_fill,q_auto,g_center/t_cnnarabic_watermark_logo_v5/cnnarabic/2014/01/26/images/56285.jpg",
   },
   {
     id: "media-29",
@@ -785,6 +809,8 @@ export const media: MediaItem[] = [
     date: "Aug 14, 2010",
     type: "News Feature",
     articleUrl: "https://www.al-madina.com/article/42979/",
+    thumbnail:
+      "https://cdnx.premiumread.com/?url=https://www.al-madina.com/uploads/imported_images/sa/_0/sa_0.jpg&w=800&q=100&f=jpg",
   },
   {
     id: "media-34",
@@ -793,6 +819,8 @@ export const media: MediaItem[] = [
     date: "Jun 28, 2009",
     type: "News Feature",
     articleUrl: "https://www.aleqt.com/2009/06/28/article_245322.html",
+    thumbnail:
+      "https://static.aleqt.com/https://archive-files.aleqt.com/a/245322_42086.jpg?w=800&q=75",
   },
   {
     id: "media-35",

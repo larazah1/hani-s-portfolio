@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { ExternalLink, Eye, Newspaper, Play, Video as VideoIcon, Mic } from "lucide-react";
 import type { MediaItem } from "@/content/site";
 import { Button } from "@/components/ui/button";
@@ -40,17 +41,27 @@ function typeMeta(type: MediaItem["type"]) {
 
 function MediaThumb({ item }: { item: MediaItem }) {
   const { icon: Icon } = typeMeta(item.type);
-  const thumbnail = youTubeThumbnailUrl(item.videoUrl);
+  const [broken, setBroken] = useState(false);
+  const isVideo = Boolean(youTubeThumbnailUrl(item.videoUrl));
+  const thumbnail = youTubeThumbnailUrl(item.videoUrl) ?? item.thumbnail;
 
-  if (thumbnail) {
+  if (thumbnail && !broken) {
     return (
       <div className="relative aspect-[16/9] overflow-hidden rounded-md border border-border bg-secondary/60">
-        <img src={thumbnail} alt="" loading="lazy" className="h-full w-full object-cover" />
-        <div className="absolute inset-0 flex items-center justify-center bg-black/15 transition-colors group-hover:bg-black/25">
-          <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white/90 shadow-soft">
-            <Play className="h-4 w-4 translate-x-[1px] text-surface-deep" fill="currentColor" />
-          </span>
-        </div>
+        <img
+          src={thumbnail}
+          alt=""
+          loading="lazy"
+          onError={() => setBroken(true)}
+          className="h-full w-full object-cover"
+        />
+        {isVideo && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black/15 transition-colors group-hover:bg-black/25">
+            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white/90 shadow-soft">
+              <Play className="h-4 w-4 translate-x-[1px] text-surface-deep" fill="currentColor" />
+            </span>
+          </div>
+        )}
       </div>
     );
   }
