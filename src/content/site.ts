@@ -3,15 +3,21 @@
 
 export const profile = {
   name: "Dr. Hani Mahmoud Zahran",
+  nameAr: "د. هاني محمود زهران",
   credentials: "PhD",
+  credentialsAr: "دكتوراه",
   title: "Geophysicist & Seismologist | Technical Advisor | Earthquake & Volcano Researcher",
+  titleAr: "جيوفيزيائي وعالم زلازل | مستشار فني | باحث في الزلازل والبراكين",
   tagline:
     "More than three decades of experience in geophysics, seismology, seismic hazard assessment, disaster risk reduction, and geological research.",
+  taglineAr:
+    "أكثر من ثلاثة عقود من الخبرة في الجيوفيزياء وعلم الزلازل وتقييم المخاطر الزلزالية والحد من مخاطر الكوارث والبحث الجيولوجي.",
   location: "Jeddah, Saudi Arabia",
+  locationAr: "جدة، المملكة العربية السعودية",
   email: "zahran.hm@sgs.org.sa",
   phone: "+966 50 598 1677",
-  primaryCta: { label: "Explore My Research", to: "/publications" },
-  secondaryCta: { label: "Get in Touch", to: "/contact" },
+  primaryCta: { label: "Explore My Research", labelAr: "استكشف أبحاثي", to: "/publications" },
+  secondaryCta: { label: "Get in Touch", labelAr: "تواصل معي", to: "/contact" },
 };
 
 export const summary = [
@@ -20,76 +26,103 @@ export const summary = [
   "He has contributed to international research collaborations, peer-reviewed publications, scientific conferences, workshops, and professional training.",
 ];
 
-export type Stat = { label: string; value: string };
+export type Stat = { label: string; labelAr: string; value: string };
 export const stats: Stat[] = [
-  { label: "Years of Experience", value: "34+" },
-  { label: "Publications", value: "41" },
-  { label: "Citations", value: "1,218" },
-  { label: "H-Index", value: "22" },
-  { label: "Scientific Books", value: "2" },
+  { label: "Years of Experience", labelAr: "سنوات الخبرة", value: "34+" },
+  { label: "Publications", labelAr: "المنشورات", value: "41" },
+  { label: "Citations", labelAr: "الاستشهادات", value: "1,218" },
+  { label: "H-Index", labelAr: "مؤشر H", value: "22" },
+  { label: "Scientific Books", labelAr: "الكتب العلمية", value: "2" },
 ];
 
 export type CareerEntry = {
   position: string;
+  positionAr: string;
   organization: string;
+  organizationAr: string;
   start: string;
   end: string;
   description?: string;
+  descriptionAr?: string;
 };
+
+const SGS = "Saudi Geological Survey";
+const SGS_AR = "الهيئة السعودية للمساحة الجيولوجية";
+
 export const career: CareerEntry[] = [
   {
     position: "Technical Advisor for the Vice President of Geological Programs",
-    organization: "Saudi Geological Survey",
+    positionAr: "مستشار فني لنائب رئيس البرامج الجيولوجية",
+    organization: SGS,
+    organizationAr: SGS_AR,
     start: "Jul 2026",
     end: "Present",
   },
   {
     position: "Technical Advisor for the Geological Hazard Center",
-    organization: "Saudi Geological Survey",
+    positionAr: "مستشار فني لمركز المخاطر الجيولوجية",
+    organization: SGS,
+    organizationAr: SGS_AR,
     start: "May 2025",
     end: "Jul 2026",
   },
   {
     position: "Manager of the Disaster and Crisis Center",
-    organization: "Saudi Geological Survey",
+    positionAr: "مدير مركز الكوارث والأزمات",
+    organization: SGS,
+    organizationAr: SGS_AR,
     start: "Sep 2021",
     end: "May 2025",
   },
   {
     position: "Consultant for Earthquakes and Volcanoes",
-    organization: "Saudi Geological Survey",
+    positionAr: "استشاري الزلازل والبراكين",
+    organization: SGS,
+    organizationAr: SGS_AR,
     start: "Apr 2019",
     end: "Sep 2021",
   },
   {
     position: "General Manager, National Center for Earthquake and Volcanoes",
-    organization: "Saudi Geological Survey",
+    positionAr: "المدير العام للمركز الوطني للزلازل والبراكين",
+    organization: SGS,
+    organizationAr: SGS_AR,
     start: "Feb 2005",
     end: "Apr 2019",
     description:
       "Led Saudi Arabia's national seismic and volcanic monitoring programs, including development of the Saudi National Seismic Network.",
+    descriptionAr:
+      "قاد برامج المملكة العربية السعودية الوطنية لمراقبة الزلازل والبراكين، بما في ذلك تطوير الشبكة الوطنية السعودية لرصد الزلازل.",
   },
   {
     position: "Head of Geophysical Exploration Department",
-    organization: "Saudi Geological Survey",
+    positionAr: "رئيس قسم المسح الجيوفيزيائي",
+    organization: SGS,
+    organizationAr: SGS_AR,
     start: "2003",
     end: "2005",
   },
   {
     position: "Manager of Geophysical Management",
-    organization: "Saudi Geological Survey",
+    positionAr: "مدير إدارة الجيوفيزياء",
+    organization: SGS,
+    organizationAr: SGS_AR,
     start: "2000",
     end: "2003",
   },
   {
     position: "Senior Geophysicist",
+    positionAr: "جيوفيزيائي أول",
     organization: "French Geological Survey (BRGM)",
+    organizationAr: "المكتب الفرنسي للأبحاث الجيولوجية والمنجمية (BRGM)",
     start: "1997",
     end: "1999",
   },
   {
     position: "Geophysicist",
+    positionAr: "جيوفيزيائي",
     organization: "French Geological Survey (BRGM)",
+    organizationAr: "المكتب الفرنسي للأبحاث الجيولوجية والمنجمية (BRGM)",
     start: "1993",
     end: "1997",
   },
@@ -98,34 +131,57 @@ export const career: CareerEntry[] = [
 export const collaborations: CareerEntry[] = [
   {
     position: "Research Collaborator",
+    positionAr: "متعاون بحثي",
     organization: "United States Geological Survey (USGS), USA",
+    organizationAr: "هيئة المسح الجيولوجي الأمريكية (USGS)، الولايات المتحدة الأمريكية",
     start: "2015",
     end: "Present",
   },
 ];
 
-export const expertise: string[] = [
-  "Applied Geophysics",
-  "Seismology",
-  "Seismic Hazard Assessment",
-  "Earthquake Research",
-  "Volcanic Hazard Assessment",
-  "Seismic Signal Processing",
-  "Disaster Risk Reduction",
-  "Mineral Exploration",
-  "Geothermal Prospecting",
-  "Numerical Simulation",
-  "Geophysical Data Analysis",
-  "High-Performance Computing",
+export type LocalizedItem = { en: string; ar: string };
+export const expertise: LocalizedItem[] = [
+  { en: "Applied Geophysics", ar: "الجيوفيزياء التطبيقية" },
+  { en: "Seismology", ar: "علم الزلازل" },
+  { en: "Seismic Hazard Assessment", ar: "تقييم المخاطر الزلزالية" },
+  { en: "Earthquake Research", ar: "أبحاث الزلازل" },
+  { en: "Volcanic Hazard Assessment", ar: "تقييم المخاطر البركانية" },
+  { en: "Seismic Signal Processing", ar: "معالجة الإشارات الزلزالية" },
+  { en: "Disaster Risk Reduction", ar: "الحد من مخاطر الكوارث" },
+  { en: "Mineral Exploration", ar: "التنقيب عن المعادن" },
+  { en: "Geothermal Prospecting", ar: "استكشاف الطاقة الحرارية الأرضية" },
+  { en: "Numerical Simulation", ar: "المحاكاة العددية" },
+  { en: "Geophysical Data Analysis", ar: "تحليل البيانات الجيوفيزيائية" },
+  { en: "High-Performance Computing", ar: "الحوسبة عالية الأداء" },
 ];
+
+export type PublicationType =
+  "Journal Article" | "Scientific Book" | "Conference Paper" | "Report" | "Other";
+
+export const publicationTypeAr: Record<PublicationType, string> = {
+  "Journal Article": "مقال علمي",
+  "Scientific Book": "كتاب علمي",
+  "Conference Paper": "ورقة مؤتمر",
+  Report: "تقرير",
+  Other: "أخرى",
+};
+
+export const publicationAreaAr: Record<string, string> = {
+  "Seismic Hazard Assessment": "تقييم المخاطر الزلزالية",
+  Geophysics: "الجيوفيزياء",
+  Seismology: "علم الزلازل",
+  Volcanology: "علم البراكين",
+  "Mineral Exploration": "التنقيب عن المعادن",
+};
 
 export type Publication = {
   id: string;
   title: string;
+  titleAr: string;
   authors: string;
   journal: string;
   year: number;
-  type: "Journal Article" | "Scientific Book" | "Conference Paper" | "Report" | "Other";
+  type: PublicationType;
   area: string;
   doi?: string;
   url?: string;
@@ -137,6 +193,8 @@ export const publications: Publication[] = [
     id: "pub-1",
     title:
       "Areal-Source and Fault-Source Based Probabilistic Seismic Hazard Analysis Using Characteristic Earthquake Model and Monte-Carlo Approach: An Example of the Gulf of Aqaba Region",
+    titleAr:
+      "تحليل احتمالي للمخاطر الزلزالية باستخدام مصادر مساحية ومصادر فالقية بالاعتماد على نموذج الزلزال المميز وأسلوب مونت كارلو: نموذج تطبيقي من منطقة خليج العقبة",
     authors: "Sokolov V., Zahran H.M., Toni M.",
     journal: "Soil Dynamics and Earthquake Engineering",
     year: 2024,
@@ -150,6 +208,7 @@ export const publications: Publication[] = [
   {
     id: "pub-2",
     title: "Thickness of the Saudi Arabian Crust",
+    titleAr: "سماكة القشرة الأرضية في المملكة العربية السعودية",
     authors: "Blanchette A.R., Klemperer S.L., Mooney W.D., Zahran H.M.",
     journal: "US Geological Survey Professional Paper 1862 (Chapter M)",
     year: 2023,
@@ -162,6 +221,7 @@ export const publications: Publication[] = [
   {
     id: "pub-3",
     title: "Teleseismic P-Wave Attenuation Beneath the Arabian Plate",
+    titleAr: "توهين الموجات الزلزالية البعيدة من نوع P أسفل الصفيحة العربية",
     authors: "Zahran H.M. et al.",
     journal: "Geosciences",
     year: 2023,
@@ -177,6 +237,8 @@ export const publications: Publication[] = [
     id: "pub-4",
     title:
       "Isotropic and Radially Anisotropic S-Velocity Structure Beneath the Arabian Plate Inferred from Surface Wave Tomography",
+    titleAr:
+      "البنية المتناحية وغير المتناحية شعاعيًا لسرعة الموجات S أسفل الصفيحة العربية المستنتجة من التصوير المقطعي للموجات السطحية",
     authors: "Kim R., Witek M., Chang S-J., Lim J-A., Mai P.M., Zahran H.M.",
     journal: "Tectonophysics",
     year: 2023,
@@ -191,6 +253,8 @@ export const publications: Publication[] = [
     id: "pub-5",
     title:
       "The Duration and Characteristics of Magmatic Differentiation from Basalt to Trachyte Within the Matan Volcanic Center, Northern Harrat Rahat, Kingdom of Saudi Arabia",
+    titleAr:
+      "مدة وخصائص التمايز الصهاري من البازلت إلى التراكيت في مركز متعن البركاني، شمال حرة راهط، المملكة العربية السعودية",
     authors: "Zahran H.M. et al.",
     journal: "US Geological Survey Professional Paper 1862 (Chapter F)",
     year: 2023,
@@ -205,6 +269,8 @@ export const publications: Publication[] = [
     id: "pub-6",
     title:
       "Shear Velocity Structure Beneath Saudi Arabia From the Joint Inversion of P and S Wave Receiver Functions, and Rayleigh Wave Group Velocity Dispersion Data",
+    titleAr:
+      "بنية سرعة موجات القص أسفل المملكة العربية السعودية من الانعكاس المشترك لدوال المستقبل لموجات P وS، وبيانات تشتت سرعة مجموعة موجات رايلي",
     authors: "Zahran H.M. et al.",
     journal: "Solid Earth",
     year: 2019,
@@ -215,6 +281,8 @@ export const publications: Publication[] = [
   {
     id: "pub-7",
     title: "Crustal imaging of northern Harrat Rahat, Saudi Arabia, from ambient noise tomography",
+    titleAr:
+      "تصوير القشرة الأرضية لشمال حرة راهط، المملكة العربية السعودية، باستخدام التصوير المقطعي للضوضاء المحيطية",
     authors: "Zahran H.M. et al.",
     journal: "Geophysical Journal International",
     year: 2019,
@@ -225,6 +293,7 @@ export const publications: Publication[] = [
   {
     id: "pub-8",
     title: "Crustal magmatism and anisotropy beneath the Arabian Shield - a cautionary tale",
+    titleAr: "النشاط الصهاري القشري والتباين الاتجاهي أسفل الدرع العربي - دراسة تحذيرية",
     authors: "Zahran H.M. et al.",
     journal: "Journal of Geophysical Research: Solid Earth",
     year: 2019,
@@ -235,6 +304,7 @@ export const publications: Publication[] = [
   {
     id: "pub-9",
     title: "Deterministic seismic hazard assessment for the Makkah region, western Saudi Arabia",
+    titleAr: "التقييم الحتمي للمخاطر الزلزالية لمنطقة مكة المكرمة، غرب المملكة العربية السعودية",
     authors: "Zahran H.M., Sokolov V., El-Hadidy S.",
     journal: "Arabian Journal of Geosciences",
     year: 2019,
@@ -247,6 +317,8 @@ export const publications: Publication[] = [
     id: "pub-10",
     title:
       "Crustal structure of the northern Harrat Rahat volcanic field (Saudi Arabia) from gravity and aeromagnetic data",
+    titleAr:
+      "البنية القشرية لحقل حرة راهط البركاني الشمالي (المملكة العربية السعودية) من بيانات الجاذبية والمغناطيسية الجوية",
     authors: "Zahran H.M. et al.",
     journal: "Tectonophysics",
     year: 2018,
@@ -259,6 +331,8 @@ export const publications: Publication[] = [
     id: "pub-11",
     title:
       "Reconstructing lava flow emplacement histories with rheological and morphological analyses: the Harrat Rahat volcanic field, Kingdom of Saudi Arabia",
+    titleAr:
+      "إعادة بناء تاريخ توضع تدفقات الحمم البركانية من خلال التحليل الريولوجي والمورفولوجي: حقل حرة راهط البركاني، المملكة العربية السعودية",
     authors: "Dietterich H., Downs D., Stelten M., Zahran H.",
     journal: "Bulletin of Volcanology",
     year: 2018,
@@ -271,6 +345,8 @@ export const publications: Publication[] = [
     id: "pub-12",
     title:
       "Evidence for crustal low shear-wave speed in western Saudi Arabia from multi-scale fundamental-mode Rayleigh-wave group-velocity tomography",
+    titleAr:
+      "دلائل على انخفاض سرعة موجات القص القشرية في غرب المملكة العربية السعودية من التصوير المقطعي متعدد المقاييس لسرعة مجموعة موجات رايلي في النمط الأساسي",
     authors: "Zahran H.M. et al.",
     journal: "Earth and Planetary Science Letters",
     year: 2018,
@@ -282,6 +358,8 @@ export const publications: Publication[] = [
     id: "pub-13",
     title:
       "Generation of stochastic earthquake ground motion in western Saudi Arabia as a first step in development of regional ground motion prediction model",
+    titleAr:
+      "توليد الحركة الأرضية الزلزالية العشوائية في غرب المملكة العربية السعودية كخطوة أولى نحو تطوير نموذج إقليمي للتنبؤ بالحركة الأرضية",
     authors: "Sokolov V., Zahran H.",
     journal: "Arabian Journal of Geosciences",
     year: 2018,
@@ -292,6 +370,7 @@ export const publications: Publication[] = [
   {
     id: "pub-14",
     title: "Integrated Studies for Assessment of Seismic Hazard in Harrat Lunayyir",
+    titleAr: "دراسات متكاملة لتقييم المخاطر الزلزالية في حرة لنير",
     authors: "Zahran H.M.",
     journal: "LAMBERT Academic Publishing",
     year: 2018,
@@ -303,6 +382,8 @@ export const publications: Publication[] = [
     id: "pub-15",
     title:
       "Seismic microzonation of Ubhur district, Jeddah, Saudi Arabia, using H/V spectral ratio",
+    titleAr:
+      "التقسيم الزلزالي الدقيق لحي أبحر، جدة، المملكة العربية السعودية، باستخدام نسبة H/V الطيفية",
     authors: "Zahran H.M. et al.",
     journal: "Arabian Journal of Geosciences",
     year: 2018,
@@ -314,6 +395,8 @@ export const publications: Publication[] = [
     id: "pub-16",
     title:
       "Timescales of magmatic differentiation from alkali basalt to trachyte within the Harrat Rahat volcanic field, Kingdom of Saudi Arabia",
+    titleAr:
+      "الجداول الزمنية للتمايز الصهاري من البازلت القلوي إلى التراكيت في حقل حرة راهط البركاني، المملكة العربية السعودية",
     authors: "Zahran H.M. et al.",
     journal: "Contributions to Mineralogy and Petrology",
     year: 2018,
@@ -325,6 +408,8 @@ export const publications: Publication[] = [
     id: "pub-17",
     title:
       "Two-stage Red Sea rifting inferred from mantle earthquakes in Neoproterozoic lithosphere",
+    titleAr:
+      "تصدع البحر الأحمر على مرحلتين المستنتج من زلازل الوشاح في الغلاف الصخري للعصر البروتيروزوي الحديث",
     authors: "Zahran H.M. et al.",
     journal: "Earth and Planetary Science Letters",
     year: 2018,
@@ -336,6 +421,8 @@ export const publications: Publication[] = [
     id: "pub-18",
     title:
       "Volcanic history of the northernmost part of the Harrat Rahat volcanic field, Saudi Arabia",
+    titleAr:
+      "التاريخ البركاني لأقصى الجزء الشمالي من حقل حرة راهط البركاني، المملكة العربية السعودية",
     authors: "Zahran H.M. et al.",
     journal: "Geosphere",
     year: 2018,
@@ -346,6 +433,7 @@ export const publications: Publication[] = [
   {
     id: "pub-19",
     title: "Seismic hazard assessment for Harrat Lunayyir – A lava field in western Saudi Arabia",
+    titleAr: "تقييم المخاطر الزلزالية لحرة لنير – حقل حمم بركانية في غرب المملكة العربية السعودية",
     authors: "Zahran H., El-Hady S.",
     journal: "Soil Dynamics and Earthquake Engineering",
     year: 2017,
@@ -356,6 +444,8 @@ export const publications: Publication[] = [
   {
     id: "pub-20",
     title: "Aeromagnetic data over Harrat Lunayyir and surrounding areas, western Saudi Arabia",
+    titleAr:
+      "بيانات المغناطيسية الجوية فوق حرة لنير والمناطق المحيطة بها، غرب المملكة العربية السعودية",
     authors: "Zahran H., El-Hady S., Abuelnaga H.",
     journal: "Arabian Journal of Geosciences",
     year: 2017,
@@ -367,6 +457,8 @@ export const publications: Publication[] = [
     id: "pub-21",
     title:
       "Surface soil assessment in the Ubhur area, north of Jeddah, western Saudi Arabia, using a multichannel analysis of surface waves method",
+    titleAr:
+      "تقييم التربة السطحية في منطقة أبحر، شمال جدة، غرب المملكة العربية السعودية، باستخدام طريقة التحليل متعدد القنوات للموجات السطحية",
     authors: "Zahran H.M. et al.",
     journal: "Journal of the Geological Society of India",
     year: 2017,
@@ -378,6 +470,8 @@ export const publications: Publication[] = [
     id: "pub-22",
     title:
       "Upper mantle velocity structure beneath the Arabian shield from Rayleigh surface wave tomography and its implications",
+    titleAr:
+      "بنية سرعة الوشاح العلوي أسفل الدرع العربي من التصوير المقطعي لموجات رايلي السطحية ودلالاتها",
     authors: "Zahran H.M. et al.",
     journal: "Journal of Geophysical Research: Solid Earth",
     year: 2017,
@@ -388,6 +482,7 @@ export const publications: Publication[] = [
   {
     id: "pub-23",
     title: "Geophysical Atlas of Central and Western Saudi Arabia",
+    titleAr: "الأطلس الجيوفيزيائي لوسط وغرب المملكة العربية السعودية",
     authors: "Zahran H.M., Stewart I.C.F., Johnson P.R., Basahel M.H.",
     journal: "Saudi Geological Survey",
     year: 2017,
@@ -398,6 +493,8 @@ export const publications: Publication[] = [
     id: "pub-24",
     title:
       "Emplacement conditions of the 1256 AD Al-Madinah lava flow field in Harrat Rahat, Kingdom of Saudi Arabia — Insights from surface morphology and lava flow simulations",
+    titleAr:
+      "ظروف توضع حقل تدفق حمم المدينة المنورة لعام 1256م في حرة راهط، المملكة العربية السعودية — رؤى من المورفولوجيا السطحية ومحاكاة تدفق الحمم",
     authors: "Kereszturi G., Németh K., Moufti M.R. et al.",
     journal: "Journal of Volcanology and Geothermal Research",
     year: 2016,
@@ -408,6 +505,7 @@ export const publications: Publication[] = [
   {
     id: "pub-25",
     title: "Imaging of magma intrusions beneath Harrat Al-Madinah in Saudi Arabia",
+    titleAr: "تصوير التداخلات الصهارية أسفل حرة المدينة المنورة في المملكة العربية السعودية",
     authors: "Zahran H.M. et al.",
     journal: "Journal of Asian Earth Sciences",
     year: 2016,
@@ -420,6 +518,8 @@ export const publications: Publication[] = [
     id: "pub-26",
     title:
       "On the development of a seismic source zonation model for seismic hazard assessment in western Saudi Arabia",
+    titleAr:
+      "حول تطوير نموذج لتقسيم مصادر الزلازل لأغراض تقييم المخاطر الزلزالية في غرب المملكة العربية السعودية",
     authors: "Zahran H.M., Sokolov V., Roobol M.J., Stewart I.C.F., El-Hadidy S.Y., El-Hadidy M.",
     journal: "Journal of Seismology",
     year: 2016,
@@ -432,6 +532,8 @@ export const publications: Publication[] = [
     id: "pub-27",
     title:
       "The lithospheric shear-wave velocity structure of Saudi Arabia: Young volcanism in an old shield",
+    titleAr:
+      "بنية سرعة موجات القص في الغلاف الصخري للمملكة العربية السعودية: نشاط بركاني حديث في درع قديم",
     authors: "Zahran H.M. et al.",
     journal: "Tectonophysics",
     year: 2016,
@@ -443,6 +545,8 @@ export const publications: Publication[] = [
     id: "pub-28",
     title:
       "Broad accommodation of rift-related extension recorded by dyke intrusion in Saudi Arabia",
+    titleAr:
+      "استيعاب واسع للتمدد المرتبط بالتصدع سجلته التداخلات الجيرية (الديايك) في المملكة العربية السعودية",
     authors: "Zahran H.M. et al.",
     journal: "Nature Geoscience",
     year: 2010,
@@ -453,6 +557,7 @@ export const publications: Publication[] = [
   {
     id: "pub-29",
     title: "The Saudi National Seismic Network",
+    titleAr: "الشبكة الوطنية السعودية لرصد الزلازل",
     authors: "Zahran H.M. et al.",
     journal: "Seismological Research Letters",
     year: 2007,
@@ -464,6 +569,7 @@ export const publications: Publication[] = [
     id: "pub-30",
     title:
       "Gamma-Ray Exposure Maps From Airborne Spectrometric Data (Open-File Report SGS-OF-2006-9)",
+    titleAr: "خرائط التعرض لأشعة غاما من بيانات المطيافية الجوية (تقرير مفتوح رقم SGS-OF-2006-9)",
     authors: "Zahran H.M., Stewart I.C.F.",
     journal: "Saudi Geological Survey",
     year: 2006,
@@ -473,6 +579,7 @@ export const publications: Publication[] = [
   {
     id: "pub-31",
     title: "Aeromagnetic-anomaly maps of central and western Saudi Arabia",
+    titleAr: "خرائط الشذوذ المغناطيسي الجوي لوسط وغرب المملكة العربية السعودية",
     authors: "Zahran H.M., Stewart I.C.F., Johnson P.R., Basahel M.H.",
     journal: "Saudi Geological Survey",
     year: 2003,
@@ -484,6 +591,8 @@ export const publications: Publication[] = [
     id: "pub-32",
     title:
       "The Ar Rayn Terrane: Geotectonic Implications of Unique Metallogeny in the Arabian Shield (Report SGS-OF-2002-8)",
+    titleAr:
+      "إقليم الرين: الدلالات الجيوتكتونية لتكوين معدني فريد في الدرع العربي (تقرير رقم SGS-OF-2002-8)",
     authors: "Zahran H.M. et al.",
     journal: "Saudi Geological Survey",
     year: 2001,
@@ -495,6 +604,8 @@ export const publications: Publication[] = [
     id: "pub-33",
     title:
       "Detail mineral exploration studies in Shatban prospect, Western Saudi Arabia (Master Thesis)",
+    titleAr:
+      "دراسات تفصيلية للتنقيب عن المعادن في موقع شطبان الواعد، غرب المملكة العربية السعودية (رسالة ماجستير)",
     authors: "Zahran H.M., Sadek H.S.",
     journal: "King Abdulaziz University",
     year: 1999,
@@ -506,6 +617,7 @@ export const publications: Publication[] = [
 export type MediaItem = {
   id: string;
   title: string;
+  titleAr?: string;
   source: string;
   date: string;
   type: "Interview" | "Article" | "Video" | "News Feature" | "Other";
@@ -642,6 +754,7 @@ export const media: MediaItem[] = [
   {
     id: "media-15",
     title: "Saudi Arabia plans 50 seismic stations in 3 years",
+    titleAr: "السعودية تخطط لإنشاء 50 محطة رصد زلزالي خلال 3 سنوات",
     source: "Arab News",
     date: "Dec 2, 2018",
     type: "News Feature",
@@ -735,6 +848,7 @@ export const media: MediaItem[] = [
   {
     id: "media-25",
     title: "73 quakes west of Umluj in one week",
+    titleAr: "73 هزة أرضية غرب أملج خلال أسبوع واحد",
     source: "Saudi Gazette",
     date: "Jan 18, 2015",
     type: "News Feature",
@@ -780,6 +894,7 @@ export const media: MediaItem[] = [
   {
     id: "media-30",
     title: "KSA to set up 50 additional seismic monitoring stations",
+    titleAr: "السعودية تنشئ 50 محطة إضافية لرصد الزلازل",
     source: "Arab News",
     date: "Dec 19, 2013",
     type: "News Feature",
@@ -880,77 +995,148 @@ export const recommendations: Recommendation[] = [
 
 export type EducationEntry = {
   degree: string;
+  degreeAr: string;
   field: string;
+  fieldAr: string;
   university: string;
+  universityAr: string;
   location: string;
+  locationAr: string;
   year: string;
   description?: string;
+  descriptionAr?: string;
 };
+
+const KAU = "King Abdulaziz University";
+const KAU_AR = "جامعة الملك عبدالعزيز";
+const JEDDAH = "Jeddah, Saudi Arabia";
+const JEDDAH_AR = "جدة، المملكة العربية السعودية";
+
 export const education: EducationEntry[] = [
   {
     degree: "PhD",
+    degreeAr: "دكتوراه",
     field: "Geophysics and Seismology",
-    university: "King Abdulaziz University",
-    location: "Jeddah, Saudi Arabia",
+    fieldAr: "الجيوفيزياء وعلم الزلازل",
+    university: KAU,
+    universityAr: KAU_AR,
+    location: JEDDAH,
+    locationAr: JEDDAH_AR,
     year: "2018",
   },
   {
     degree: "MSc",
+    degreeAr: "ماجستير",
     field: "Applied Geophysics",
-    university: "King Abdulaziz University",
-    location: "Jeddah, Saudi Arabia",
+    fieldAr: "الجيوفيزياء التطبيقية",
+    university: KAU,
+    universityAr: KAU_AR,
+    location: JEDDAH,
+    locationAr: JEDDAH_AR,
     year: "1999",
     description:
       "Thesis: Detail mineral exploration studies in Shatban prospect, Western Saudi Arabia.",
+    descriptionAr:
+      "رسالة الماجستير: دراسات تفصيلية للتنقيب عن المعادن في موقع شطبان الواعد، غرب المملكة العربية السعودية.",
   },
   {
     degree: "BSc",
+    degreeAr: "بكالوريوس",
     field: "Applied Geophysics",
-    university: "King Abdulaziz University",
-    location: "Jeddah, Saudi Arabia",
+    fieldAr: "الجيوفيزياء التطبيقية",
+    university: KAU,
+    universityAr: KAU_AR,
+    location: JEDDAH,
+    locationAr: JEDDAH_AR,
     year: "1993",
   },
 ];
 
-export const researchSpecialties: string[] = [
-  "Applied Geophysics",
-  "Seismic Hazard Assessment",
-  "Disaster Risk Reduction",
-  "Seismology",
-  "Mineral Exploration",
-  "Geothermal Prospecting",
+export const researchSpecialties: LocalizedItem[] = [
+  { en: "Applied Geophysics", ar: "الجيوفيزياء التطبيقية" },
+  { en: "Seismic Hazard Assessment", ar: "تقييم المخاطر الزلزالية" },
+  { en: "Disaster Risk Reduction", ar: "الحد من مخاطر الكوارث" },
+  { en: "Seismology", ar: "علم الزلازل" },
+  { en: "Mineral Exploration", ar: "التنقيب عن المعادن" },
+  { en: "Geothermal Prospecting", ar: "استكشاف الطاقة الحرارية الأرضية" },
 ];
 
-export type Membership = { title: string; period?: string };
+export type Membership = { title: string; titleAr: string; period?: string };
 export const memberships: Membership[] = [
-  { title: "Vice Chairman of the Board, Saudi Society for Geoscience", period: "2014 – 2023" },
-  { title: "Representative of Saudi Arabia, Global Platform for Disaster Risk Reduction" },
-  { title: "Chief, National Advisory Committee for Earthquakes" },
-  { title: "Chief, Advisory Committee for Study of Causes and Influence of Earthquakes" },
-  { title: "Participant, National Disaster Risk Reduction Committee" },
-  { title: "Member, Saudi Building Code Technical and Seismic Committees" },
-  { title: "Chairman, Saudi Geological Survey Promotion Committee" },
-  { title: "Leadership roles, International Geological Conferences" },
+  {
+    title: "Vice Chairman of the Board, Saudi Society for Geoscience",
+    titleAr: "نائب رئيس مجلس إدارة الجمعية السعودية لعلوم الأرض",
+    period: "2014 – 2023",
+  },
+  {
+    title: "Representative of Saudi Arabia, Global Platform for Disaster Risk Reduction",
+    titleAr: "ممثل المملكة العربية السعودية في المنتدى العالمي للحد من مخاطر الكوارث",
+  },
+  {
+    title: "Chief, National Advisory Committee for Earthquakes",
+    titleAr: "رئيس اللجنة الاستشارية الوطنية للزلازل",
+  },
+  {
+    title: "Chief, Advisory Committee for Study of Causes and Influence of Earthquakes",
+    titleAr: "رئيس اللجنة الاستشارية لدراسة أسباب وتأثيرات الزلازل",
+  },
+  {
+    title: "Participant, National Disaster Risk Reduction Committee",
+    titleAr: "عضو مشارك في اللجنة الوطنية للحد من مخاطر الكوارث",
+  },
+  {
+    title: "Member, Saudi Building Code Technical and Seismic Committees",
+    titleAr: "عضو اللجان الفنية والزلزالية لكود البناء السعودي",
+  },
+  {
+    title: "Chairman, Saudi Geological Survey Promotion Committee",
+    titleAr: "رئيس لجنة الترقيات في الهيئة السعودية للمساحة الجيولوجية",
+  },
+  {
+    title: "Leadership roles, International Geological Conferences",
+    titleAr: "أدوار قيادية في المؤتمرات الجيولوجية الدولية",
+  },
 ];
 
-export const activities: string[] = [
-  "Saudi National Seismic Network",
-  "Saudi National Strong Motion Network",
-  "Seismic hazard map of the Kingdom of Saudi Arabia",
-  "Harrat Al-Madinah seismic and volcanic hazard assessment",
-  "Haramain High-Speed Railway seismic risk assessment",
-  "HAZUS earthquake loss estimation studies",
-  "Seismic and volcanic activity investigations across Saudi Arabia",
+export const activities: LocalizedItem[] = [
+  { en: "Saudi National Seismic Network", ar: "الشبكة الوطنية السعودية لرصد الزلازل" },
+  {
+    en: "Saudi National Strong Motion Network",
+    ar: "الشبكة الوطنية السعودية لرصد الحركة الأرضية القوية",
+  },
+  {
+    en: "Seismic hazard map of the Kingdom of Saudi Arabia",
+    ar: "خريطة المخاطر الزلزالية للمملكة العربية السعودية",
+  },
+  {
+    en: "Harrat Al-Madinah seismic and volcanic hazard assessment",
+    ar: "تقييم المخاطر الزلزالية والبركانية لحرة المدينة المنورة",
+  },
+  {
+    en: "Haramain High-Speed Railway seismic risk assessment",
+    ar: "تقييم المخاطر الزلزالية لقطار الحرمين السريع",
+  },
+  {
+    en: "HAZUS earthquake loss estimation studies",
+    ar: "دراسات تقدير خسائر الزلازل باستخدام نظام HAZUS",
+  },
+  {
+    en: "Seismic and volcanic activity investigations across Saudi Arabia",
+    ar: "دراسات النشاط الزلزالي والبركاني في أنحاء المملكة العربية السعودية",
+  },
 ];
 
-export const languages: string[] = ["Arabic", "English"];
+export const languages: LocalizedItem[] = [
+  { en: "Arabic", ar: "العربية" },
+  { en: "English", ar: "الإنجليزية" },
+];
 
-export const interests: string[] = [
-  "Academia / Research / Science",
-  "HPC and Data Analysis",
-  "Environment and Natural Hazards",
-  "Industry / Engineering",
-  "International Collaboration",
+export const interests: LocalizedItem[] = [
+  { en: "Academia / Research / Science", ar: "الأوساط الأكاديمية / البحث العلمي / العلوم" },
+  { en: "HPC and Data Analysis", ar: "الحوسبة عالية الأداء وتحليل البيانات" },
+  { en: "Environment and Natural Hazards", ar: "البيئة والمخاطر الطبيعية" },
+  { en: "Industry / Engineering", ar: "الصناعة / الهندسة" },
+  { en: "International Collaboration", ar: "التعاون الدولي" },
 ];
 
 export const socialLinks: { label: string; url: string }[] = [

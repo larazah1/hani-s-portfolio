@@ -107,6 +107,11 @@
   --sidebar-ring: oklch(0.704 0.04 256.788);
 }
 
+html[dir="rtl"] {
+  --font-display: "Cairo", "Work Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Cairo", ui-sans-serif, system-ui, sans-serif;
+}
+
 .dark {
   --background: oklch(0.129 0.042 264.695);
   --foreground: oklch(0.984 0.003 247.858);
@@ -161,6 +166,13 @@
     font-weight: 400;
     letter-spacing: -0.01em;
   }
+
+  html[dir="rtl"] h1,
+  html[dir="rtl"] h2,
+  html[dir="rtl"] h3 {
+    font-weight: 600;
+    letter-spacing: 0;
+  }
 }
 
 @utility eyebrow {
@@ -168,6 +180,12 @@
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--muted-foreground);
+}
+
+/* Letter-spacing and uppercase transforms break Arabic glyph joining. */
+html[dir="rtl"] .eyebrow {
+  letter-spacing: 0;
+  text-transform: none;
 }
 
 /* Restrained topographic-contour motif for dark surfaces. */

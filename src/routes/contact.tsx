@@ -17,6 +17,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { profile, socialLinks } from "@/content/site";
+import { useLanguage } from "@/lib/language";
 
 const title = "Contact — Dr. Hani Mahmoud Zahran";
 const description =
@@ -45,6 +46,7 @@ const contactSchema = z.object({
 type ContactValues = z.infer<typeof contactSchema>;
 
 function ContactPage() {
+  const { t, pick } = useLanguage();
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
 
   const form = useForm<ContactValues>({
@@ -69,11 +71,10 @@ function ContactPage() {
     <>
       <section className="border-b border-border bg-card">
         <div className="mx-auto max-w-6xl px-5 py-16 md:py-20">
-          <p className="eyebrow">Contact</p>
-          <h1 className="mt-3 text-3xl font-bold md:text-4xl">Let&rsquo;s Connect</h1>
+          <p className="eyebrow">{t("contact")}</p>
+          <h1 className="mt-3 text-3xl font-bold md:text-4xl">{t("letsConnect")}</h1>
           <p className="mt-4 max-w-2xl text-sm leading-relaxed text-muted-foreground md:text-base">
-            For professional inquiries, research collaboration, consulting, media requests, or
-            scientific discussions, feel free to get in touch.
+            {t("contactIntro")}
           </p>
         </div>
       </section>
@@ -88,9 +89,9 @@ function ContactPage() {
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Full Name</FormLabel>
+                      <FormLabel>{t("fullName")}</FormLabel>
                       <FormControl>
-                        <Input placeholder="Your name" {...field} />
+                        <Input placeholder={t("fullNamePlaceholder")} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -101,9 +102,9 @@ function ContactPage() {
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Email</FormLabel>
+                      <FormLabel>{t("email")}</FormLabel>
                       <FormControl>
-                        <Input type="email" placeholder="Email address" {...field} />
+                        <Input type="email" placeholder={t("emailPlaceholder")} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -116,9 +117,9 @@ function ContactPage() {
                 name="subject"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Subject</FormLabel>
+                    <FormLabel>{t("subject")}</FormLabel>
                     <FormControl>
-                      <Input placeholder="Subject" {...field} />
+                      <Input placeholder={t("subjectPlaceholder")} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -130,9 +131,9 @@ function ContactPage() {
                 name="message"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Message</FormLabel>
+                    <FormLabel>{t("message")}</FormLabel>
                     <FormControl>
-                      <Textarea rows={6} placeholder="Message" {...field} />
+                      <Textarea rows={6} placeholder={t("messagePlaceholder")} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -140,19 +141,19 @@ function ContactPage() {
               />
 
               <Button type="submit" disabled={form.formState.isSubmitting} size="lg">
-                {form.formState.isSubmitting ? "Sending…" : "Send Message"}
+                {form.formState.isSubmitting ? t("sending") : t("sendMessage")}
               </Button>
 
               {status === "success" && (
                 <div className="flex items-center gap-2 rounded-md border border-border bg-secondary/60 px-4 py-3 text-sm text-foreground">
                   <CheckCircle2 className="h-4 w-4 shrink-0 text-accent-foreground" />
-                  Thank you — your message has been sent successfully.
+                  {t("sendSuccess")}
                 </div>
               )}
               {status === "error" && (
                 <div className="flex items-center gap-2 rounded-md border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm text-destructive">
                   <AlertCircle className="h-4 w-4 shrink-0" />
-                  Something went wrong sending your message. Please try again.
+                  {t("sendError")}
                 </div>
               )}
             </form>
@@ -160,9 +161,10 @@ function ContactPage() {
 
           <aside className="space-y-4 text-sm">
             <div>
-              <p className="eyebrow">Email</p>
+              <p className="eyebrow">{t("email")}</p>
               <a
                 href={`mailto:${profile.email}`}
+                dir="ltr"
                 className="mt-1 flex items-center gap-2 hover:underline"
               >
                 <Mail className="h-4 w-4 shrink-0" />
@@ -170,9 +172,10 @@ function ContactPage() {
               </a>
             </div>
             <div>
-              <p className="eyebrow">Phone</p>
+              <p className="eyebrow">{t("phone")}</p>
               <a
                 href={`tel:${profile.phone.replace(/\s+/g, "")}`}
+                dir="ltr"
                 className="mt-1 flex items-center gap-2 hover:underline"
               >
                 <Phone className="h-4 w-4 shrink-0" />
@@ -181,13 +184,13 @@ function ContactPage() {
             </div>
             {profile.location && (
               <div>
-                <p className="eyebrow">Location</p>
-                <p className="mt-1">{profile.location}</p>
+                <p className="eyebrow">{t("location")}</p>
+                <p className="mt-1">{pick(profile.location, profile.locationAr)}</p>
               </div>
             )}
             {socialLinks.length > 0 && (
               <div>
-                <p className="eyebrow">Profiles</p>
+                <p className="eyebrow">{t("profiles")}</p>
                 <ul className="mt-1 space-y-1">
                   {socialLinks.map((s) => (
                     <li key={s.url}>

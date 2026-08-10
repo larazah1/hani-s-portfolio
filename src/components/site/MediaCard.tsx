@@ -11,6 +11,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
+import { useLanguage, type DictionaryKey } from "@/lib/language";
 
 function youTubeVideoId(url?: string) {
   if (!url) return null;
@@ -28,14 +29,18 @@ function youTubeThumbnailUrl(url?: string) {
   return id ? `https://img.youtube.com/vi/${id}/hqdefault.jpg` : null;
 }
 
-function typeMeta(type: MediaItem["type"]) {
+function typeMeta(type: MediaItem["type"]): {
+  icon: typeof VideoIcon;
+  labelKey: DictionaryKey;
+  actionKey: DictionaryKey;
+} {
   switch (type) {
     case "Video":
-      return { icon: VideoIcon, label: "Video", actionLabel: "Watch Video" };
+      return { icon: VideoIcon, labelKey: "video", actionKey: "watchVideo" };
     case "Interview":
-      return { icon: Mic, label: "Interview", actionLabel: "Read Article" };
+      return { icon: Mic, labelKey: "interview", actionKey: "readArticle" };
     default:
-      return { icon: Newspaper, label: "Article", actionLabel: "Read Article" };
+      return { icon: Newspaper, labelKey: "article", actionKey: "readArticle" };
   }
 }
 
@@ -74,9 +79,11 @@ function MediaThumb({ item }: { item: MediaItem }) {
 }
 
 export function MediaCard({ item }: { item: MediaItem }) {
+  const { t, pick } = useLanguage();
   const meta = typeMeta(item.type);
   const primaryUrl = item.videoUrl ?? item.articleUrl;
   const embed = youTubeEmbedUrl(item.videoUrl);
+  const displayTitle = pick(item.title, item.titleAr ?? item.title);
 
   return (
     <article className="group flex h-full flex-col overflow-hidden rounded-lg border border-border bg-card shadow-soft transition-all hover:-translate-y-0.5 hover:border-accent/50 hover:shadow-md">
@@ -89,10 +96,10 @@ export function MediaCard({ item }: { item: MediaItem }) {
             {item.date} · {item.type}
           </p>
           <Badge variant="secondary" className="font-normal">
-            {meta.label}
+            {t(meta.labelKey)}
           </Badge>
         </div>
-        <h3 className="mt-2 text-lg leading-snug font-semibold">{item.title}</h3>
+        <h3 className="mt-2 text-lg leading-snug font-semibold">{displayTitle}</h3>
         <p className="mt-1 text-sm text-muted-foreground">{item.source}</p>
         {item.description && (
           <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{item.description}</p>
@@ -103,7 +110,7 @@ export function MediaCard({ item }: { item: MediaItem }) {
             <DialogTrigger asChild>
               <Button variant="secondary" size="sm">
                 <Eye />
-                View
+                {t("view")}
               </Button>
             </DialogTrigger>
             <DialogContent className="max-h-[85vh] overflow-y-auto sm:max-w-xl">
@@ -112,7 +119,7 @@ export function MediaCard({ item }: { item: MediaItem }) {
                   {item.date} · {item.type}
                 </p>
                 <DialogTitle className="font-[family-name:var(--font-display)] text-xl font-normal leading-snug">
-                  {item.title}
+                  {displayTitle}
                 </DialogTitle>
                 <DialogDescription className="pt-1">{item.source}</DialogDescription>
               </DialogHeader>
@@ -123,7 +130,7 @@ export function MediaCard({ item }: { item: MediaItem }) {
                 <div className="aspect-video overflow-hidden rounded-md border border-border">
                   <iframe
                     src={embed}
-                    title={item.title}
+                    title={displayTitle}
                     className="h-full w-full"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
@@ -134,7 +141,7 @@ export function MediaCard({ item }: { item: MediaItem }) {
                 <div className="pt-2">
                   <Button variant="outline" size="sm" asChild>
                     <a href={primaryUrl} target="_blank" rel="noreferrer noopener">
-                      {meta.actionLabel}
+                      {t(meta.actionKey)}
                       <ExternalLink />
                     </a>
                   </Button>
@@ -146,7 +153,7 @@ export function MediaCard({ item }: { item: MediaItem }) {
           {primaryUrl && (
             <Button variant="outline" size="sm" asChild>
               <a href={primaryUrl} target="_blank" rel="noreferrer noopener">
-                {meta.actionLabel}
+                {t(meta.actionKey)}
                 <ExternalLink />
               </a>
             </Button>
