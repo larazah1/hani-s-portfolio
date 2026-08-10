@@ -784,6 +784,8 @@ export const media: MediaItem[] = [
     date: "Dec 19, 2013",
     type: "News Feature",
     articleUrl: "https://www.arabnews.com/news/495066",
+    thumbnail:
+      "https://www.arabnews.com/sites/default/files/styles/watermark_670x423/public/media/19/12/2013/1387395850479077100.jpg?itok=WymW1nmU",
     featured: true,
   },
   {
