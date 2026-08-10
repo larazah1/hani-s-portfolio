@@ -9,7 +9,7 @@ export const profile = {
     "More than three decades of experience in geophysics, seismology, seismic hazard assessment, disaster risk reduction, and geological research.",
   location: "Jeddah, Saudi Arabia",
   email: "zahran.hm@sgs.org.sa",
-  phone: "+966 505 613 667",
+  phone: "+966 50 598 1677",
   primaryCta: { label: "Explore My Research", to: "/publications" },
   secondaryCta: { label: "Get in Touch", to: "/contact" },
 };
@@ -137,24 +137,26 @@ export const publications: Publication[] = [
     id: "pub-1",
     title:
       "Areal-Source and Fault-Source Based Probabilistic Seismic Hazard Analysis Using Characteristic Earthquake Model and Monte-Carlo Approach: An Example of the Gulf of Aqaba Region",
-    authors: "Zahran H.M. et al.",
-    journal: "Journal not yet specified",
+    authors: "Sokolov V., Zahran H.M., Toni M.",
+    journal: "Soil Dynamics and Earthquake Engineering",
     year: 2024,
     type: "Journal Article",
     area: "Seismic Hazard Assessment",
     summary:
       "A probabilistic seismic hazard analysis of the Gulf of Aqaba region combining areal- and fault-source models with a characteristic earthquake model and Monte-Carlo simulation.",
+    url: "https://www.sciencedirect.com/science/article/abs/pii/S0267726124004937",
     featured: true,
   },
   {
     id: "pub-2",
     title: "Thickness of the Saudi Arabian Crust",
-    authors: "Zahran H.M. et al.",
-    journal: "US Geological Survey Professional Paper",
+    authors: "Blanchette A.R., Klemperer S.L., Mooney W.D., Zahran H.M.",
+    journal: "US Geological Survey Professional Paper 1862 (Chapter M)",
     year: 2023,
     type: "Report",
     area: "Geophysics",
     summary: "An assessment of crustal thickness beneath Saudi Arabia.",
+    url: "https://pubs.usgs.gov/publication/pp1862M",
     featured: true,
   },
   {
@@ -167,19 +169,22 @@ export const publications: Publication[] = [
     area: "Seismology",
     summary:
       "An investigation of teleseismic P-wave attenuation structure beneath the Arabian Plate.",
+    doi: "10.3390/geosciences13110343",
+    url: "https://doi.org/10.3390/geosciences13110343",
     featured: true,
   },
   {
     id: "pub-4",
     title:
       "Isotropic and Radially Anisotropic S-Velocity Structure Beneath the Arabian Plate Inferred from Surface Wave Tomography",
-    authors: "Zahran H.M. et al.",
+    authors: "Kim R., Witek M., Chang S-J., Lim J-A., Mai P.M., Zahran H.M.",
     journal: "Tectonophysics",
     year: 2023,
     type: "Journal Article",
     area: "Seismology",
     summary:
       "Surface wave tomography constraining isotropic and radially anisotropic shear-velocity structure beneath the Arabian Plate.",
+    url: "https://www.sciencedirect.com/science/article/pii/S0040195123002664",
     featured: true,
   },
   {
@@ -187,12 +192,13 @@ export const publications: Publication[] = [
     title:
       "The Duration and Characteristics of Magmatic Differentiation from Basalt to Trachyte Within the Matan Volcanic Center, Northern Harrat Rahat, Kingdom of Saudi Arabia",
     authors: "Zahran H.M. et al.",
-    journal: "Journal not yet specified",
+    journal: "US Geological Survey Professional Paper 1862 (Chapter F)",
     year: 2023,
     type: "Journal Article",
     area: "Volcanology",
     summary:
       "A study of the timescales and characteristics of magmatic differentiation from basalt to trachyte at the Matan Volcanic Center, northern Harrat Rahat.",
+    url: "https://pubs.usgs.gov/publication/pp1862F",
     featured: true,
   },
   {
@@ -534,6 +540,7 @@ export const media: MediaItem[] = [
     type: "Interview",
     videoUrl: "https://slaati.com/2023/09/12/p2369452.html",
     articleUrl: "https://slaati.com/2023/09/12/p2369452.html",
+    featured: true,
   },
   {
     id: "media-4",
@@ -753,6 +760,7 @@ export const media: MediaItem[] = [
     date: "Dec 19, 2013",
     type: "News Feature",
     articleUrl: "https://www.arabnews.com/news/495066",
+    featured: true,
   },
   {
     id: "media-31",
