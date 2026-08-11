@@ -3,14 +3,15 @@ import { desc, eq, sql } from "drizzle-orm";
 import { z } from "zod";
 import { db } from "@/db/client";
 import { contactMessages } from "@/db/schema";
+import { safeString } from "@/lib/text-validation";
 import { logActivity } from "./collection-helpers";
 import { requireAdmin } from "./require-admin";
 
 const submitContactMessageSchema = z.object({
-  name: z.string().trim().min(1).max(200),
+  name: safeString(200).min(1),
   email: z.string().trim().email().max(200),
-  subject: z.string().trim().min(1).max(300),
-  message: z.string().trim().min(1).max(5000),
+  subject: safeString(300).min(1),
+  message: safeString(5000).min(1),
 });
 
 export const submitContactMessage = createServerFn({ method: "POST" })

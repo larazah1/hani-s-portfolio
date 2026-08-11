@@ -4,6 +4,7 @@ import { z } from "zod";
 import { db } from "@/db/client";
 import { pages, sections } from "@/db/schema";
 import { SECTION_TYPES } from "@/lib/section-types";
+import { safeJsonRecord, safePath, safeString } from "@/lib/text-validation";
 import { requireAdmin } from "./require-admin";
 import { logActivity } from "./collection-helpers";
 
@@ -43,17 +44,11 @@ export const getPageForEdit = createServerFn({ method: "GET" })
   });
 
 const createPageSchema = z.object({
-  path: z
-    .string()
-    .min(1)
-    .regex(
-      /^\/[a-z0-9-]*$/,
-      "Path must start with / and use lowercase letters, numbers, and dashes.",
-    ),
-  title: z.string().min(1),
-  titleAr: z.string().min(1),
-  navLabel: z.string().optional(),
-  navLabelAr: z.string().optional(),
+  path: safePath().min(1),
+  title: safeString(200).min(1),
+  titleAr: safeString(200).min(1),
+  navLabel: safeString(100).optional(),
+  navLabelAr: safeString(100).optional(),
   showInNav: z.boolean().optional().default(true),
 });
 
@@ -74,16 +69,16 @@ export const createPage = createServerFn({ method: "POST" })
 
 const updatePageSchema = z.object({
   id: z.string().uuid(),
-  path: z.string().min(1).optional(),
-  title: z.string().min(1).optional(),
-  titleAr: z.string().min(1).optional(),
-  navLabel: z.string().optional(),
-  navLabelAr: z.string().optional(),
+  path: safePath().optional(),
+  title: safeString(200).min(1).optional(),
+  titleAr: safeString(200).min(1).optional(),
+  navLabel: safeString(100).optional(),
+  navLabelAr: safeString(100).optional(),
   showInNav: z.boolean().optional(),
-  metaTitle: z.string().optional(),
-  metaTitleAr: z.string().optional(),
-  metaDescription: z.string().optional(),
-  metaDescriptionAr: z.string().optional(),
+  metaTitle: safeString(300).optional(),
+  metaTitleAr: safeString(300).optional(),
+  metaDescription: safeString(500).optional(),
+  metaDescriptionAr: safeString(500).optional(),
   status: z.enum(["draft", "published"]).optional(),
 });
 
@@ -146,11 +141,11 @@ export const addSection = createServerFn({ method: "POST" })
 
 const updateSectionSchema = z.object({
   id: z.string().uuid(),
-  eyebrow: z.string().optional(),
-  eyebrowAr: z.string().optional(),
-  title: z.string().optional(),
-  titleAr: z.string().optional(),
-  config: z.record(z.string(), z.unknown()).optional(),
+  eyebrow: safeString(200).optional(),
+  eyebrowAr: safeString(200).optional(),
+  title: safeString(200).optional(),
+  titleAr: safeString(200).optional(),
+  config: safeJsonRecord().optional(),
   visible: z.boolean().optional(),
 });
 

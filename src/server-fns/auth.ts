@@ -4,6 +4,7 @@ import { z } from "zod";
 import { db } from "@/db/client";
 import { admins } from "@/db/schema";
 import { hashPassword, sha256Hex, verifyPassword } from "@/lib/security";
+import { safeToken } from "@/lib/text-validation";
 import { createAdminSession, destroyAdminSession } from "@/lib/session.server";
 import { requireAdmin } from "./require-admin";
 
@@ -69,7 +70,7 @@ export const getCurrentAdmin = createServerFn({ method: "GET" }).handler(async (
 });
 
 const acceptInviteSchema = z.object({
-  token: z.string().min(1),
+  token: safeToken(),
   password: z.string().min(10, "Password must be at least 10 characters."),
 });
 
