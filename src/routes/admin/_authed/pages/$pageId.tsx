@@ -97,8 +97,8 @@ function PageSectionBuilder() {
     onSuccess: invalidate,
   });
 
-  if (isLoading) return <p className="text-sm text-muted-foreground">Loading…</p>;
-  if (!data) return <p className="text-sm text-muted-foreground">Page not found.</p>;
+  if (isLoading) return <p className="text-sm text-muted-foreground">جارٍ التحميل…</p>;
+  if (!data) return <p className="text-sm text-muted-foreground">الصفحة غير موجودة.</p>;
 
   const { page, sections } = data;
   const typedSections = sections as SectionRow[];
@@ -117,11 +117,13 @@ function PageSectionBuilder() {
     <div>
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <p className="eyebrow">Pages</p>
+          <p className="eyebrow">الصفحات</p>
           <h1 className="mt-2 font-[family-name:var(--font-display)] text-2xl font-semibold">
             {page.title}
           </h1>
-          <p className="mt-1 text-sm text-muted-foreground">{page.path}</p>
+          <p className="mt-1 text-sm text-muted-foreground" dir="ltr">
+            {page.path}
+          </p>
         </div>
         <div className="flex items-center gap-6 rounded-md border border-border bg-card px-4 py-3">
           <label className="flex items-center gap-2 text-sm font-medium">
@@ -129,7 +131,7 @@ function PageSectionBuilder() {
               checked={page.showInNav}
               onCheckedChange={(v) => updatePageMutation.mutate({ showInNav: v })}
             />
-            In navigation
+            في قائمة التنقل
           </label>
           <label className="flex items-center gap-2 text-sm font-medium">
             <Switch
@@ -138,7 +140,7 @@ function PageSectionBuilder() {
                 updatePageMutation.mutate({ status: v ? "published" : "draft" })
               }
             />
-            Published
+            منشورة
           </label>
         </div>
       </div>
@@ -161,14 +163,14 @@ function PageSectionBuilder() {
           disabled={addSectionMutation.isPending}
         >
           <Plus />
-          Add Section
+          إضافة قسم
         </Button>
       </div>
 
       <div className="mt-6 space-y-3">
         {typedSections.length === 0 ? (
           <p className="rounded-md border border-dashed border-border px-5 py-8 text-sm text-muted-foreground">
-            No sections yet — add one above.
+            لا توجد أقسام بعد — أضف قسمًا من الأعلى.
           </p>
         ) : (
           typedSections.map((section, index) => (
@@ -181,7 +183,7 @@ function PageSectionBuilder() {
                   type="button"
                   disabled={index === 0}
                   onClick={() => moveSection(index, -1)}
-                  aria-label="Move up"
+                  aria-label="تحريك للأعلى"
                   className="text-muted-foreground hover:text-foreground disabled:opacity-30"
                 >
                   <ChevronUp className="h-4 w-4" />
@@ -190,7 +192,7 @@ function PageSectionBuilder() {
                   type="button"
                   disabled={index === typedSections.length - 1}
                   onClick={() => moveSection(index, 1)}
-                  aria-label="Move down"
+                  aria-label="تحريك للأسفل"
                   className="text-muted-foreground hover:text-foreground disabled:opacity-30"
                 >
                   <ChevronDown className="h-4 w-4" />
@@ -199,7 +201,7 @@ function PageSectionBuilder() {
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2">
                   <p className="text-sm font-medium">{SECTION_TYPE_LABELS[section.type]}</p>
-                  {!section.visible && <Badge variant="outline">Hidden</Badge>}
+                  {!section.visible && <Badge variant="outline">مخفي</Badge>}
                 </div>
                 {(section.title || section.eyebrow) && (
                   <p className="truncate text-xs text-muted-foreground">
@@ -215,7 +217,7 @@ function PageSectionBuilder() {
                   onClick={() =>
                     toggleVisibleMutation.mutate({ id: section.id, visible: !section.visible })
                   }
-                  aria-label={section.visible ? "Hide section" : "Show section"}
+                  aria-label={section.visible ? "إخفاء القسم" : "إظهار القسم"}
                 >
                   {section.visible ? (
                     <Eye className="h-3.5 w-3.5" />
@@ -224,7 +226,7 @@ function PageSectionBuilder() {
                   )}
                 </Button>
                 <Button variant="outline" size="sm" onClick={() => setEditingSection(section)}>
-                  Edit
+                  تعديل
                 </Button>
                 <Button variant="outline" size="sm" onClick={() => setDeleteTarget(section)}>
                   <Trash2 className="h-3.5 w-3.5" />

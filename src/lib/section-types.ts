@@ -25,22 +25,22 @@ export const SECTION_TYPES = [
 export type SectionType = (typeof SECTION_TYPES)[number];
 
 export const SECTION_TYPE_LABELS: Record<SectionType, string> = {
-  hero: "Hero",
-  summary: "Professional Summary",
-  "stats-row": "Statistics Row",
-  "career-timeline": "Career Timeline",
-  "expertise-grid": "Expertise Grid",
-  "education-grid": "Education Grid",
-  "experience-timeline": "Experience Timeline",
-  "memberships-list": "Memberships List",
-  "list-block": "List (Specialties / Activities / Languages / Interests)",
-  "publications-carousel": "Publications Carousel",
-  "media-carousel": "Media Carousel",
-  "recommendations-grid": "Recommendations Grid",
-  "publications-full-list": "Full Publications List (with filters)",
-  "media-full-grid": "Full Media Grid",
-  "rich-text": "Rich Text Block",
-  "contact-block": "Contact Form & Info",
+  hero: "الترويسة الرئيسية",
+  summary: "الملخص المهني",
+  "stats-row": "صف الإحصائيات",
+  "career-timeline": "الجدول الزمني للمسيرة المهنية",
+  "expertise-grid": "شبكة مجالات الخبرة",
+  "education-grid": "شبكة التعليم",
+  "experience-timeline": "الجدول الزمني للخبرات",
+  "memberships-list": "قائمة العضويات",
+  "list-block": "قائمة (تخصصات / أنشطة / لغات / اهتمامات)",
+  "publications-carousel": "عرض شرائح المنشورات",
+  "media-carousel": "عرض شرائح الوسائط",
+  "recommendations-grid": "شبكة التوصيات",
+  "publications-full-list": "القائمة الكاملة للمنشورات (مع الفلاتر)",
+  "media-full-grid": "الشبكة الكاملة للوسائط",
+  "rich-text": "كتلة نص منسق",
+  "contact-block": "نموذج ومعلومات التواصل",
 };
 
 /** Section types that make sense to add to an arbitrary/custom page, as

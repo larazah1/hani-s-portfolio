@@ -29,17 +29,17 @@ function EditRecommendationPage() {
       void queryClient.invalidateQueries({ queryKey: ["recommendations"] });
       void router.navigate({ to: "/admin/recommendations" });
     },
-    onError: (e: Error) => setError(e.message || "Something went wrong."),
+    onError: (e: Error) => setError(e.message || "حدث خطأ ما."),
   });
 
-  if (isLoading) return <p className="text-sm text-muted-foreground">Loading…</p>;
-  if (!data) return <p className="text-sm text-muted-foreground">Not found.</p>;
+  if (isLoading) return <p className="text-sm text-muted-foreground">جارٍ التحميل…</p>;
+  if (!data) return <p className="text-sm text-muted-foreground">غير موجود.</p>;
 
   return (
     <div>
-      <p className="eyebrow">Recommendations</p>
+      <p className="eyebrow">التوصيات</p>
       <h1 className="mt-2 font-[family-name:var(--font-display)] text-2xl font-semibold">
-        Edit Recommendation
+        تعديل التوصية
       </h1>
       <div className="mt-8">
         <RecommendationForm
@@ -52,7 +52,7 @@ function EditRecommendationPage() {
             featured: data.featured,
             status: data.status,
           }}
-          submitLabel="Save Changes"
+          submitLabel="حفظ التغييرات"
           isSubmitting={mutation.isPending}
           error={error}
           onSubmit={(values) => {

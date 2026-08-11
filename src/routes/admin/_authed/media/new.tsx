@@ -29,19 +29,19 @@ function NewMediaPage() {
       void queryClient.invalidateQueries({ queryKey: ["media"] });
       void router.navigate({ to: "/admin/media" });
     },
-    onError: (e: Error) => setError(e.message || "Something went wrong."),
+    onError: (e: Error) => setError(e.message || "حدث خطأ ما."),
   });
 
   return (
     <div>
-      <p className="eyebrow">Interviews & Articles</p>
+      <p className="eyebrow">المقابلات والمقالات</p>
       <h1 className="mt-2 font-[family-name:var(--font-display)] text-2xl font-semibold">
-        Add Interview / Article
+        إضافة مقابلة / مقال
       </h1>
       <div className="mt-8">
         <MediaForm
           initial={emptyMediaForm}
-          submitLabel="Create"
+          submitLabel="إنشاء"
           isSubmitting={mutation.isPending}
           error={error}
           onSubmit={(values) => {

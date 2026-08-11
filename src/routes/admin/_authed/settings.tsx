@@ -69,7 +69,7 @@ function SettingsPage() {
   });
 
   if (isLoading || !form) {
-    return <p className="text-sm text-muted-foreground">Loading…</p>;
+    return <p className="text-sm text-muted-foreground">جارٍ التحميل…</p>;
   }
 
   function set<K extends keyof FormState>(key: K, value: string) {
@@ -78,9 +78,9 @@ function SettingsPage() {
 
   return (
     <div className="max-w-3xl">
-      <p className="eyebrow">Website Settings</p>
+      <p className="eyebrow">إعدادات الموقع</p>
       <h1 className="mt-2 font-[family-name:var(--font-display)] text-2xl font-semibold">
-        Website Settings
+        إعدادات الموقع
       </h1>
 
       <form
@@ -91,27 +91,23 @@ function SettingsPage() {
         className="mt-8 space-y-10"
       >
         <div>
-          <h2 className="text-sm font-semibold text-foreground">General</h2>
+          <h2 className="text-sm font-semibold text-foreground">عام</h2>
           <div className="mt-4 grid gap-4 sm:grid-cols-2">
+            <Field label="اسم الموقع" value={form.siteName} onChange={(v) => set("siteName", v)} />
             <Field
-              label="Website Name"
-              value={form.siteName}
-              onChange={(v) => set("siteName", v)}
-            />
-            <Field
-              label="Website Name (Arabic)"
+              label="اسم الموقع (بالعربية)"
               value={form.siteNameAr}
               onChange={(v) => set("siteNameAr", v)}
             />
-            <Field label="Logo URL" value={form.logoUrl} onChange={(v) => set("logoUrl", v)} full />
+            <Field label="رابط الشعار" value={form.logoUrl} onChange={(v) => set("logoUrl", v)} full />
             <Field
-              label="Favicon URL"
+              label="رابط أيقونة الموقع"
               value={form.faviconUrl}
               onChange={(v) => set("faviconUrl", v)}
               full
             />
             <div className="space-y-1.5 sm:col-span-2">
-              <label className="text-sm font-medium">Website Description</label>
+              <label className="text-sm font-medium">وصف الموقع</label>
               <Textarea
                 rows={2}
                 value={form.siteDescription}
@@ -119,7 +115,7 @@ function SettingsPage() {
               />
             </div>
             <div className="space-y-1.5 sm:col-span-2">
-              <label className="text-sm font-medium">Website Description (Arabic)</label>
+              <label className="text-sm font-medium">وصف الموقع (بالعربية)</label>
               <Textarea
                 rows={2}
                 value={form.siteDescriptionAr}
@@ -130,20 +126,20 @@ function SettingsPage() {
         </div>
 
         <div>
-          <h2 className="text-sm font-semibold text-foreground">SEO / Metadata</h2>
+          <h2 className="text-sm font-semibold text-foreground">تحسين محركات البحث والبيانات الوصفية</h2>
           <div className="mt-4 grid gap-4 sm:grid-cols-2">
             <Field
-              label="Default Page Title"
+              label="عنوان الصفحة الافتراضي"
               value={form.defaultMetaTitle}
               onChange={(v) => set("defaultMetaTitle", v)}
             />
             <Field
-              label="Default Page Title (Arabic)"
+              label="عنوان الصفحة الافتراضي (بالعربية)"
               value={form.defaultMetaTitleAr}
               onChange={(v) => set("defaultMetaTitleAr", v)}
             />
             <div className="space-y-1.5 sm:col-span-2">
-              <label className="text-sm font-medium">Default Meta Description</label>
+              <label className="text-sm font-medium">الوصف الافتراضي للبيانات الوصفية</label>
               <Textarea
                 rows={2}
                 value={form.defaultMetaDescription}
@@ -151,7 +147,7 @@ function SettingsPage() {
               />
             </div>
             <div className="space-y-1.5 sm:col-span-2">
-              <label className="text-sm font-medium">Default Meta Description (Arabic)</label>
+              <label className="text-sm font-medium">الوصف الافتراضي للبيانات الوصفية (بالعربية)</label>
               <Textarea
                 rows={2}
                 value={form.defaultMetaDescriptionAr}
@@ -159,7 +155,7 @@ function SettingsPage() {
               />
             </div>
             <Field
-              label="Open Graph Image URL"
+              label="رابط صورة المشاركة (Open Graph)"
               value={form.ogImageUrl}
               onChange={(v) => set("ogImageUrl", v)}
               full
@@ -168,25 +164,25 @@ function SettingsPage() {
         </div>
 
         <div>
-          <h2 className="text-sm font-semibold text-foreground">Footer</h2>
+          <h2 className="text-sm font-semibold text-foreground">التذييل</h2>
           <div className="mt-4 grid gap-4 sm:grid-cols-2">
             <Field
-              label="Footer Description"
+              label="وصف التذييل"
               value={form.footerDescription}
               onChange={(v) => set("footerDescription", v)}
             />
             <Field
-              label="Footer Description (Arabic)"
+              label="وصف التذييل (بالعربية)"
               value={form.footerDescriptionAr}
               onChange={(v) => set("footerDescriptionAr", v)}
             />
             <Field
-              label="Copyright Text"
+              label="نص حقوق النشر"
               value={form.copyrightText}
               onChange={(v) => set("copyrightText", v)}
             />
             <Field
-              label="Copyright Text (Arabic)"
+              label="نص حقوق النشر (بالعربية)"
               value={form.copyrightTextAr}
               onChange={(v) => set("copyrightTextAr", v)}
             />
@@ -195,9 +191,9 @@ function SettingsPage() {
 
         <div className="flex items-center gap-3">
           <Button type="submit" disabled={saveMutation.isPending}>
-            {saveMutation.isPending ? "Saving…" : "Save Changes"}
+            {saveMutation.isPending ? "جارٍ الحفظ…" : "حفظ التغييرات"}
           </Button>
-          {saved && <span className="text-sm text-muted-foreground">Saved.</span>}
+          {saved && <span className="text-sm text-muted-foreground">تم الحفظ.</span>}
         </div>
       </form>
     </div>

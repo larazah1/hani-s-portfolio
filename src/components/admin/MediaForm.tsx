@@ -10,6 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { mediaTypeAr } from "@/lib/media-i18n";
 
 const MEDIA_TYPES = ["Interview", "Article", "Video", "News Feature", "Other"] as const;
 
@@ -70,20 +71,20 @@ export function MediaForm({
     >
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-1.5 sm:col-span-2">
-          <label className="text-sm font-medium">Title</label>
+          <label className="text-sm font-medium">العنوان</label>
           <Input value={form.title} onChange={(e) => set("title", e.target.value)} required />
         </div>
         <div className="space-y-1.5 sm:col-span-2">
-          <label className="text-sm font-medium">Title (Arabic)</label>
+          <label className="text-sm font-medium">العنوان (بالعربية)</label>
           <Input value={form.titleAr} onChange={(e) => set("titleAr", e.target.value)} />
         </div>
 
         <div className="space-y-1.5">
-          <label className="text-sm font-medium">Source / Organization</label>
+          <label className="text-sm font-medium">المصدر / الجهة</label>
           <Input value={form.source} onChange={(e) => set("source", e.target.value)} required />
         </div>
         <div className="space-y-1.5">
-          <label className="text-sm font-medium">Date (e.g. Jul 2024 or n.d.)</label>
+          <label className="text-sm font-medium">التاريخ (مثال: يوليو 2024)</label>
           <Input
             value={form.dateLabel}
             onChange={(e) => set("dateLabel", e.target.value)}
@@ -92,7 +93,7 @@ export function MediaForm({
         </div>
 
         <div className="space-y-1.5">
-          <label className="text-sm font-medium">Type</label>
+          <label className="text-sm font-medium">النوع</label>
           <Select
             value={form.type}
             onValueChange={(v) => set("type", v as MediaFormValues["type"])}
@@ -103,28 +104,40 @@ export function MediaForm({
             <SelectContent>
               {MEDIA_TYPES.map((t) => (
                 <SelectItem key={t} value={t}>
-                  {t}
+                  {mediaTypeAr[t] ?? t}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
         </div>
         <div className="space-y-1.5">
-          <label className="text-sm font-medium">Thumbnail URL</label>
-          <Input value={form.thumbnail} onChange={(e) => set("thumbnail", e.target.value)} />
+          <label className="text-sm font-medium">رابط الصورة المصغرة</label>
+          <Input
+            value={form.thumbnail}
+            onChange={(e) => set("thumbnail", e.target.value)}
+            dir="ltr"
+          />
         </div>
 
         <div className="space-y-1.5">
-          <label className="text-sm font-medium">Video URL (for Watch Video)</label>
-          <Input value={form.videoUrl} onChange={(e) => set("videoUrl", e.target.value)} />
+          <label className="text-sm font-medium">رابط الفيديو (لزر مشاهدة الفيديو)</label>
+          <Input
+            value={form.videoUrl}
+            onChange={(e) => set("videoUrl", e.target.value)}
+            dir="ltr"
+          />
         </div>
         <div className="space-y-1.5">
-          <label className="text-sm font-medium">Article URL (for Read Article)</label>
-          <Input value={form.articleUrl} onChange={(e) => set("articleUrl", e.target.value)} />
+          <label className="text-sm font-medium">رابط المقال (لزر قراءة المقال)</label>
+          <Input
+            value={form.articleUrl}
+            onChange={(e) => set("articleUrl", e.target.value)}
+            dir="ltr"
+          />
         </div>
 
         <div className="space-y-1.5 sm:col-span-2">
-          <label className="text-sm font-medium">Short Description</label>
+          <label className="text-sm font-medium">وصف مختصر</label>
           <Textarea
             rows={3}
             value={form.description}
@@ -136,14 +149,14 @@ export function MediaForm({
       <div className="flex flex-wrap items-center gap-8 rounded-md border border-border bg-card px-4 py-3">
         <label className="flex items-center gap-2 text-sm font-medium">
           <Switch checked={form.featured} onCheckedChange={(v) => set("featured", v)} />
-          Featured on homepage
+          مميز في الصفحة الرئيسية
         </label>
         <label className="flex items-center gap-2 text-sm font-medium">
           <Switch
             checked={form.status === "published"}
             onCheckedChange={(v) => set("status", v ? "published" : "draft")}
           />
-          Published
+          منشور
         </label>
       </div>
 
@@ -154,7 +167,7 @@ export function MediaForm({
       )}
 
       <Button type="submit" disabled={isSubmitting}>
-        {isSubmitting ? "Saving…" : submitLabel}
+        {isSubmitting ? "جارٍ الحفظ…" : submitLabel}
       </Button>
     </form>
   );

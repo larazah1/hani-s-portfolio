@@ -30,11 +30,14 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { mediaTypeAr } from "@/lib/media-i18n";
 import { deleteMediaItem, duplicateMediaItem, listMedia } from "@/server-fns/media";
 
 export const Route = createFileRoute("/admin/_authed/media/")({
   component: MediaListPage,
 });
+
+const STATUS_AR: Record<string, string> = { published: "منشور", draft: "مسودة" };
 
 function MediaListPage() {
   const queryClient = useQueryClient();
@@ -69,15 +72,15 @@ function MediaListPage() {
     <div>
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <p className="eyebrow">Interviews & Articles</p>
+          <p className="eyebrow">المقابلات والمقالات</p>
           <h1 className="mt-2 font-[family-name:var(--font-display)] text-2xl font-semibold">
-            Interviews & Articles
+            المقابلات والمقالات
           </h1>
         </div>
         <Button asChild>
           <Link to="/admin/media/new">
             <Plus />
-            Add Interview / Article
+            إضافة مقابلة / مقال
           </Link>
         </Button>
       </div>
@@ -86,7 +89,7 @@ function MediaListPage() {
         <Input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search"
+          placeholder="بحث"
           className="max-w-xs"
         />
         <Select value={type} onValueChange={setType}>
@@ -96,7 +99,7 @@ function MediaListPage() {
           <SelectContent>
             {types.map((t) => (
               <SelectItem key={t} value={t}>
-                {t === "All" ? "All types" : t}
+                {t === "All" ? "كل الأنواع" : (mediaTypeAr[t] ?? t)}
               </SelectItem>
             ))}
           </SelectContent>
@@ -105,20 +108,20 @@ function MediaListPage() {
 
       <div className="mt-6 overflow-hidden rounded-lg border border-border bg-card">
         {isLoading ? (
-          <p className="p-6 text-sm text-muted-foreground">Loading…</p>
+          <p className="p-6 text-sm text-muted-foreground">جارٍ التحميل…</p>
         ) : filtered.length === 0 ? (
-          <p className="p-6 text-sm text-muted-foreground">Nothing matches.</p>
+          <p className="p-6 text-sm text-muted-foreground">لا يوجد ما يطابق البحث.</p>
         ) : (
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Title</TableHead>
-                <TableHead>Source</TableHead>
-                <TableHead>Date</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Featured</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
+                <TableHead>العنوان</TableHead>
+                <TableHead>المصدر</TableHead>
+                <TableHead>التاريخ</TableHead>
+                <TableHead>النوع</TableHead>
+                <TableHead>الحالة</TableHead>
+                <TableHead>مميز</TableHead>
+                <TableHead className="text-end">الإجراءات</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -129,13 +132,13 @@ function MediaListPage() {
                     <TableCell className="max-w-sm truncate font-medium">{m.title}</TableCell>
                     <TableCell>{m.source}</TableCell>
                     <TableCell>{m.dateLabel}</TableCell>
-                    <TableCell>{m.type}</TableCell>
+                    <TableCell>{mediaTypeAr[m.type] ?? m.type}</TableCell>
                     <TableCell>
                       <Badge variant={m.status === "published" ? "default" : "secondary"}>
-                        {m.status}
+                        {STATUS_AR[m.status] ?? m.status}
                       </Badge>
                     </TableCell>
-                    <TableCell>{m.featured ? "Yes" : "—"}</TableCell>
+                    <TableCell>{m.featured ? "نعم" : "—"}</TableCell>
                     <TableCell>
                       <div className="flex justify-end gap-2">
                         {primaryUrl && (
@@ -147,7 +150,7 @@ function MediaListPage() {
                         )}
                         <Button variant="outline" size="sm" asChild>
                           <Link to="/admin/media/$mediaId" params={{ mediaId: m.id }}>
-                            Edit
+                            تعديل
                           </Link>
                         </Button>
                         <Button
@@ -173,18 +176,18 @@ function MediaListPage() {
       <AlertDialog open={!!deleteTarget} onOpenChange={(open) => !open && setDeleteTarget(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete this item?</AlertDialogTitle>
+            <AlertDialogTitle>هل تريد حذف هذا العنصر؟</AlertDialogTitle>
             <AlertDialogDescription>
-              {deleteTarget?.title} — this can&rsquo;t be undone, and it will be removed from any
-              homepage carousel it appears in.
+              {deleteTarget?.title} — لا يمكن التراجع عن هذا الإجراء، وسيُحذف من أي عرض شرائح في
+              الصفحة الرئيسية يظهر فيه.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>إلغاء</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => deleteTarget && deleteMutation.mutate(deleteTarget.id)}
             >
-              Delete
+              حذف
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

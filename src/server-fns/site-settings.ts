@@ -40,7 +40,7 @@ export const updateSiteSettings = createServerFn({ method: "POST" })
       .set({ ...data, updatedAt: new Date() })
       .where(eq(siteSettings.id, 1))
       .returning();
-    if (!row) throw new Error("Site settings row missing.");
+    if (!row) throw new Error("سجل إعدادات الموقع غير موجود.");
     await logActivity(admin.id, "updated", "site_settings", null, "Updated website settings");
     return row;
   });

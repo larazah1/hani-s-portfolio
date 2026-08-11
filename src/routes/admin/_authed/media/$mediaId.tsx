@@ -36,17 +36,17 @@ function EditMediaPage() {
       void queryClient.invalidateQueries({ queryKey: ["media"] });
       void router.navigate({ to: "/admin/media" });
     },
-    onError: (e: Error) => setError(e.message || "Something went wrong."),
+    onError: (e: Error) => setError(e.message || "حدث خطأ ما."),
   });
 
-  if (isLoading) return <p className="text-sm text-muted-foreground">Loading…</p>;
-  if (!data) return <p className="text-sm text-muted-foreground">Item not found.</p>;
+  if (isLoading) return <p className="text-sm text-muted-foreground">جارٍ التحميل…</p>;
+  if (!data) return <p className="text-sm text-muted-foreground">العنصر غير موجود.</p>;
 
   return (
     <div>
-      <p className="eyebrow">Interviews & Articles</p>
+      <p className="eyebrow">المقابلات والمقالات</p>
       <h1 className="mt-2 font-[family-name:var(--font-display)] text-2xl font-semibold">
-        Edit Item
+        تعديل العنصر
       </h1>
       <div className="mt-8">
         <MediaForm
@@ -63,7 +63,7 @@ function EditMediaPage() {
             featured: data.featured,
             status: data.status,
           }}
-          submitLabel="Save Changes"
+          submitLabel="حفظ التغييرات"
           isSubmitting={mutation.isPending}
           error={error}
           onSubmit={(values) => {

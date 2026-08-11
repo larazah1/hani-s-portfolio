@@ -43,7 +43,7 @@ export const updateProfile = createServerFn({ method: "POST" })
       .set({ ...data, updatedAt: new Date() })
       .where(eq(profile.id, 1))
       .returning();
-    if (!row) throw new Error("Profile row missing.");
+    if (!row) throw new Error("سجل الملف الشخصي غير موجود.");
     await logActivity(admin.id, "updated", "profile", null, "Updated profile & hero");
     return row;
   });

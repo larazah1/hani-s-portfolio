@@ -39,17 +39,17 @@ function NewPagePage() {
       void queryClient.invalidateQueries({ queryKey: ["pages"] });
       void router.navigate({ to: "/admin/pages/$pageId", params: { pageId: row.id } });
     },
-    onError: (e: Error) => setError(e.message || "Something went wrong."),
+    onError: (e: Error) => setError(e.message || "حدث خطأ ما."),
   });
 
   return (
     <div className="max-w-xl">
-      <p className="eyebrow">Site Structure</p>
+      <p className="eyebrow">هيكل الموقع</p>
       <h1 className="mt-2 font-[family-name:var(--font-display)] text-2xl font-semibold">
-        Add Page
+        إضافة صفحة
       </h1>
       <p className="mt-1 text-sm text-muted-foreground">
-        Starts empty — add sections once it&rsquo;s created. New pages start as a draft.
+        تبدأ فارغة — أضف الأقسام بعد إنشائها. الصفحات الجديدة تبدأ كمسودة.
       </p>
 
       <form
@@ -61,17 +61,18 @@ function NewPagePage() {
         className="mt-8 space-y-4"
       >
         <div className="space-y-1.5">
-          <label className="text-sm font-medium">Path (e.g. /research)</label>
+          <label className="text-sm font-medium">المسار (مثال: /research)</label>
           <Input
             value={form.path}
             onChange={(e) => setForm((f) => ({ ...f, path: e.target.value }))}
             placeholder="/research"
+            dir="ltr"
             required
           />
         </div>
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="space-y-1.5">
-            <label className="text-sm font-medium">Title</label>
+            <label className="text-sm font-medium">العنوان</label>
             <Input
               value={form.title}
               onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))}
@@ -79,7 +80,7 @@ function NewPagePage() {
             />
           </div>
           <div className="space-y-1.5">
-            <label className="text-sm font-medium">Title (Arabic)</label>
+            <label className="text-sm font-medium">العنوان (بالعربية)</label>
             <Input
               value={form.titleAr}
               onChange={(e) => setForm((f) => ({ ...f, titleAr: e.target.value }))}
@@ -87,15 +88,15 @@ function NewPagePage() {
             />
           </div>
           <div className="space-y-1.5">
-            <label className="text-sm font-medium">Nav label (optional)</label>
+            <label className="text-sm font-medium">تسمية القائمة (اختياري)</label>
             <Input
               value={form.navLabel}
               onChange={(e) => setForm((f) => ({ ...f, navLabel: e.target.value }))}
-              placeholder="Defaults to Title"
+              placeholder="تُستخدم العنوان افتراضيًا"
             />
           </div>
           <div className="space-y-1.5">
-            <label className="text-sm font-medium">Nav label (Arabic, optional)</label>
+            <label className="text-sm font-medium">تسمية القائمة (بالعربية، اختياري)</label>
             <Input
               value={form.navLabelAr}
               onChange={(e) => setForm((f) => ({ ...f, navLabelAr: e.target.value }))}
@@ -108,7 +109,7 @@ function NewPagePage() {
             checked={form.showInNav}
             onCheckedChange={(v) => setForm((f) => ({ ...f, showInNav: v }))}
           />
-          Show in navigation
+          إظهار في قائمة التنقل
         </label>
 
         {error && (
@@ -118,7 +119,7 @@ function NewPagePage() {
         )}
 
         <Button type="submit" disabled={mutation.isPending}>
-          {mutation.isPending ? "Creating…" : "Create Page"}
+          {mutation.isPending ? "جارٍ الإنشاء…" : "إنشاء الصفحة"}
         </Button>
       </form>
     </div>

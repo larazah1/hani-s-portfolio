@@ -73,7 +73,7 @@ export const createPublication = createServerFn({ method: "POST" })
       .insert(publications)
       .values({ ...data, sortOrder: (row0?.maxOrder ?? -1) + 1 })
       .returning();
-    if (!row) throw new Error("Failed to create.");
+    if (!row) throw new Error("فشل الإنشاء.");
     await logActivity(admin.id, "created", "publication", row.id, row.title);
     return row;
   });
@@ -88,7 +88,7 @@ export const updatePublication = createServerFn({ method: "POST" })
       .set({ ...fields, updatedAt: new Date() })
       .where(eq(publications.id, id))
       .returning();
-    if (!row) throw new Error("Not found.");
+    if (!row) throw new Error("العنصر غير موجود.");
     await logActivity(admin.id, "updated", "publication", id, row.title);
     return row;
   });
@@ -114,7 +114,7 @@ export const duplicatePublication = createServerFn({ method: "POST" })
       .from(publications)
       .where(eq(publications.id, data.id))
       .limit(1);
-    if (!original) throw new Error("Not found.");
+    if (!original) throw new Error("العنصر غير موجود.");
     const [row0] = await db
       .select({ maxOrder: sql<number>`coalesce(max(${publications.sortOrder}), -1)` })
       .from(publications);
@@ -137,7 +137,7 @@ export const duplicatePublication = createServerFn({ method: "POST" })
         sortOrder: (row0?.maxOrder ?? -1) + 1,
       })
       .returning();
-    if (!row) throw new Error("Failed to duplicate.");
+    if (!row) throw new Error("فشل النسخ.");
     await logActivity(admin.id, "created", "publication", row.id, row.title);
     return row;
   });

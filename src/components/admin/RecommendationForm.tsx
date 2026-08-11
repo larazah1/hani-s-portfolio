@@ -56,23 +56,23 @@ export function RecommendationForm({
     >
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-1.5">
-          <label className="text-sm font-medium">Person Name</label>
+          <label className="text-sm font-medium">اسم الشخص</label>
           <Input value={form.name} onChange={(e) => set("name", e.target.value)} required />
         </div>
         <div className="space-y-1.5">
-          <label className="text-sm font-medium">Position</label>
+          <label className="text-sm font-medium">المنصب</label>
           <Input value={form.position} onChange={(e) => set("position", e.target.value)} required />
         </div>
         <div className="space-y-1.5 sm:col-span-2">
-          <label className="text-sm font-medium">Organization</label>
+          <label className="text-sm font-medium">الجهة</label>
           <Input value={form.organization} onChange={(e) => set("organization", e.target.value)} />
         </div>
         <div className="space-y-1.5">
-          <label className="text-sm font-medium">Date</label>
+          <label className="text-sm font-medium">التاريخ</label>
           <Input value={form.dateLabel} onChange={(e) => set("dateLabel", e.target.value)} />
         </div>
         <div className="space-y-1.5 sm:col-span-2">
-          <label className="text-sm font-medium">Recommendation Text</label>
+          <label className="text-sm font-medium">نص التوصية</label>
           <Textarea
             rows={5}
             value={form.body}
@@ -85,14 +85,14 @@ export function RecommendationForm({
       <div className="flex flex-wrap items-center gap-8 rounded-md border border-border bg-card px-4 py-3">
         <label className="flex items-center gap-2 text-sm font-medium">
           <Switch checked={form.featured} onCheckedChange={(v) => set("featured", v)} />
-          Featured on homepage
+          مميز في الصفحة الرئيسية
         </label>
         <label className="flex items-center gap-2 text-sm font-medium">
           <Switch
             checked={form.status === "published"}
             onCheckedChange={(v) => set("status", v ? "published" : "draft")}
           />
-          Published
+          منشور
         </label>
       </div>
 
@@ -103,7 +103,7 @@ export function RecommendationForm({
       )}
 
       <Button type="submit" disabled={isSubmitting}>
-        {isSubmitting ? "Saving…" : submitLabel}
+        {isSubmitting ? "جارٍ الحفظ…" : submitLabel}
       </Button>
     </form>
   );

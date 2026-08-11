@@ -59,27 +59,27 @@ function RecommendationsListPage() {
     <div>
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <p className="eyebrow">Recommendations</p>
+          <p className="eyebrow">التوصيات</p>
           <h1 className="mt-2 font-[family-name:var(--font-display)] text-2xl font-semibold">
-            Recommendations
+            التوصيات
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Real testimonials only — don&rsquo;t add placeholder recommendations.
+            شهادات حقيقية فقط — لا تُضِف توصيات وهمية.
           </p>
         </div>
         <Button asChild>
           <Link to="/admin/recommendations/new">
             <Plus />
-            Add Recommendation
+            إضافة توصية
           </Link>
         </Button>
       </div>
 
       <div className="mt-8 overflow-hidden rounded-lg border border-border bg-card">
         {isLoading ? (
-          <p className="p-6 text-sm text-muted-foreground">Loading…</p>
+          <p className="p-6 text-sm text-muted-foreground">جارٍ التحميل…</p>
         ) : rows.length === 0 ? (
-          <p className="p-6 text-sm text-muted-foreground">No recommendations yet.</p>
+          <p className="p-6 text-sm text-muted-foreground">لا توجد توصيات بعد.</p>
         ) : (
           <ul className="divide-y divide-border">
             {rows.map((r, index) => (
@@ -89,7 +89,7 @@ function RecommendationsListPage() {
                     type="button"
                     disabled={index === 0}
                     onClick={() => moveRow(index, -1)}
-                    aria-label="Move up"
+                    aria-label="تحريك للأعلى"
                     className="text-muted-foreground hover:text-foreground disabled:opacity-30"
                   >
                     <ChevronUp className="h-4 w-4" />
@@ -98,7 +98,7 @@ function RecommendationsListPage() {
                     type="button"
                     disabled={index === rows.length - 1}
                     onClick={() => moveRow(index, 1)}
-                    aria-label="Move down"
+                    aria-label="تحريك للأسفل"
                     className="text-muted-foreground hover:text-foreground disabled:opacity-30"
                   >
                     <ChevronDown className="h-4 w-4" />
@@ -108,13 +108,13 @@ function RecommendationsListPage() {
                   <div className="flex items-center gap-2">
                     <p className="font-medium">{r.name}</p>
                     <Badge variant={r.status === "published" ? "default" : "secondary"}>
-                      {r.status}
+                      {r.status === "published" ? "منشور" : "مسودة"}
                     </Badge>
-                    {r.featured && <Badge variant="outline">Featured</Badge>}
+                    {r.featured && <Badge variant="outline">مميز</Badge>}
                   </div>
                   <p className="text-xs text-muted-foreground">
                     {r.position}
-                    {r.organization ? `, ${r.organization}` : ""}
+                    {r.organization ? `، ${r.organization}` : ""}
                   </p>
                   <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">{r.body}</p>
                 </div>
@@ -124,7 +124,7 @@ function RecommendationsListPage() {
                       to="/admin/recommendations/$recommendationId"
                       params={{ recommendationId: r.id }}
                     >
-                      Edit
+                      تعديل
                     </Link>
                   </Button>
                   <Button variant="outline" size="sm" onClick={() => setDeleteTarget(r)}>
@@ -140,17 +140,17 @@ function RecommendationsListPage() {
       <AlertDialog open={!!deleteTarget} onOpenChange={(open) => !open && setDeleteTarget(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete this recommendation?</AlertDialogTitle>
+            <AlertDialogTitle>هل تريد حذف هذه التوصية؟</AlertDialogTitle>
             <AlertDialogDescription>
-              {deleteTarget?.name} — this can&rsquo;t be undone.
+              {deleteTarget?.name} — لا يمكن التراجع عن هذا الإجراء.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>إلغاء</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => deleteTarget && deleteMutation.mutate(deleteTarget.id)}
             >
-              Delete
+              حذف
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

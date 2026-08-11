@@ -65,7 +65,7 @@ export const createMediaItem = createServerFn({ method: "POST" })
       .insert(mediaItems)
       .values({ ...data, sortOrder: (row0?.maxOrder ?? -1) + 1 })
       .returning();
-    if (!row) throw new Error("Failed to create.");
+    if (!row) throw new Error("فشل الإنشاء.");
     await logActivity(admin.id, "created", "media_item", row.id, row.title);
     return row;
   });
@@ -80,7 +80,7 @@ export const updateMediaItem = createServerFn({ method: "POST" })
       .set({ ...fields, updatedAt: new Date() })
       .where(eq(mediaItems.id, id))
       .returning();
-    if (!row) throw new Error("Not found.");
+    if (!row) throw new Error("العنصر غير موجود.");
     await logActivity(admin.id, "updated", "media_item", id, row.title);
     return row;
   });
@@ -106,7 +106,7 @@ export const duplicateMediaItem = createServerFn({ method: "POST" })
       .from(mediaItems)
       .where(eq(mediaItems.id, data.id))
       .limit(1);
-    if (!original) throw new Error("Not found.");
+    if (!original) throw new Error("العنصر غير موجود.");
     const [row0] = await db
       .select({ maxOrder: sql<number>`coalesce(max(${mediaItems.sortOrder}), -1)` })
       .from(mediaItems);
@@ -127,7 +127,7 @@ export const duplicateMediaItem = createServerFn({ method: "POST" })
         sortOrder: (row0?.maxOrder ?? -1) + 1,
       })
       .returning();
-    if (!row) throw new Error("Failed to duplicate.");
+    if (!row) throw new Error("فشل النسخ.");
     await logActivity(admin.id, "created", "media_item", row.id, row.title);
     return row;
   });

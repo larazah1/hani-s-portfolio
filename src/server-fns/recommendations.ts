@@ -65,7 +65,7 @@ export const createRecommendation = createServerFn({ method: "POST" })
       .insert(recommendations)
       .values({ ...data, sortOrder: (row0?.maxOrder ?? -1) + 1 })
       .returning();
-    if (!row) throw new Error("Failed to create.");
+    if (!row) throw new Error("فشل الإنشاء.");
     await logActivity(admin.id, "created", "recommendation", row.id, row.name);
     return row;
   });
@@ -80,7 +80,7 @@ export const updateRecommendation = createServerFn({ method: "POST" })
       .set({ ...fields, updatedAt: new Date() })
       .where(eq(recommendations.id, id))
       .returning();
-    if (!row) throw new Error("Not found.");
+    if (!row) throw new Error("العنصر غير موجود.");
     await logActivity(admin.id, "updated", "recommendation", id, row.name);
     return row;
   });
