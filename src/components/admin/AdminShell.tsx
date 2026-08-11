@@ -152,7 +152,7 @@ export function AdminShell({ admin, children }: { admin: CurrentAdmin; children:
         <div className="flex items-center gap-3 border-b border-border px-4 py-3 md:hidden">
           <SidebarTrigger />
           <p className="font-[family-name:var(--font-display)] text-sm font-semibold">
-            Zahran Portal Admin
+            إدارة بوابة زهران
           </p>
         </div>
         <div className="flex-1 px-6 py-8 md:px-10 md:py-10">{children}</div>
