@@ -20,7 +20,6 @@ const insertSchema = z.object({
   articleUrl: safeUrl().optional(),
   thumbnail: safeUrl().optional(),
   featured: z.boolean().optional().default(false),
-  status: z.enum(["draft", "published"]).optional().default("draft"),
 });
 const updateSchema = insertSchema.partial().and(z.object({ id: z.string().uuid() }));
 const idSchema = z.object({ id: z.string().uuid() });
@@ -63,7 +62,7 @@ export const createMediaItem = createServerFn({ method: "POST" })
       .from(mediaItems);
     const [row] = await db
       .insert(mediaItems)
-      .values({ ...data, sortOrder: (row0?.maxOrder ?? -1) + 1 })
+      .values({ ...data, status: "published", sortOrder: (row0?.maxOrder ?? -1) + 1 })
       .returning();
     if (!row) throw new Error("فشل الإنشاء.");
     await logActivity(admin.id, "created", "media_item", row.id, row.title);
@@ -95,39 +94,4 @@ export const deleteMediaItem = createServerFn({ method: "POST" })
       await scrubSectionReferences(data.id);
     }
     return { ok: true } as const;
-  });
-
-export const duplicateMediaItem = createServerFn({ method: "POST" })
-  .validator(idSchema)
-  .handler(async ({ data, context }) => {
-    const admin = requireAdmin(context);
-    const [original] = await db
-      .select()
-      .from(mediaItems)
-      .where(eq(mediaItems.id, data.id))
-      .limit(1);
-    if (!original) throw new Error("العنصر غير موجود.");
-    const [row0] = await db
-      .select({ maxOrder: sql<number>`coalesce(max(${mediaItems.sortOrder}), -1)` })
-      .from(mediaItems);
-    const [row] = await db
-      .insert(mediaItems)
-      .values({
-        title: `${original.title} (Copy)`,
-        titleAr: original.titleAr,
-        source: original.source,
-        dateLabel: original.dateLabel,
-        type: original.type,
-        description: original.description,
-        videoUrl: original.videoUrl,
-        articleUrl: original.articleUrl,
-        thumbnail: original.thumbnail,
-        featured: false,
-        status: "draft" as const,
-        sortOrder: (row0?.maxOrder ?? -1) + 1,
-      })
-      .returning();
-    if (!row) throw new Error("فشل النسخ.");
-    await logActivity(admin.id, "created", "media_item", row.id, row.title);
-    return row;
   });

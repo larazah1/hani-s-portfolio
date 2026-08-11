@@ -50,13 +50,18 @@ type SectionRow = {
   sortOrder: number;
 };
 
+const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
 function PageSectionBuilder() {
   const { pageId } = Route.useParams();
   const queryClient = useQueryClient();
   const queryKey = ["page-edit", pageId];
+  const isValidId = UUID_PATTERN.test(pageId);
   const { data, isLoading } = useQuery({
     queryKey,
     queryFn: () => getPageForEdit({ data: { id: pageId } }),
+    enabled: isValidId,
+    retry: false,
   });
 
   const [addType, setAddType] = useState<SectionType>("rich-text");
@@ -97,6 +102,7 @@ function PageSectionBuilder() {
     onSuccess: invalidate,
   });
 
+  if (!isValidId) return <p className="text-sm text-muted-foreground">الصفحة غير موجودة.</p>;
   if (isLoading) return <p className="text-sm text-muted-foreground">جارٍ التحميل…</p>;
   if (!data) return <p className="text-sm text-muted-foreground">الصفحة غير موجودة.</p>;
 

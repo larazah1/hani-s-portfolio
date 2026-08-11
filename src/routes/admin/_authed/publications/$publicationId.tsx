@@ -63,7 +63,6 @@ function EditPublicationPage() {
             url: data.url ?? "",
             summary: data.summary ?? "",
             featured: data.featured,
-            status: data.status,
           }}
           submitLabel="حفظ التغييرات"
           isSubmitting={mutation.isPending}

@@ -1,10 +1,9 @@
-import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
-import { Copy, ExternalLink, Plus, Trash2 } from "lucide-react";
+import { ExternalLink, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
 import {
   Select,
   SelectContent,
@@ -31,20 +30,13 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { publicationTypeAr } from "@/lib/publication-i18n";
-import {
-  deletePublication,
-  duplicatePublication,
-  listPublications,
-} from "@/server-fns/publications";
+import { deletePublication, listPublications } from "@/server-fns/publications";
 
 export const Route = createFileRoute("/admin/_authed/publications/")({
   component: PublicationsListPage,
 });
 
-const STATUS_AR: Record<string, string> = { published: "منشور", draft: "مسودة" };
-
 function PublicationsListPage() {
-  const router = useRouter();
   const queryClient = useQueryClient();
   const { data, isLoading } = useQuery({
     queryKey: ["publications"],
@@ -71,16 +63,6 @@ function PublicationsListPage() {
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ["publications"] });
       setDeleteTarget(null);
-    },
-  });
-  const duplicateMutation = useMutation({
-    mutationFn: (id: string) => duplicatePublication({ data: { id } }),
-    onSuccess: (row) => {
-      void queryClient.invalidateQueries({ queryKey: ["publications"] });
-      void router.navigate({
-        to: "/admin/publications/$publicationId",
-        params: { publicationId: row["id"] as string },
-      });
     },
   });
 
@@ -134,7 +116,6 @@ function PublicationsListPage() {
                 <TableHead>العنوان</TableHead>
                 <TableHead>السنة</TableHead>
                 <TableHead>النوع</TableHead>
-                <TableHead>الحالة</TableHead>
                 <TableHead>مميز</TableHead>
                 <TableHead className="text-end">الإجراءات</TableHead>
               </TableRow>
@@ -148,11 +129,6 @@ function PublicationsListPage() {
                   </TableCell>
                   <TableCell>{p.year}</TableCell>
                   <TableCell>{publicationTypeAr[p.type] ?? p.type}</TableCell>
-                  <TableCell>
-                    <Badge variant={p.status === "published" ? "default" : "secondary"}>
-                      {STATUS_AR[p.status] ?? p.status}
-                    </Badge>
-                  </TableCell>
                   <TableCell>{p.featured ? "نعم" : "—"}</TableCell>
                   <TableCell>
                     <div className="flex justify-end gap-2">
@@ -170,13 +146,6 @@ function PublicationsListPage() {
                         >
                           تعديل
                         </Link>
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => duplicateMutation.mutate(p.id)}
-                      >
-                        <Copy className="h-3.5 w-3.5" />
                       </Button>
                       <Button variant="outline" size="sm" onClick={() => setDeleteTarget(p)}>
                         <Trash2 className="h-3.5 w-3.5" />

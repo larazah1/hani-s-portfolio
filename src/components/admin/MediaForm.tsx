@@ -25,7 +25,6 @@ export type MediaFormValues = {
   articleUrl: string;
   thumbnail: string;
   featured: boolean;
-  status: "draft" | "published";
 };
 
 export const emptyMediaForm: MediaFormValues = {
@@ -39,7 +38,6 @@ export const emptyMediaForm: MediaFormValues = {
   articleUrl: "",
   thumbnail: "",
   featured: false,
-  status: "draft",
 };
 
 export function MediaForm({
@@ -150,13 +148,6 @@ export function MediaForm({
         <label className="flex items-center gap-2 text-sm font-medium">
           <Switch checked={form.featured} onCheckedChange={(v) => set("featured", v)} />
           مميز في الصفحة الرئيسية
-        </label>
-        <label className="flex items-center gap-2 text-sm font-medium">
-          <Switch
-            checked={form.status === "published"}
-            onCheckedChange={(v) => set("status", v ? "published" : "draft")}
-          />
-          منشور
         </label>
       </div>
 

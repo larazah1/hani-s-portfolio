@@ -1,10 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
-import { Copy, ExternalLink, Plus, Trash2 } from "lucide-react";
+import { ExternalLink, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
 import {
   Select,
   SelectContent,
@@ -31,13 +30,11 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { mediaTypeAr } from "@/lib/media-i18n";
-import { deleteMediaItem, duplicateMediaItem, listMedia } from "@/server-fns/media";
+import { deleteMediaItem, listMedia } from "@/server-fns/media";
 
 export const Route = createFileRoute("/admin/_authed/media/")({
   component: MediaListPage,
 });
-
-const STATUS_AR: Record<string, string> = { published: "منشور", draft: "مسودة" };
 
 function MediaListPage() {
   const queryClient = useQueryClient();
@@ -62,10 +59,6 @@ function MediaListPage() {
       void queryClient.invalidateQueries({ queryKey: ["media"] });
       setDeleteTarget(null);
     },
-  });
-  const duplicateMutation = useMutation({
-    mutationFn: (id: string) => duplicateMediaItem({ data: { id } }),
-    onSuccess: () => void queryClient.invalidateQueries({ queryKey: ["media"] }),
   });
 
   return (
@@ -119,7 +112,6 @@ function MediaListPage() {
                 <TableHead>المصدر</TableHead>
                 <TableHead>التاريخ</TableHead>
                 <TableHead>النوع</TableHead>
-                <TableHead>الحالة</TableHead>
                 <TableHead>مميز</TableHead>
                 <TableHead className="text-end">الإجراءات</TableHead>
               </TableRow>
@@ -133,11 +125,6 @@ function MediaListPage() {
                     <TableCell>{m.source}</TableCell>
                     <TableCell>{m.dateLabel}</TableCell>
                     <TableCell>{mediaTypeAr[m.type] ?? m.type}</TableCell>
-                    <TableCell>
-                      <Badge variant={m.status === "published" ? "default" : "secondary"}>
-                        {STATUS_AR[m.status] ?? m.status}
-                      </Badge>
-                    </TableCell>
                     <TableCell>{m.featured ? "نعم" : "—"}</TableCell>
                     <TableCell>
                       <div className="flex justify-end gap-2">
@@ -152,13 +139,6 @@ function MediaListPage() {
                           <Link to="/admin/media/$mediaId" params={{ mediaId: m.id }}>
                             تعديل
                           </Link>
-                        </Button>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => duplicateMutation.mutate(m.id)}
-                        >
-                          <Copy className="h-3.5 w-3.5" />
                         </Button>
                         <Button variant="outline" size="sm" onClick={() => setDeleteTarget(m)}>
                           <Trash2 className="h-3.5 w-3.5" />

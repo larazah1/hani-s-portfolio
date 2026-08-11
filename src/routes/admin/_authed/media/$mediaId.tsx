@@ -61,7 +61,6 @@ function EditMediaPage() {
             articleUrl: data.articleUrl ?? "",
             thumbnail: data.thumbnail ?? "",
             featured: data.featured,
-            status: data.status,
           }}
           submitLabel="حفظ التغييرات"
           isSubmitting={mutation.isPending}

@@ -28,7 +28,6 @@ const insertSchema = z.object({
   url: safeUrl().optional(),
   summary: safeString(5000).optional(),
   featured: z.boolean().optional().default(false),
-  status: z.enum(["draft", "published"]).optional().default("draft"),
 });
 const updateSchema = insertSchema.partial().and(z.object({ id: z.string().uuid() }));
 const idSchema = z.object({ id: z.string().uuid() });
@@ -71,7 +70,7 @@ export const createPublication = createServerFn({ method: "POST" })
       .from(publications);
     const [row] = await db
       .insert(publications)
-      .values({ ...data, sortOrder: (row0?.maxOrder ?? -1) + 1 })
+      .values({ ...data, status: "published", sortOrder: (row0?.maxOrder ?? -1) + 1 })
       .returning();
     if (!row) throw new Error("فشل الإنشاء.");
     await logActivity(admin.id, "created", "publication", row.id, row.title);
@@ -103,41 +102,4 @@ export const deletePublication = createServerFn({ method: "POST" })
       await scrubSectionReferences(data.id);
     }
     return { ok: true } as const;
-  });
-
-export const duplicatePublication = createServerFn({ method: "POST" })
-  .validator(idSchema)
-  .handler(async ({ data, context }) => {
-    const admin = requireAdmin(context);
-    const [original] = await db
-      .select()
-      .from(publications)
-      .where(eq(publications.id, data.id))
-      .limit(1);
-    if (!original) throw new Error("العنصر غير موجود.");
-    const [row0] = await db
-      .select({ maxOrder: sql<number>`coalesce(max(${publications.sortOrder}), -1)` })
-      .from(publications);
-    const [row] = await db
-      .insert(publications)
-      .values({
-        title: `${original.title} (Copy)`,
-        titleAr: `${original.titleAr} (نسخة)`,
-        authors: original.authors,
-        journal: original.journal,
-        year: original.year,
-        type: original.type,
-        area: original.area,
-        areaAr: original.areaAr,
-        doi: original.doi,
-        url: original.url,
-        summary: original.summary,
-        featured: false,
-        status: "draft" as const,
-        sortOrder: (row0?.maxOrder ?? -1) + 1,
-      })
-      .returning();
-    if (!row) throw new Error("فشل النسخ.");
-    await logActivity(admin.id, "created", "publication", row.id, row.title);
-    return row;
   });

@@ -251,11 +251,18 @@ function SummarySection({
 function StatsRowSection({ section }: { section: ResolvedSection }) {
   const { pick } = useLanguage();
   const rows = (section.data as Record<string, unknown>[] | null) ?? [];
+  // Rendered twice back-to-back so `animate-marquee`'s -50% translation
+  // loops seamlessly, regardless of how many stats there are.
+  const looped = [...rows, ...rows];
+
   return (
-    <section className="border-y border-border bg-card">
-      <div className="mx-auto grid max-w-6xl grid-cols-2 gap-px px-5 py-12 md:grid-cols-5">
-        {rows.map((s) => (
-          <div key={String(s["id"])} className="px-2 py-4 text-center">
+    <section className="overflow-hidden border-y border-border bg-card py-12">
+      <div className="flex w-max animate-marquee hover:[animation-play-state:paused] motion-reduce:animate-none">
+        {looped.map((s, index) => (
+          <div
+            key={`${String(s["id"])}-${index}`}
+            className="me-10 min-w-36 shrink-0 px-4 text-center"
+          >
             <p className="font-[family-name:var(--font-display)] text-4xl">{String(s["value"])}</p>
             <p className="eyebrow mt-2">{pick(String(s["label"]), String(s["labelAr"]))}</p>
           </div>
@@ -371,19 +378,19 @@ function ExpertiseGridSection({ section }: { section: ResolvedSection }) {
 
   return (
     <Section eyebrow={heading.eyebrow} title={heading.title}>
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
         {rows.map((e) => {
           const en = String(e["en"]);
           const Icon = expertiseIcons[en] ?? Compass;
           return (
             <div
               key={String(e["id"])}
-              className="flex items-center gap-3 rounded-lg border border-border bg-card p-5 transition-all hover:-translate-y-0.5 hover:border-accent/50 hover:shadow-md"
+              className="flex items-center gap-2 rounded-lg border border-border bg-card p-3 transition-all hover:-translate-y-0.5 hover:border-accent/50 hover:shadow-md"
             >
-              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-accent/10 text-accent-foreground">
-                <Icon className="h-5 w-5" strokeWidth={1.5} />
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-accent/10 text-accent-foreground">
+                <Icon className="h-4 w-4" strokeWidth={1.5} />
               </span>
-              <span className="text-sm font-medium">{pick(en, String(e["ar"]))}</span>
+              <span className="text-xs font-medium sm:text-sm">{pick(en, String(e["ar"]))}</span>
             </div>
           );
         })}

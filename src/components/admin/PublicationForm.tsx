@@ -33,7 +33,6 @@ export type PublicationFormValues = {
   url: string;
   summary: string;
   featured: boolean;
-  status: "draft" | "published";
 };
 
 export const emptyPublicationForm: PublicationFormValues = {
@@ -49,7 +48,6 @@ export const emptyPublicationForm: PublicationFormValues = {
   url: "",
   summary: "",
   featured: false,
-  status: "draft",
 };
 
 export function PublicationForm({
@@ -158,13 +156,6 @@ export function PublicationForm({
         <label className="flex items-center gap-2 text-sm font-medium">
           <Switch checked={form.featured} onCheckedChange={(v) => set("featured", v)} />
           مميز في الصفحة الرئيسية
-        </label>
-        <label className="flex items-center gap-2 text-sm font-medium">
-          <Switch
-            checked={form.status === "published"}
-            onCheckedChange={(v) => set("status", v ? "published" : "draft")}
-          />
-          منشور
         </label>
       </div>
 
