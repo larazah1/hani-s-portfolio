@@ -4,6 +4,7 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
@@ -14,12 +15,16 @@ import { SiteHeader } from "../components/site/SiteHeader";
 import { SiteFooter } from "../components/site/SiteFooter";
 import { Toaster } from "../components/ui/sonner";
 import { LanguageProvider, useLanguage } from "../lib/language";
+import { getSiteChrome } from "../server-fns/public-content";
 
 // Runs before hydration so a stored Arabic preference applies immediately,
-// avoiding a flash of LTR content on repeat visits.
+// avoiding a flash of LTR content on repeat visits. Skipped for /admin/* —
+// the admin panel is always English/LTR, independent of the public site's
+// language toggle.
 const noFlashLanguageScript = `
 (function () {
   try {
+    if (window.location.pathname.indexOf("/admin") === 0) return;
     var lang = window.localStorage.getItem("site-lang");
     if (lang === "ar") {
       document.documentElement.lang = "ar";
@@ -111,6 +116,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
     ],
   }),
+  loader: async () => await getSiteChrome(),
   shellComponent: RootShell,
   component: RootComponent,
   notFoundComponent: NotFoundComponent,
@@ -134,18 +140,33 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const chrome = Route.useLoaderData();
+  const isAdminRoute = useRouterState({
+    select: (s) => s.location.pathname.startsWith("/admin"),
+  });
 
   return (
     <QueryClientProvider client={queryClient}>
       <LanguageProvider>
-        <div className="flex min-h-screen flex-col">
-          <SiteHeader />
-          <main className="flex-1">
-            {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-            <Outlet />
-          </main>
-          <SiteFooter />
-        </div>
+        {isAdminRoute ? (
+          // The admin panel is a separate experience from the public
+          // portfolio — no public header/footer/nav here. Each admin route
+          // (or the shared admin layout) supplies its own chrome.
+          <Outlet />
+        ) : (
+          <div className="flex min-h-screen flex-col">
+            <SiteHeader profile={chrome.profile} navPages={chrome.navPages} />
+            <main className="flex-1">
+              {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+              <Outlet />
+            </main>
+            <SiteFooter
+              profile={chrome.profile}
+              navPages={chrome.navPages}
+              socialLinks={chrome.socialLinks}
+            />
+          </div>
+        )}
         <Toaster />
       </LanguageProvider>
     </QueryClientProvider>

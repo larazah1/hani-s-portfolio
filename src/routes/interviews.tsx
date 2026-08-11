@@ -1,43 +1,42 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { Section, EmptyNote } from "@/components/site/Section";
-import { MediaCard } from "@/components/site/MediaCard";
-import { media } from "@/content/site";
-import { useLanguage } from "@/lib/language";
-
-const title = "Interviews & Articles — Dr. Hani Mahmoud Zahran";
-const description =
-  "Media appearances, interviews, video features and articles by and about Dr. Hani Mahmoud Zahran.";
+import { createFileRoute, notFound } from "@tanstack/react-router";
+import { SectionRenderer } from "@/components/site/SectionRenderer";
+import { getPageByPath } from "@/server-fns/public-content";
 
 export const Route = createFileRoute("/interviews")({
-  head: () => ({
-    meta: [
-      { title },
-      { name: "description", content: description },
-      { property: "og:title", content: title },
-      { property: "og:description", content: description },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
+  loader: async () => {
+    const result = await getPageByPath({ data: { path: "/interviews" } });
+    if (!result) throw notFound();
+    return result;
+  },
+  head: ({ loaderData }) => {
+    const title = loaderData?.page.metaTitle ?? loaderData?.page.title ?? "Interviews & Articles";
+    const description = loaderData?.page.metaDescription ?? "";
+    return {
+      meta: [
+        { title },
+        { name: "description", content: description },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:type", content: "website" },
+        { name: "twitter:card", content: "summary_large_image" },
+      ],
+    };
+  },
   component: InterviewsPage,
 });
 
 function InterviewsPage() {
-  const { t } = useLanguage();
+  const { sections, profile, socialLinks } = Route.useLoaderData();
   return (
-    <Section eyebrow={t("media")} title={t("interviewsArticlesHeadline")}>
-      <p className="-mt-4 mb-8 max-w-2xl text-sm text-muted-foreground">
-        {t("interviewsArticlesIntro")}
-      </p>
-      {media.length === 0 ? (
-        <EmptyNote>{t("emptyInterviews")}</EmptyNote>
-      ) : (
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {media.map((m) => (
-            <MediaCard key={m.id} item={m} />
-          ))}
-        </div>
-      )}
-    </Section>
+    <>
+      {sections.map((section) => (
+        <SectionRenderer
+          key={section.id}
+          section={section}
+          profile={profile}
+          socialLinks={socialLinks}
+        />
+      ))}
+    </>
   );
 }

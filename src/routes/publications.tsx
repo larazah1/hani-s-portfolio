@@ -1,134 +1,42 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
-import { Section, EmptyNote } from "@/components/site/Section";
-import { PublicationCard } from "@/components/site/PublicationCard";
-import {
-  publications,
-  publicationAreaAr,
-  publicationTypeAr,
-  type Publication,
-} from "@/content/site";
-import { useLanguage } from "@/lib/language";
-import type { DictionaryKey } from "@/lib/language";
-
-const title = "Publications — Dr. Hani Mahmoud Zahran";
-const description =
-  "Research, studies and scientific contributions spanning geophysics, seismology, seismic hazards and geological sciences by Dr. Hani Mahmoud Zahran.";
+import { createFileRoute, notFound } from "@tanstack/react-router";
+import { SectionRenderer } from "@/components/site/SectionRenderer";
+import { getPageByPath } from "@/server-fns/public-content";
 
 export const Route = createFileRoute("/publications")({
-  head: () => ({
-    meta: [
-      { title },
-      { name: "description", content: description },
-      { property: "og:title", content: title },
-      { property: "og:description", content: description },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
+  loader: async () => {
+    const result = await getPageByPath({ data: { path: "/publications" } });
+    if (!result) throw notFound();
+    return result;
+  },
+  head: ({ loaderData }) => {
+    const title = loaderData?.page.metaTitle ?? loaderData?.page.title ?? "Publications";
+    const description = loaderData?.page.metaDescription ?? "";
+    return {
+      meta: [
+        { title },
+        { name: "description", content: description },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:type", content: "website" },
+        { name: "twitter:card", content: "summary_large_image" },
+      ],
+    };
+  },
   component: PublicationsPage,
 });
 
-const selectClass =
-  "rounded-sm border border-input bg-card px-4 py-2.5 text-sm outline-none focus:border-accent";
-
-const GROUPS: { heading: string; headingKey: DictionaryKey; types: Publication["type"][] }[] = [
-  { heading: "Journal Articles", headingKey: "journalArticles", types: ["Journal Article"] },
-  { heading: "Scientific Books", headingKey: "scientificBooks", types: ["Scientific Book"] },
-  {
-    heading: "Reports & Other",
-    headingKey: "reportsOther",
-    types: ["Report", "Conference Paper", "Other"],
-  },
-];
-
 function PublicationsPage() {
-  const { t, pick } = useLanguage();
-  const [query, setQuery] = useState("");
-  const [year, setYear] = useState("All");
-  const [type, setType] = useState("All");
-  const [area, setArea] = useState("All");
-
-  const years = useMemo(
-    () => ["All", ...Array.from(new Set(publications.map((p) => p.year))).sort((a, b) => b - a)],
-    [],
-  );
-  const types = useMemo(() => ["All", ...Array.from(new Set(publications.map((p) => p.type)))], []);
-  const areas = useMemo(
-    () => ["All", ...Array.from(new Set(publications.map((p) => p.area))).sort()],
-    [],
-  );
-
-  const filtered = publications.filter((p) => {
-    const matchesQuery = `${p.title} ${p.titleAr} ${p.authors} ${p.journal}`
-      .toLowerCase()
-      .includes(query.toLowerCase());
-    const matchesYear = year === "All" || p.year === Number(year);
-    const matchesType = type === "All" || p.type === type;
-    const matchesArea = area === "All" || p.area === area;
-    return matchesQuery && matchesYear && matchesType && matchesArea;
-  });
-
+  const { sections, profile, socialLinks } = Route.useLoaderData();
   return (
-    <Section eyebrow={t("researchOutput")} title={t("publicationsHeadline")}>
-      <p className="-mt-4 mb-8 max-w-2xl text-sm text-muted-foreground">
-        {t("publicationsPageIntro")}
-      </p>
-
-      <div className="mb-10 grid gap-3 sm:grid-cols-[minmax(0,1fr)_auto_auto_auto]">
-        <input
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder={t("searchPublications")}
-          className={selectClass}
+    <>
+      {sections.map((section) => (
+        <SectionRenderer
+          key={section.id}
+          section={section}
+          profile={profile}
+          socialLinks={socialLinks}
         />
-        <select value={year} onChange={(e) => setYear(e.target.value)} className={selectClass}>
-          {years.map((y) => (
-            <option key={y} value={y}>
-              {y === "All" ? t("allYears") : y}
-            </option>
-          ))}
-        </select>
-        <select value={type} onChange={(e) => setType(e.target.value)} className={selectClass}>
-          {types.map((ty) => (
-            <option key={ty} value={ty}>
-              {ty === "All"
-                ? t("allTypes")
-                : pick(ty, publicationTypeAr[ty as Publication["type"]])}
-            </option>
-          ))}
-        </select>
-        <select value={area} onChange={(e) => setArea(e.target.value)} className={selectClass}>
-          {areas.map((a) => (
-            <option key={a} value={a}>
-              {a === "All" ? t("allAreas") : pick(a, publicationAreaAr[a] ?? a)}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      {filtered.length === 0 ? (
-        <EmptyNote>{t("noPublicationsMatch")}</EmptyNote>
-      ) : (
-        <div className="space-y-14">
-          {GROUPS.map((group) => {
-            const items = filtered.filter((p) => group.types.includes(p.type));
-            if (items.length === 0) return null;
-            return (
-              <div key={group.heading}>
-                <h3 className="mb-5 font-[family-name:var(--font-display)] text-2xl font-bold">
-                  {t(group.headingKey)}
-                </h3>
-                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                  {items.map((p) => (
-                    <PublicationCard key={p.id} publication={p} />
-                  ))}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      )}
-    </Section>
+      ))}
+    </>
   );
 }

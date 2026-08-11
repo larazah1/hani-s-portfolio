@@ -1,6 +1,7 @@
 import { createStart, createCsrfMiddleware, createMiddleware } from "@tanstack/react-start";
 
 import { renderErrorPage } from "./lib/error-page";
+import { resolveCurrentAdmin } from "./server-fns/current-admin";
 
 const errorMiddleware = createMiddleware().server(async ({ next }) => {
   try {
@@ -24,6 +25,17 @@ const csrfMiddleware = createCsrfMiddleware({
   filter: (ctx) => ctx.handlerType === "serverFn",
 });
 
+// Resolves the current admin (if any) once per request from the session
+// cookie, re-validated against the DB every time — see resolveCurrentAdmin's
+// doc comment for why that's what makes disabling an admin take effect
+// immediately. Runs for every request (page loads and server fn calls) but
+// only touches the DB when a session cookie is actually present, so it's a
+// no-op for anonymous public traffic.
+const authMiddleware = createMiddleware().server(async ({ next }) => {
+  const admin = await resolveCurrentAdmin();
+  return next({ context: { admin } });
+});
+
 export const startInstance = createStart(() => ({
-  requestMiddleware: [errorMiddleware, csrfMiddleware],
+  requestMiddleware: [errorMiddleware, csrfMiddleware, authMiddleware],
 }));

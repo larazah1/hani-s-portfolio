@@ -1,8 +1,29 @@
 import { Link } from "@tanstack/react-router";
-import { profile, socialLinks } from "@/content/site";
 import { useLanguage } from "@/lib/language";
+import type { NavPage } from "@/components/site/SiteHeader";
 
-export function SiteFooter() {
+type FooterProfile = {
+  name: string;
+  nameAr: string;
+  credentials: string;
+  credentialsAr: string;
+  email: string;
+  phone: string;
+  location: string;
+  locationAr: string;
+};
+
+type SocialLink = { label: string; url: string };
+
+export function SiteFooter({
+  profile,
+  navPages,
+  socialLinks,
+}: {
+  profile: FooterProfile;
+  navPages: NavPage[];
+  socialLinks: SocialLink[];
+}) {
   const { t, pick } = useLanguage();
 
   return (
@@ -18,21 +39,13 @@ export function SiteFooter() {
         <div>
           <p className="eyebrow !text-current opacity-60">{t("quickLinks")}</p>
           <ul className="mt-4 space-y-2 text-sm opacity-80">
-            <li>
-              <Link to="/">{t("home")}</Link>
-            </li>
-            <li>
-              <Link to="/about">{t("aboutMe")}</Link>
-            </li>
-            <li>
-              <Link to="/publications">{t("publications")}</Link>
-            </li>
-            <li>
-              <Link to="/interviews">{t("interviewsArticles")}</Link>
-            </li>
-            <li>
-              <Link to="/contact">{t("contact")}</Link>
-            </li>
+            {navPages.map((page) => (
+              <li key={page.path}>
+                <Link to={page.path}>
+                  {pick(page.navLabel ?? page.title, page.navLabelAr ?? page.titleAr)}
+                </Link>
+              </li>
+            ))}
           </ul>
         </div>
 

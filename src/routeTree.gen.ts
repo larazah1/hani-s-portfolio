@@ -11,9 +11,42 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as AdminRouteRouteImport } from './routes/admin/route'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as InterviewsRouteImport } from './routes/interviews'
 import { Route as PublicationsRouteImport } from './routes/publications'
+import { Route as AdminAuthedRouteImport } from './routes/admin/_authed'
+import { Route as AdminForgotPasswordRouteImport } from './routes/admin/forgot-password'
+import { Route as AdminLoginRouteImport } from './routes/admin/login'
+import { Route as AdminSetupRouteImport } from './routes/admin/setup'
+import { Route as AdminAuthedIndexRouteImport } from './routes/admin/_authed/index'
+import { Route as AdminAuthedActivitiesRouteImport } from './routes/admin/_authed/activities'
+import { Route as AdminAuthedAdminsRouteImport } from './routes/admin/_authed/admins'
+import { Route as AdminAuthedCareerRouteImport } from './routes/admin/_authed/career'
+import { Route as AdminAuthedChangePasswordRouteImport } from './routes/admin/_authed/change-password'
+import { Route as AdminAuthedEducationRouteImport } from './routes/admin/_authed/education'
+import { Route as AdminAuthedExpertiseRouteImport } from './routes/admin/_authed/expertise'
+import { Route as AdminAuthedInterestsRouteImport } from './routes/admin/_authed/interests'
+import { Route as AdminAuthedLanguagesRouteImport } from './routes/admin/_authed/languages'
+import { Route as AdminAuthedMembershipsRouteImport } from './routes/admin/_authed/memberships'
+import { Route as AdminAuthedMessagesRouteImport } from './routes/admin/_authed/messages'
+import { Route as AdminAuthedProfileRouteImport } from './routes/admin/_authed/profile'
+import { Route as AdminAuthedResearchSpecialtiesRouteImport } from './routes/admin/_authed/research-specialties'
+import { Route as AdminAuthedSettingsRouteImport } from './routes/admin/_authed/settings'
+import { Route as AdminAuthedSocialLinksRouteImport } from './routes/admin/_authed/social-links'
+import { Route as AdminAuthedStatsRouteImport } from './routes/admin/_authed/stats'
+import { Route as AdminAuthedMediaIndexRouteImport } from './routes/admin/_authed/media/index'
+import { Route as AdminAuthedMediaMediaIdRouteImport } from './routes/admin/_authed/media/$mediaId'
+import { Route as AdminAuthedMediaNewRouteImport } from './routes/admin/_authed/media/new'
+import { Route as AdminAuthedPagesIndexRouteImport } from './routes/admin/_authed/pages/index'
+import { Route as AdminAuthedPagesPageIdRouteImport } from './routes/admin/_authed/pages/$pageId'
+import { Route as AdminAuthedPagesNewRouteImport } from './routes/admin/_authed/pages/new'
+import { Route as AdminAuthedPublicationsIndexRouteImport } from './routes/admin/_authed/publications/index'
+import { Route as AdminAuthedPublicationsPublicationIdRouteImport } from './routes/admin/_authed/publications/$publicationId'
+import { Route as AdminAuthedPublicationsNewRouteImport } from './routes/admin/_authed/publications/new'
+import { Route as AdminAuthedRecommendationsIndexRouteImport } from './routes/admin/_authed/recommendations/index'
+import { Route as AdminAuthedRecommendationsRecommendationIdRouteImport } from './routes/admin/_authed/recommendations/$recommendationId'
+import { Route as AdminAuthedRecommendationsNewRouteImport } from './routes/admin/_authed/recommendations/new'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -23,6 +56,11 @@ const IndexRoute = IndexRouteImport.update({
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRouteRoute = AdminRouteRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -40,39 +78,415 @@ const PublicationsRoute = PublicationsRouteImport.update({
   path: '/publications',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminAuthedRoute = AdminAuthedRouteImport.update({
+  id: '/_authed',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminForgotPasswordRoute = AdminForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminLoginRoute = AdminLoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminSetupRoute = AdminSetupRouteImport.update({
+  id: '/setup',
+  path: '/setup',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminAuthedIndexRoute = AdminAuthedIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminAuthedRoute,
+} as any)
+const AdminAuthedActivitiesRoute = AdminAuthedActivitiesRouteImport.update({
+  id: '/activities',
+  path: '/activities',
+  getParentRoute: () => AdminAuthedRoute,
+} as any)
+const AdminAuthedAdminsRoute = AdminAuthedAdminsRouteImport.update({
+  id: '/admins',
+  path: '/admins',
+  getParentRoute: () => AdminAuthedRoute,
+} as any)
+const AdminAuthedCareerRoute = AdminAuthedCareerRouteImport.update({
+  id: '/career',
+  path: '/career',
+  getParentRoute: () => AdminAuthedRoute,
+} as any)
+const AdminAuthedChangePasswordRoute =
+  AdminAuthedChangePasswordRouteImport.update({
+    id: '/change-password',
+    path: '/change-password',
+    getParentRoute: () => AdminAuthedRoute,
+  } as any)
+const AdminAuthedEducationRoute = AdminAuthedEducationRouteImport.update({
+  id: '/education',
+  path: '/education',
+  getParentRoute: () => AdminAuthedRoute,
+} as any)
+const AdminAuthedExpertiseRoute = AdminAuthedExpertiseRouteImport.update({
+  id: '/expertise',
+  path: '/expertise',
+  getParentRoute: () => AdminAuthedRoute,
+} as any)
+const AdminAuthedInterestsRoute = AdminAuthedInterestsRouteImport.update({
+  id: '/interests',
+  path: '/interests',
+  getParentRoute: () => AdminAuthedRoute,
+} as any)
+const AdminAuthedLanguagesRoute = AdminAuthedLanguagesRouteImport.update({
+  id: '/languages',
+  path: '/languages',
+  getParentRoute: () => AdminAuthedRoute,
+} as any)
+const AdminAuthedMembershipsRoute = AdminAuthedMembershipsRouteImport.update({
+  id: '/memberships',
+  path: '/memberships',
+  getParentRoute: () => AdminAuthedRoute,
+} as any)
+const AdminAuthedMessagesRoute = AdminAuthedMessagesRouteImport.update({
+  id: '/messages',
+  path: '/messages',
+  getParentRoute: () => AdminAuthedRoute,
+} as any)
+const AdminAuthedProfileRoute = AdminAuthedProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => AdminAuthedRoute,
+} as any)
+const AdminAuthedResearchSpecialtiesRoute =
+  AdminAuthedResearchSpecialtiesRouteImport.update({
+    id: '/research-specialties',
+    path: '/research-specialties',
+    getParentRoute: () => AdminAuthedRoute,
+  } as any)
+const AdminAuthedSettingsRoute = AdminAuthedSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AdminAuthedRoute,
+} as any)
+const AdminAuthedSocialLinksRoute = AdminAuthedSocialLinksRouteImport.update({
+  id: '/social-links',
+  path: '/social-links',
+  getParentRoute: () => AdminAuthedRoute,
+} as any)
+const AdminAuthedStatsRoute = AdminAuthedStatsRouteImport.update({
+  id: '/stats',
+  path: '/stats',
+  getParentRoute: () => AdminAuthedRoute,
+} as any)
+const AdminAuthedMediaIndexRoute = AdminAuthedMediaIndexRouteImport.update({
+  id: '/media/',
+  path: '/media/',
+  getParentRoute: () => AdminAuthedRoute,
+} as any)
+const AdminAuthedMediaMediaIdRoute = AdminAuthedMediaMediaIdRouteImport.update({
+  id: '/media/$mediaId',
+  path: '/media/$mediaId',
+  getParentRoute: () => AdminAuthedRoute,
+} as any)
+const AdminAuthedMediaNewRoute = AdminAuthedMediaNewRouteImport.update({
+  id: '/media/new',
+  path: '/media/new',
+  getParentRoute: () => AdminAuthedRoute,
+} as any)
+const AdminAuthedPagesIndexRoute = AdminAuthedPagesIndexRouteImport.update({
+  id: '/pages/',
+  path: '/pages/',
+  getParentRoute: () => AdminAuthedRoute,
+} as any)
+const AdminAuthedPagesPageIdRoute = AdminAuthedPagesPageIdRouteImport.update({
+  id: '/pages/$pageId',
+  path: '/pages/$pageId',
+  getParentRoute: () => AdminAuthedRoute,
+} as any)
+const AdminAuthedPagesNewRoute = AdminAuthedPagesNewRouteImport.update({
+  id: '/pages/new',
+  path: '/pages/new',
+  getParentRoute: () => AdminAuthedRoute,
+} as any)
+const AdminAuthedPublicationsIndexRoute =
+  AdminAuthedPublicationsIndexRouteImport.update({
+    id: '/publications/',
+    path: '/publications/',
+    getParentRoute: () => AdminAuthedRoute,
+  } as any)
+const AdminAuthedPublicationsPublicationIdRoute =
+  AdminAuthedPublicationsPublicationIdRouteImport.update({
+    id: '/publications/$publicationId',
+    path: '/publications/$publicationId',
+    getParentRoute: () => AdminAuthedRoute,
+  } as any)
+const AdminAuthedPublicationsNewRoute =
+  AdminAuthedPublicationsNewRouteImport.update({
+    id: '/publications/new',
+    path: '/publications/new',
+    getParentRoute: () => AdminAuthedRoute,
+  } as any)
+const AdminAuthedRecommendationsIndexRoute =
+  AdminAuthedRecommendationsIndexRouteImport.update({
+    id: '/recommendations/',
+    path: '/recommendations/',
+    getParentRoute: () => AdminAuthedRoute,
+  } as any)
+const AdminAuthedRecommendationsRecommendationIdRoute =
+  AdminAuthedRecommendationsRecommendationIdRouteImport.update({
+    id: '/recommendations/$recommendationId',
+    path: '/recommendations/$recommendationId',
+    getParentRoute: () => AdminAuthedRoute,
+  } as any)
+const AdminAuthedRecommendationsNewRoute =
+  AdminAuthedRecommendationsNewRouteImport.update({
+    id: '/recommendations/new',
+    path: '/recommendations/new',
+    getParentRoute: () => AdminAuthedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteRouteWithChildren
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
   '/interviews': typeof InterviewsRoute
   '/publications': typeof PublicationsRoute
+  '/admin/forgot-password': typeof AdminForgotPasswordRoute
+  '/admin/login': typeof AdminLoginRoute
+  '/admin/setup': typeof AdminSetupRoute
+  '/admin/activities': typeof AdminAuthedActivitiesRoute
+  '/admin/admins': typeof AdminAuthedAdminsRoute
+  '/admin/career': typeof AdminAuthedCareerRoute
+  '/admin/change-password': typeof AdminAuthedChangePasswordRoute
+  '/admin/education': typeof AdminAuthedEducationRoute
+  '/admin/expertise': typeof AdminAuthedExpertiseRoute
+  '/admin/interests': typeof AdminAuthedInterestsRoute
+  '/admin/languages': typeof AdminAuthedLanguagesRoute
+  '/admin/memberships': typeof AdminAuthedMembershipsRoute
+  '/admin/messages': typeof AdminAuthedMessagesRoute
+  '/admin/profile': typeof AdminAuthedProfileRoute
+  '/admin/research-specialties': typeof AdminAuthedResearchSpecialtiesRoute
+  '/admin/settings': typeof AdminAuthedSettingsRoute
+  '/admin/social-links': typeof AdminAuthedSocialLinksRoute
+  '/admin/stats': typeof AdminAuthedStatsRoute
+  '/admin/': typeof AdminAuthedIndexRoute
+  '/admin/media/$mediaId': typeof AdminAuthedMediaMediaIdRoute
+  '/admin/media/new': typeof AdminAuthedMediaNewRoute
+  '/admin/pages/$pageId': typeof AdminAuthedPagesPageIdRoute
+  '/admin/pages/new': typeof AdminAuthedPagesNewRoute
+  '/admin/publications/$publicationId': typeof AdminAuthedPublicationsPublicationIdRoute
+  '/admin/publications/new': typeof AdminAuthedPublicationsNewRoute
+  '/admin/recommendations/$recommendationId': typeof AdminAuthedRecommendationsRecommendationIdRoute
+  '/admin/recommendations/new': typeof AdminAuthedRecommendationsNewRoute
+  '/admin/media/': typeof AdminAuthedMediaIndexRoute
+  '/admin/pages/': typeof AdminAuthedPagesIndexRoute
+  '/admin/publications/': typeof AdminAuthedPublicationsIndexRoute
+  '/admin/recommendations/': typeof AdminAuthedRecommendationsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin': typeof AdminAuthedIndexRoute
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
   '/interviews': typeof InterviewsRoute
   '/publications': typeof PublicationsRoute
+  '/admin/forgot-password': typeof AdminForgotPasswordRoute
+  '/admin/login': typeof AdminLoginRoute
+  '/admin/setup': typeof AdminSetupRoute
+  '/admin/activities': typeof AdminAuthedActivitiesRoute
+  '/admin/admins': typeof AdminAuthedAdminsRoute
+  '/admin/career': typeof AdminAuthedCareerRoute
+  '/admin/change-password': typeof AdminAuthedChangePasswordRoute
+  '/admin/education': typeof AdminAuthedEducationRoute
+  '/admin/expertise': typeof AdminAuthedExpertiseRoute
+  '/admin/interests': typeof AdminAuthedInterestsRoute
+  '/admin/languages': typeof AdminAuthedLanguagesRoute
+  '/admin/memberships': typeof AdminAuthedMembershipsRoute
+  '/admin/messages': typeof AdminAuthedMessagesRoute
+  '/admin/profile': typeof AdminAuthedProfileRoute
+  '/admin/research-specialties': typeof AdminAuthedResearchSpecialtiesRoute
+  '/admin/settings': typeof AdminAuthedSettingsRoute
+  '/admin/social-links': typeof AdminAuthedSocialLinksRoute
+  '/admin/stats': typeof AdminAuthedStatsRoute
+  '/admin/media/$mediaId': typeof AdminAuthedMediaMediaIdRoute
+  '/admin/media/new': typeof AdminAuthedMediaNewRoute
+  '/admin/pages/$pageId': typeof AdminAuthedPagesPageIdRoute
+  '/admin/pages/new': typeof AdminAuthedPagesNewRoute
+  '/admin/publications/$publicationId': typeof AdminAuthedPublicationsPublicationIdRoute
+  '/admin/publications/new': typeof AdminAuthedPublicationsNewRoute
+  '/admin/recommendations/$recommendationId': typeof AdminAuthedRecommendationsRecommendationIdRoute
+  '/admin/recommendations/new': typeof AdminAuthedRecommendationsNewRoute
+  '/admin/media': typeof AdminAuthedMediaIndexRoute
+  '/admin/pages': typeof AdminAuthedPagesIndexRoute
+  '/admin/publications': typeof AdminAuthedPublicationsIndexRoute
+  '/admin/recommendations': typeof AdminAuthedRecommendationsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteRouteWithChildren
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
   '/interviews': typeof InterviewsRoute
   '/publications': typeof PublicationsRoute
+  '/admin/_authed': typeof AdminAuthedRouteWithChildren
+  '/admin/forgot-password': typeof AdminForgotPasswordRoute
+  '/admin/login': typeof AdminLoginRoute
+  '/admin/setup': typeof AdminSetupRoute
+  '/admin/_authed/activities': typeof AdminAuthedActivitiesRoute
+  '/admin/_authed/admins': typeof AdminAuthedAdminsRoute
+  '/admin/_authed/career': typeof AdminAuthedCareerRoute
+  '/admin/_authed/change-password': typeof AdminAuthedChangePasswordRoute
+  '/admin/_authed/education': typeof AdminAuthedEducationRoute
+  '/admin/_authed/expertise': typeof AdminAuthedExpertiseRoute
+  '/admin/_authed/interests': typeof AdminAuthedInterestsRoute
+  '/admin/_authed/languages': typeof AdminAuthedLanguagesRoute
+  '/admin/_authed/memberships': typeof AdminAuthedMembershipsRoute
+  '/admin/_authed/messages': typeof AdminAuthedMessagesRoute
+  '/admin/_authed/profile': typeof AdminAuthedProfileRoute
+  '/admin/_authed/research-specialties': typeof AdminAuthedResearchSpecialtiesRoute
+  '/admin/_authed/settings': typeof AdminAuthedSettingsRoute
+  '/admin/_authed/social-links': typeof AdminAuthedSocialLinksRoute
+  '/admin/_authed/stats': typeof AdminAuthedStatsRoute
+  '/admin/_authed/': typeof AdminAuthedIndexRoute
+  '/admin/_authed/media/$mediaId': typeof AdminAuthedMediaMediaIdRoute
+  '/admin/_authed/media/new': typeof AdminAuthedMediaNewRoute
+  '/admin/_authed/pages/$pageId': typeof AdminAuthedPagesPageIdRoute
+  '/admin/_authed/pages/new': typeof AdminAuthedPagesNewRoute
+  '/admin/_authed/publications/$publicationId': typeof AdminAuthedPublicationsPublicationIdRoute
+  '/admin/_authed/publications/new': typeof AdminAuthedPublicationsNewRoute
+  '/admin/_authed/recommendations/$recommendationId': typeof AdminAuthedRecommendationsRecommendationIdRoute
+  '/admin/_authed/recommendations/new': typeof AdminAuthedRecommendationsNewRoute
+  '/admin/_authed/media/': typeof AdminAuthedMediaIndexRoute
+  '/admin/_authed/pages/': typeof AdminAuthedPagesIndexRoute
+  '/admin/_authed/publications/': typeof AdminAuthedPublicationsIndexRoute
+  '/admin/_authed/recommendations/': typeof AdminAuthedRecommendationsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/contact' | '/interviews' | '/publications'
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/about'
+    | '/contact'
+    | '/interviews'
+    | '/publications'
+    | '/admin/forgot-password'
+    | '/admin/login'
+    | '/admin/setup'
+    | '/admin/activities'
+    | '/admin/admins'
+    | '/admin/career'
+    | '/admin/change-password'
+    | '/admin/education'
+    | '/admin/expertise'
+    | '/admin/interests'
+    | '/admin/languages'
+    | '/admin/memberships'
+    | '/admin/messages'
+    | '/admin/profile'
+    | '/admin/research-specialties'
+    | '/admin/settings'
+    | '/admin/social-links'
+    | '/admin/stats'
+    | '/admin/'
+    | '/admin/media/$mediaId'
+    | '/admin/media/new'
+    | '/admin/pages/$pageId'
+    | '/admin/pages/new'
+    | '/admin/publications/$publicationId'
+    | '/admin/publications/new'
+    | '/admin/recommendations/$recommendationId'
+    | '/admin/recommendations/new'
+    | '/admin/media/'
+    | '/admin/pages/'
+    | '/admin/publications/'
+    | '/admin/recommendations/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/contact' | '/interviews' | '/publications'
-  id: '__root__' | '/' | '/about' | '/contact' | '/interviews' | '/publications'
+  to:
+    | '/'
+    | '/admin'
+    | '/about'
+    | '/contact'
+    | '/interviews'
+    | '/publications'
+    | '/admin/forgot-password'
+    | '/admin/login'
+    | '/admin/setup'
+    | '/admin/activities'
+    | '/admin/admins'
+    | '/admin/career'
+    | '/admin/change-password'
+    | '/admin/education'
+    | '/admin/expertise'
+    | '/admin/interests'
+    | '/admin/languages'
+    | '/admin/memberships'
+    | '/admin/messages'
+    | '/admin/profile'
+    | '/admin/research-specialties'
+    | '/admin/settings'
+    | '/admin/social-links'
+    | '/admin/stats'
+    | '/admin/media/$mediaId'
+    | '/admin/media/new'
+    | '/admin/pages/$pageId'
+    | '/admin/pages/new'
+    | '/admin/publications/$publicationId'
+    | '/admin/publications/new'
+    | '/admin/recommendations/$recommendationId'
+    | '/admin/recommendations/new'
+    | '/admin/media'
+    | '/admin/pages'
+    | '/admin/publications'
+    | '/admin/recommendations'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/about'
+    | '/contact'
+    | '/interviews'
+    | '/publications'
+    | '/admin/_authed'
+    | '/admin/forgot-password'
+    | '/admin/login'
+    | '/admin/setup'
+    | '/admin/_authed/activities'
+    | '/admin/_authed/admins'
+    | '/admin/_authed/career'
+    | '/admin/_authed/change-password'
+    | '/admin/_authed/education'
+    | '/admin/_authed/expertise'
+    | '/admin/_authed/interests'
+    | '/admin/_authed/languages'
+    | '/admin/_authed/memberships'
+    | '/admin/_authed/messages'
+    | '/admin/_authed/profile'
+    | '/admin/_authed/research-specialties'
+    | '/admin/_authed/settings'
+    | '/admin/_authed/social-links'
+    | '/admin/_authed/stats'
+    | '/admin/_authed/'
+    | '/admin/_authed/media/$mediaId'
+    | '/admin/_authed/media/new'
+    | '/admin/_authed/pages/$pageId'
+    | '/admin/_authed/pages/new'
+    | '/admin/_authed/publications/$publicationId'
+    | '/admin/_authed/publications/new'
+    | '/admin/_authed/recommendations/$recommendationId'
+    | '/admin/_authed/recommendations/new'
+    | '/admin/_authed/media/'
+    | '/admin/_authed/pages/'
+    | '/admin/_authed/publications/'
+    | '/admin/_authed/recommendations/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRouteRoute: typeof AdminRouteRouteWithChildren
   AboutRoute: typeof AboutRoute
   ContactRoute: typeof ContactRoute
   InterviewsRoute: typeof InterviewsRoute
@@ -93,6 +507,13 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -116,11 +537,322 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicationsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/_authed': {
+      id: '/admin/_authed'
+      path: ''
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminAuthedRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/forgot-password': {
+      id: '/admin/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/admin/forgot-password'
+      preLoaderRoute: typeof AdminForgotPasswordRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/login': {
+      id: '/admin/login'
+      path: '/login'
+      fullPath: '/admin/login'
+      preLoaderRoute: typeof AdminLoginRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/setup': {
+      id: '/admin/setup'
+      path: '/setup'
+      fullPath: '/admin/setup'
+      preLoaderRoute: typeof AdminSetupRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/_authed/': {
+      id: '/admin/_authed/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminAuthedIndexRouteImport
+      parentRoute: typeof AdminAuthedRoute
+    }
+    '/admin/_authed/activities': {
+      id: '/admin/_authed/activities'
+      path: '/activities'
+      fullPath: '/admin/activities'
+      preLoaderRoute: typeof AdminAuthedActivitiesRouteImport
+      parentRoute: typeof AdminAuthedRoute
+    }
+    '/admin/_authed/admins': {
+      id: '/admin/_authed/admins'
+      path: '/admins'
+      fullPath: '/admin/admins'
+      preLoaderRoute: typeof AdminAuthedAdminsRouteImport
+      parentRoute: typeof AdminAuthedRoute
+    }
+    '/admin/_authed/career': {
+      id: '/admin/_authed/career'
+      path: '/career'
+      fullPath: '/admin/career'
+      preLoaderRoute: typeof AdminAuthedCareerRouteImport
+      parentRoute: typeof AdminAuthedRoute
+    }
+    '/admin/_authed/change-password': {
+      id: '/admin/_authed/change-password'
+      path: '/change-password'
+      fullPath: '/admin/change-password'
+      preLoaderRoute: typeof AdminAuthedChangePasswordRouteImport
+      parentRoute: typeof AdminAuthedRoute
+    }
+    '/admin/_authed/education': {
+      id: '/admin/_authed/education'
+      path: '/education'
+      fullPath: '/admin/education'
+      preLoaderRoute: typeof AdminAuthedEducationRouteImport
+      parentRoute: typeof AdminAuthedRoute
+    }
+    '/admin/_authed/expertise': {
+      id: '/admin/_authed/expertise'
+      path: '/expertise'
+      fullPath: '/admin/expertise'
+      preLoaderRoute: typeof AdminAuthedExpertiseRouteImport
+      parentRoute: typeof AdminAuthedRoute
+    }
+    '/admin/_authed/interests': {
+      id: '/admin/_authed/interests'
+      path: '/interests'
+      fullPath: '/admin/interests'
+      preLoaderRoute: typeof AdminAuthedInterestsRouteImport
+      parentRoute: typeof AdminAuthedRoute
+    }
+    '/admin/_authed/languages': {
+      id: '/admin/_authed/languages'
+      path: '/languages'
+      fullPath: '/admin/languages'
+      preLoaderRoute: typeof AdminAuthedLanguagesRouteImport
+      parentRoute: typeof AdminAuthedRoute
+    }
+    '/admin/_authed/memberships': {
+      id: '/admin/_authed/memberships'
+      path: '/memberships'
+      fullPath: '/admin/memberships'
+      preLoaderRoute: typeof AdminAuthedMembershipsRouteImport
+      parentRoute: typeof AdminAuthedRoute
+    }
+    '/admin/_authed/messages': {
+      id: '/admin/_authed/messages'
+      path: '/messages'
+      fullPath: '/admin/messages'
+      preLoaderRoute: typeof AdminAuthedMessagesRouteImport
+      parentRoute: typeof AdminAuthedRoute
+    }
+    '/admin/_authed/profile': {
+      id: '/admin/_authed/profile'
+      path: '/profile'
+      fullPath: '/admin/profile'
+      preLoaderRoute: typeof AdminAuthedProfileRouteImport
+      parentRoute: typeof AdminAuthedRoute
+    }
+    '/admin/_authed/research-specialties': {
+      id: '/admin/_authed/research-specialties'
+      path: '/research-specialties'
+      fullPath: '/admin/research-specialties'
+      preLoaderRoute: typeof AdminAuthedResearchSpecialtiesRouteImport
+      parentRoute: typeof AdminAuthedRoute
+    }
+    '/admin/_authed/settings': {
+      id: '/admin/_authed/settings'
+      path: '/settings'
+      fullPath: '/admin/settings'
+      preLoaderRoute: typeof AdminAuthedSettingsRouteImport
+      parentRoute: typeof AdminAuthedRoute
+    }
+    '/admin/_authed/social-links': {
+      id: '/admin/_authed/social-links'
+      path: '/social-links'
+      fullPath: '/admin/social-links'
+      preLoaderRoute: typeof AdminAuthedSocialLinksRouteImport
+      parentRoute: typeof AdminAuthedRoute
+    }
+    '/admin/_authed/stats': {
+      id: '/admin/_authed/stats'
+      path: '/stats'
+      fullPath: '/admin/stats'
+      preLoaderRoute: typeof AdminAuthedStatsRouteImport
+      parentRoute: typeof AdminAuthedRoute
+    }
+    '/admin/_authed/media/': {
+      id: '/admin/_authed/media/'
+      path: '/media'
+      fullPath: '/admin/media/'
+      preLoaderRoute: typeof AdminAuthedMediaIndexRouteImport
+      parentRoute: typeof AdminAuthedRoute
+    }
+    '/admin/_authed/media/$mediaId': {
+      id: '/admin/_authed/media/$mediaId'
+      path: '/media/$mediaId'
+      fullPath: '/admin/media/$mediaId'
+      preLoaderRoute: typeof AdminAuthedMediaMediaIdRouteImport
+      parentRoute: typeof AdminAuthedRoute
+    }
+    '/admin/_authed/media/new': {
+      id: '/admin/_authed/media/new'
+      path: '/media/new'
+      fullPath: '/admin/media/new'
+      preLoaderRoute: typeof AdminAuthedMediaNewRouteImport
+      parentRoute: typeof AdminAuthedRoute
+    }
+    '/admin/_authed/pages/': {
+      id: '/admin/_authed/pages/'
+      path: '/pages'
+      fullPath: '/admin/pages/'
+      preLoaderRoute: typeof AdminAuthedPagesIndexRouteImport
+      parentRoute: typeof AdminAuthedRoute
+    }
+    '/admin/_authed/pages/$pageId': {
+      id: '/admin/_authed/pages/$pageId'
+      path: '/pages/$pageId'
+      fullPath: '/admin/pages/$pageId'
+      preLoaderRoute: typeof AdminAuthedPagesPageIdRouteImport
+      parentRoute: typeof AdminAuthedRoute
+    }
+    '/admin/_authed/pages/new': {
+      id: '/admin/_authed/pages/new'
+      path: '/pages/new'
+      fullPath: '/admin/pages/new'
+      preLoaderRoute: typeof AdminAuthedPagesNewRouteImport
+      parentRoute: typeof AdminAuthedRoute
+    }
+    '/admin/_authed/publications/': {
+      id: '/admin/_authed/publications/'
+      path: '/publications'
+      fullPath: '/admin/publications/'
+      preLoaderRoute: typeof AdminAuthedPublicationsIndexRouteImport
+      parentRoute: typeof AdminAuthedRoute
+    }
+    '/admin/_authed/publications/$publicationId': {
+      id: '/admin/_authed/publications/$publicationId'
+      path: '/publications/$publicationId'
+      fullPath: '/admin/publications/$publicationId'
+      preLoaderRoute: typeof AdminAuthedPublicationsPublicationIdRouteImport
+      parentRoute: typeof AdminAuthedRoute
+    }
+    '/admin/_authed/publications/new': {
+      id: '/admin/_authed/publications/new'
+      path: '/publications/new'
+      fullPath: '/admin/publications/new'
+      preLoaderRoute: typeof AdminAuthedPublicationsNewRouteImport
+      parentRoute: typeof AdminAuthedRoute
+    }
+    '/admin/_authed/recommendations/': {
+      id: '/admin/_authed/recommendations/'
+      path: '/recommendations'
+      fullPath: '/admin/recommendations/'
+      preLoaderRoute: typeof AdminAuthedRecommendationsIndexRouteImport
+      parentRoute: typeof AdminAuthedRoute
+    }
+    '/admin/_authed/recommendations/$recommendationId': {
+      id: '/admin/_authed/recommendations/$recommendationId'
+      path: '/recommendations/$recommendationId'
+      fullPath: '/admin/recommendations/$recommendationId'
+      preLoaderRoute: typeof AdminAuthedRecommendationsRecommendationIdRouteImport
+      parentRoute: typeof AdminAuthedRoute
+    }
+    '/admin/_authed/recommendations/new': {
+      id: '/admin/_authed/recommendations/new'
+      path: '/recommendations/new'
+      fullPath: '/admin/recommendations/new'
+      preLoaderRoute: typeof AdminAuthedRecommendationsNewRouteImport
+      parentRoute: typeof AdminAuthedRoute
+    }
   }
 }
 
+interface AdminAuthedRouteChildren {
+  AdminAuthedActivitiesRoute: typeof AdminAuthedActivitiesRoute
+  AdminAuthedAdminsRoute: typeof AdminAuthedAdminsRoute
+  AdminAuthedCareerRoute: typeof AdminAuthedCareerRoute
+  AdminAuthedChangePasswordRoute: typeof AdminAuthedChangePasswordRoute
+  AdminAuthedEducationRoute: typeof AdminAuthedEducationRoute
+  AdminAuthedExpertiseRoute: typeof AdminAuthedExpertiseRoute
+  AdminAuthedInterestsRoute: typeof AdminAuthedInterestsRoute
+  AdminAuthedLanguagesRoute: typeof AdminAuthedLanguagesRoute
+  AdminAuthedMembershipsRoute: typeof AdminAuthedMembershipsRoute
+  AdminAuthedMessagesRoute: typeof AdminAuthedMessagesRoute
+  AdminAuthedProfileRoute: typeof AdminAuthedProfileRoute
+  AdminAuthedResearchSpecialtiesRoute: typeof AdminAuthedResearchSpecialtiesRoute
+  AdminAuthedSettingsRoute: typeof AdminAuthedSettingsRoute
+  AdminAuthedSocialLinksRoute: typeof AdminAuthedSocialLinksRoute
+  AdminAuthedStatsRoute: typeof AdminAuthedStatsRoute
+  AdminAuthedIndexRoute: typeof AdminAuthedIndexRoute
+  AdminAuthedMediaMediaIdRoute: typeof AdminAuthedMediaMediaIdRoute
+  AdminAuthedMediaNewRoute: typeof AdminAuthedMediaNewRoute
+  AdminAuthedPagesPageIdRoute: typeof AdminAuthedPagesPageIdRoute
+  AdminAuthedPagesNewRoute: typeof AdminAuthedPagesNewRoute
+  AdminAuthedPublicationsPublicationIdRoute: typeof AdminAuthedPublicationsPublicationIdRoute
+  AdminAuthedPublicationsNewRoute: typeof AdminAuthedPublicationsNewRoute
+  AdminAuthedRecommendationsRecommendationIdRoute: typeof AdminAuthedRecommendationsRecommendationIdRoute
+  AdminAuthedRecommendationsNewRoute: typeof AdminAuthedRecommendationsNewRoute
+  AdminAuthedMediaIndexRoute: typeof AdminAuthedMediaIndexRoute
+  AdminAuthedPagesIndexRoute: typeof AdminAuthedPagesIndexRoute
+  AdminAuthedPublicationsIndexRoute: typeof AdminAuthedPublicationsIndexRoute
+  AdminAuthedRecommendationsIndexRoute: typeof AdminAuthedRecommendationsIndexRoute
+}
+
+const AdminAuthedRouteChildren: AdminAuthedRouteChildren = {
+  AdminAuthedActivitiesRoute: AdminAuthedActivitiesRoute,
+  AdminAuthedAdminsRoute: AdminAuthedAdminsRoute,
+  AdminAuthedCareerRoute: AdminAuthedCareerRoute,
+  AdminAuthedChangePasswordRoute: AdminAuthedChangePasswordRoute,
+  AdminAuthedEducationRoute: AdminAuthedEducationRoute,
+  AdminAuthedExpertiseRoute: AdminAuthedExpertiseRoute,
+  AdminAuthedInterestsRoute: AdminAuthedInterestsRoute,
+  AdminAuthedLanguagesRoute: AdminAuthedLanguagesRoute,
+  AdminAuthedMembershipsRoute: AdminAuthedMembershipsRoute,
+  AdminAuthedMessagesRoute: AdminAuthedMessagesRoute,
+  AdminAuthedProfileRoute: AdminAuthedProfileRoute,
+  AdminAuthedResearchSpecialtiesRoute: AdminAuthedResearchSpecialtiesRoute,
+  AdminAuthedSettingsRoute: AdminAuthedSettingsRoute,
+  AdminAuthedSocialLinksRoute: AdminAuthedSocialLinksRoute,
+  AdminAuthedStatsRoute: AdminAuthedStatsRoute,
+  AdminAuthedIndexRoute: AdminAuthedIndexRoute,
+  AdminAuthedMediaMediaIdRoute: AdminAuthedMediaMediaIdRoute,
+  AdminAuthedMediaNewRoute: AdminAuthedMediaNewRoute,
+  AdminAuthedPagesPageIdRoute: AdminAuthedPagesPageIdRoute,
+  AdminAuthedPagesNewRoute: AdminAuthedPagesNewRoute,
+  AdminAuthedPublicationsPublicationIdRoute:
+    AdminAuthedPublicationsPublicationIdRoute,
+  AdminAuthedPublicationsNewRoute: AdminAuthedPublicationsNewRoute,
+  AdminAuthedRecommendationsRecommendationIdRoute:
+    AdminAuthedRecommendationsRecommendationIdRoute,
+  AdminAuthedRecommendationsNewRoute: AdminAuthedRecommendationsNewRoute,
+  AdminAuthedMediaIndexRoute: AdminAuthedMediaIndexRoute,
+  AdminAuthedPagesIndexRoute: AdminAuthedPagesIndexRoute,
+  AdminAuthedPublicationsIndexRoute: AdminAuthedPublicationsIndexRoute,
+  AdminAuthedRecommendationsIndexRoute: AdminAuthedRecommendationsIndexRoute,
+}
+
+const AdminAuthedRouteWithChildren = AdminAuthedRoute._addFileChildren(
+  AdminAuthedRouteChildren,
+)
+
+interface AdminRouteRouteChildren {
+  AdminAuthedRoute: typeof AdminAuthedRouteWithChildren
+  AdminForgotPasswordRoute: typeof AdminForgotPasswordRoute
+  AdminLoginRoute: typeof AdminLoginRoute
+  AdminSetupRoute: typeof AdminSetupRoute
+}
+
+const AdminRouteRouteChildren: AdminRouteRouteChildren = {
+  AdminAuthedRoute: AdminAuthedRouteWithChildren,
+  AdminForgotPasswordRoute: AdminForgotPasswordRoute,
+  AdminLoginRoute: AdminLoginRoute,
+  AdminSetupRoute: AdminSetupRoute,
+}
+
+const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
+  AdminRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRouteRoute: AdminRouteRouteWithChildren,
   AboutRoute: AboutRoute,
   ContactRoute: ContactRoute,
   InterviewsRoute: InterviewsRoute,

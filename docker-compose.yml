@@ -1,0 +1,15 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: zahran
+      POSTGRES_PASSWORD: devpassword
+      POSTGRES_DB: zahran_portal
+    ports:
+      - "5544:5432"
+    volumes:
+      - zahran_portal_db:/var/lib/postgresql/data
+
+volumes:
+  zahran_portal_db:

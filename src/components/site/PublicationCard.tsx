@@ -1,7 +1,22 @@
 import { ExternalLink } from "lucide-react";
-import { publicationTypeAr, type Publication } from "@/content/site";
+import { publicationTypeAr } from "@/lib/publication-i18n";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/lib/language";
+
+export type Publication = {
+  id: string;
+  title: string;
+  titleAr: string;
+  authors: string;
+  journal: string;
+  year: number;
+  type: string;
+  area: string;
+  doi?: string | null;
+  url?: string | null;
+  summary?: string | null;
+  featured?: boolean | null;
+};
 
 function publicationHref(p: Publication) {
   return p.url ?? (p.doi ? `https://doi.org/${p.doi}` : undefined);

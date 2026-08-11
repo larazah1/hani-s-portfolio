@@ -1,21 +1,25 @@
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Menu, Mail, Phone, Languages } from "lucide-react";
-import { profile } from "@/content/site";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { useLanguage } from "@/lib/language";
-import type { DictionaryKey } from "@/lib/language";
 
-const nav: {
-  to: "/" | "/about" | "/publications" | "/interviews" | "/contact";
-  key: DictionaryKey;
-}[] = [
-  { to: "/", key: "home" },
-  { to: "/about", key: "aboutMe" },
-  { to: "/publications", key: "publications" },
-  { to: "/interviews", key: "interviewsArticles" },
-  { to: "/contact", key: "contact" },
-];
+export type NavPage = {
+  path: string;
+  title: string;
+  titleAr: string;
+  navLabel: string | null;
+  navLabelAr: string | null;
+};
+
+export type SiteProfile = {
+  name: string;
+  nameAr: string;
+  credentials: string;
+  credentialsAr: string;
+  email: string;
+  phone: string;
+};
 
 function LanguageToggle({ className = "" }: { className?: string }) {
   const { t, toggleLanguage } = useLanguage();
@@ -32,7 +36,7 @@ function LanguageToggle({ className = "" }: { className?: string }) {
   );
 }
 
-export function SiteHeader() {
+export function SiteHeader({ profile, navPages }: { profile: SiteProfile; navPages: NavPage[] }) {
   const [open, setOpen] = useState(false);
   const { dir, t, pick } = useLanguage();
 
@@ -49,15 +53,15 @@ export function SiteHeader() {
         </Link>
 
         <nav className="hidden items-center gap-7 lg:flex">
-          {nav.map((item) => (
+          {navPages.map((page) => (
             <Link
-              key={item.to}
-              to={item.to}
+              key={page.path}
+              to={page.path}
               className="text-sm text-muted-foreground transition-colors hover:text-foreground"
               activeProps={{ className: "text-sm text-foreground" }}
-              activeOptions={{ exact: item.to === "/" }}
+              activeOptions={{ exact: page.path === "/" }}
             >
-              {t(item.key)}
+              {pick(page.navLabel ?? page.title, page.navLabelAr ?? page.titleAr)}
             </Link>
           ))}
         </nav>
@@ -100,19 +104,19 @@ export function SiteHeader() {
                 {pick(profile.name, profile.nameAr)}
               </SheetTitle>
               <nav className="flex flex-1 flex-col">
-                {nav.map((item) => (
+                {navPages.map((page) => (
                   <Link
-                    key={item.to}
-                    to={item.to}
+                    key={page.path}
+                    to={page.path}
                     onClick={() => setOpen(false)}
                     className="border-b border-border/60 px-6 py-4 text-base text-muted-foreground transition-colors hover:bg-secondary/60 hover:text-foreground"
                     activeProps={{
                       className:
                         "border-b border-border/60 px-6 py-4 text-base text-foreground bg-secondary/60",
                     }}
-                    activeOptions={{ exact: item.to === "/" }}
+                    activeOptions={{ exact: page.path === "/" }}
                   >
-                    {t(item.key)}
+                    {pick(page.navLabel ?? page.title, page.navLabelAr ?? page.titleAr)}
                   </Link>
                 ))}
               </nav>

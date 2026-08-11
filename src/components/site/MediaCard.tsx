@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { ExternalLink, Eye, Newspaper, Play, Video as VideoIcon, Mic } from "lucide-react";
-import type { MediaItem } from "@/content/site";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -13,18 +12,32 @@ import {
 } from "@/components/ui/dialog";
 import { useLanguage, type DictionaryKey } from "@/lib/language";
 
-function youTubeVideoId(url?: string) {
+export type MediaItem = {
+  id: string;
+  title: string;
+  titleAr?: string | null;
+  source: string;
+  date: string;
+  type: string;
+  description?: string | null;
+  videoUrl?: string | null;
+  articleUrl?: string | null;
+  thumbnail?: string | null;
+  featured?: boolean | null;
+};
+
+function youTubeVideoId(url?: string | null) {
   if (!url) return null;
   const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]{6,})/);
   return match ? match[1] : null;
 }
 
-function youTubeEmbedUrl(url?: string) {
+function youTubeEmbedUrl(url?: string | null) {
   const id = youTubeVideoId(url);
   return id ? `https://www.youtube.com/embed/${id}` : null;
 }
 
-function youTubeThumbnailUrl(url?: string) {
+function youTubeThumbnailUrl(url?: string | null) {
   const id = youTubeVideoId(url);
   return id ? `https://img.youtube.com/vi/${id}/hqdefault.jpg` : null;
 }
