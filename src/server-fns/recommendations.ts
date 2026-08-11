@@ -3,15 +3,16 @@ import { asc, eq, sql } from "drizzle-orm";
 import { z } from "zod";
 import { db } from "@/db/client";
 import { recommendations, sections } from "@/db/schema";
+import { safeString } from "@/lib/text-validation";
 import { requireAdmin } from "./require-admin";
 import { logActivity } from "./collection-helpers";
 
 const insertSchema = z.object({
-  name: z.string().min(1),
-  position: z.string().min(1),
-  organization: z.string().optional().default(""),
-  body: z.string().min(1),
-  dateLabel: z.string().optional(),
+  name: safeString(200).min(1),
+  position: safeString(200).min(1),
+  organization: safeString(200).optional().default(""),
+  body: safeString(5000).min(1),
+  dateLabel: safeString(100).optional(),
   featured: z.boolean().optional().default(false),
   status: z.enum(["draft", "published"]).optional().default("draft"),
 });

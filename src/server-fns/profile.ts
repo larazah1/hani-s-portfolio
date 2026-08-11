@@ -3,28 +3,29 @@ import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { db } from "@/db/client";
 import { profile } from "@/db/schema";
+import { safePath, safePhone, safeString } from "@/lib/text-validation";
 import { requireAdmin } from "./require-admin";
 import { logActivity } from "./collection-helpers";
 
 const updateSchema = z.object({
-  name: z.string().min(1),
-  nameAr: z.string().min(1),
-  credentials: z.string().min(1),
-  credentialsAr: z.string().min(1),
-  title: z.string().min(1),
-  titleAr: z.string().min(1),
-  tagline: z.string().min(1),
-  taglineAr: z.string().min(1),
-  location: z.string().min(1),
-  locationAr: z.string().min(1),
-  email: z.string().email(),
-  phone: z.string().min(1),
-  primaryCtaLabel: z.string().min(1),
-  primaryCtaLabelAr: z.string().min(1),
-  primaryCtaTo: z.string().min(1),
-  secondaryCtaLabel: z.string().min(1),
-  secondaryCtaLabelAr: z.string().min(1),
-  secondaryCtaTo: z.string().min(1),
+  name: safeString(200).min(1),
+  nameAr: safeString(200).min(1),
+  credentials: safeString(200).min(1),
+  credentialsAr: safeString(200).min(1),
+  title: safeString(300).min(1),
+  titleAr: safeString(300).min(1),
+  tagline: safeString(500).min(1),
+  taglineAr: safeString(500).min(1),
+  location: safeString(200).min(1),
+  locationAr: safeString(200).min(1),
+  email: z.string().trim().max(200).email(),
+  phone: safePhone(),
+  primaryCtaLabel: safeString(100).min(1),
+  primaryCtaLabelAr: safeString(100).min(1),
+  primaryCtaTo: safePath(),
+  secondaryCtaLabel: safeString(100).min(1),
+  secondaryCtaLabelAr: safeString(100).min(1),
+  secondaryCtaTo: safePath(),
 });
 
 export const getProfile = createServerFn({ method: "GET" }).handler(async ({ context }) => {

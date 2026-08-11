@@ -3,25 +3,26 @@ import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { db } from "@/db/client";
 import { siteSettings } from "@/db/schema";
+import { safeString, safeUrl } from "@/lib/text-validation";
 import { requireAdmin } from "./require-admin";
 import { logActivity } from "./collection-helpers";
 
 const updateSchema = z.object({
-  siteName: z.string().min(1),
-  siteNameAr: z.string().min(1),
-  siteDescription: z.string().min(1),
-  siteDescriptionAr: z.string().min(1),
-  logoUrl: z.string().optional(),
-  faviconUrl: z.string().optional(),
-  defaultMetaTitle: z.string().min(1),
-  defaultMetaTitleAr: z.string().min(1),
-  defaultMetaDescription: z.string().min(1),
-  defaultMetaDescriptionAr: z.string().min(1),
-  ogImageUrl: z.string().optional(),
-  footerDescription: z.string().min(1),
-  footerDescriptionAr: z.string().min(1),
-  copyrightText: z.string().min(1),
-  copyrightTextAr: z.string().min(1),
+  siteName: safeString(200).min(1),
+  siteNameAr: safeString(200).min(1),
+  siteDescription: safeString(500).min(1),
+  siteDescriptionAr: safeString(500).min(1),
+  logoUrl: safeUrl().optional(),
+  faviconUrl: safeUrl().optional(),
+  defaultMetaTitle: safeString(300).min(1),
+  defaultMetaTitleAr: safeString(300).min(1),
+  defaultMetaDescription: safeString(500).min(1),
+  defaultMetaDescriptionAr: safeString(500).min(1),
+  ogImageUrl: safeUrl().optional(),
+  footerDescription: safeString(1000).min(1),
+  footerDescriptionAr: safeString(1000).min(1),
+  copyrightText: safeString(300).min(1),
+  copyrightTextAr: safeString(300).min(1),
 });
 
 export const getSiteSettings = createServerFn({ method: "GET" }).handler(async ({ context }) => {

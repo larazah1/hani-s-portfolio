@@ -10,15 +10,15 @@ import { logActivity } from "./collection-helpers";
 const MEDIA_TYPES = ["Interview", "Article", "Video", "News Feature", "Other"] as const;
 
 const insertSchema = z.object({
-  title: z.string().min(1),
-  titleAr: z.string().optional(),
-  source: z.string().min(1),
-  dateLabel: z.string().min(1),
+  title: safeString(500).min(1),
+  titleAr: safeString(500).optional(),
+  source: safeString(200).min(1),
+  dateLabel: safeString(100).min(1),
   type: z.enum(MEDIA_TYPES),
-  description: z.string().optional(),
-  videoUrl: z.string().optional(),
-  articleUrl: z.string().optional(),
-  thumbnail: z.string().optional(),
+  description: safeString(5000).optional(),
+  videoUrl: safeUrl().optional(),
+  articleUrl: safeUrl().optional(),
+  thumbnail: safeUrl().optional(),
   featured: z.boolean().optional().default(false),
   status: z.enum(["draft", "published"]).optional().default("draft"),
 });
