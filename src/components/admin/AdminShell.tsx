@@ -19,7 +19,6 @@ import {
   Inbox,
   Settings,
   ShieldCheck,
-  KeyRound,
   LogOut,
 } from "lucide-react";
 import {
@@ -82,7 +81,6 @@ const NAV_GROUPS: NavGroup[] = [
     items: [
       { to: "/admin/settings", label: "إعدادات الموقع", icon: Settings },
       { to: "/admin/admins", label: "المسؤولون", icon: ShieldCheck },
-      { to: "/admin/change-password", label: "تغيير كلمة المرور", icon: KeyRound },
     ],
   },
 ];

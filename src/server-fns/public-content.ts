@@ -147,12 +147,16 @@ async function resolveSectionData(section: typeof sections.$inferSelect) {
         const byId = new Map(rows.map((r) => [r.id, r]));
         return itemIds.map((id) => byId.get(id)).filter((r) => r !== undefined);
       }
+      // Unlike the publications/media carousels, there's no separate "full
+      // list" page for recommendations — this carousel is the only place
+      // they're ever shown, so every published one belongs here regardless
+      // of `featured` (that flag would otherwise silently hide approved
+      // public submissions, since new submissions never start out featured).
       return db
         .select()
         .from(recommendations)
-        .where(and(eq(recommendations.featured, true), eq(recommendations.status, "published")))
-        .orderBy(asc(recommendations.sortOrder))
-        .limit(3);
+        .where(eq(recommendations.status, "published"))
+        .orderBy(asc(recommendations.sortOrder));
     }
 
     case "publications-full-list":

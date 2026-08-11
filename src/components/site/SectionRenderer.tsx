@@ -601,24 +601,31 @@ function RecommendationsGridSection({ section }: { section: ResolvedSection }) {
       {rows.length === 0 ? (
         <EmptyNote>{t("emptyRecommendations")}</EmptyNote>
       ) : (
-        <div className="grid gap-4 md:grid-cols-3">
-          {rows.map((r) => (
-            <blockquote
-              key={String(r["id"])}
-              dir="ltr"
-              className="rounded-md border border-border bg-card p-6 text-left"
-            >
-              <p className="text-sm leading-relaxed">{String(r["body"])}</p>
-              <footer className="mt-4 text-sm">
-                <span className="font-medium">{String(r["name"])}</span>
-                <span className="block text-muted-foreground">
-                  {String(r["position"])}
-                  {r["organization"] ? `, ${String(r["organization"])}` : ""}
-                </span>
-              </footer>
-            </blockquote>
-          ))}
-        </div>
+        <Carousel opts={{ align: "start" }} className="w-full">
+          <CarouselContent>
+            {rows.map((r) => (
+              <CarouselItem key={String(r["id"])} className="sm:basis-1/2 lg:basis-1/3">
+                <blockquote
+                  dir="ltr"
+                  className="h-full rounded-md border border-border bg-card p-6 text-left"
+                >
+                  <p className="text-sm leading-relaxed">{String(r["body"])}</p>
+                  <footer className="mt-4 text-sm">
+                    <span className="font-medium">{String(r["name"])}</span>
+                    <span className="block text-muted-foreground">
+                      {String(r["position"])}
+                      {r["organization"] ? `, ${String(r["organization"])}` : ""}
+                    </span>
+                  </footer>
+                </blockquote>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <div className="mt-6 flex justify-end gap-2">
+            <CarouselPrevious className="static h-9 w-9 translate-y-0" />
+            <CarouselNext className="static h-9 w-9 translate-y-0" />
+          </div>
+        </Carousel>
       )}
     </Section>
   );

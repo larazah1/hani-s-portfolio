@@ -37,7 +37,7 @@ export const SECTION_TYPE_LABELS: Record<SectionType, string> = {
   "list-block": "قائمة (تخصصات / أنشطة / لغات / اهتمامات)",
   "publications-carousel": "عرض شرائح المنشورات",
   "media-carousel": "عرض شرائح الوسائط",
-  "recommendations-grid": "شبكة التوصيات",
+  "recommendations-grid": "عرض شرائح التوصيات",
   "publications-full-list": "القائمة الكاملة للمنشورات (مع الفلاتر)",
   "media-full-grid": "الشبكة الكاملة للوسائط",
   "rich-text": "كتلة نص منسق",

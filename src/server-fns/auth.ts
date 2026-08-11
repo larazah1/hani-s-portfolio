@@ -6,7 +6,6 @@ import { admins } from "@/db/schema";
 import { hashPassword, sha256Hex, verifyPassword } from "@/lib/security";
 import { safeToken } from "@/lib/text-validation";
 import { createAdminSession, destroyAdminSession } from "@/lib/session.server";
-import { requireAdmin } from "./require-admin";
 
 const FAILED_ATTEMPT_LIMIT = 5;
 const LOCKOUT_MS = 15 * 60 * 1000;
@@ -113,28 +112,3 @@ export const acceptInvite = createServerFn({ method: "POST" })
     return { ok: true };
   });
 
-const changePasswordSchema = z.object({
-  currentPassword: z.string().min(1),
-  newPassword: z.string().min(10, "يجب أن تتكون كلمة المرور من 10 أحرف على الأقل."),
-});
-
-export const changePassword = createServerFn({ method: "POST" })
-  .validator(changePasswordSchema)
-  .handler(async ({ data, context }): Promise<Result> => {
-    const current = requireAdmin(context);
-    const [admin] = await db.select().from(admins).where(eq(admins.id, current.id)).limit(1);
-
-    const currentOk =
-      admin?.passwordHash != null &&
-      (await verifyPassword(data.currentPassword, admin.passwordHash));
-    if (!admin || !currentOk) {
-      return { ok: false, error: "كلمة المرور الحالية غير صحيحة." };
-    }
-
-    const passwordHash = await hashPassword(data.newPassword);
-    await db
-      .update(admins)
-      .set({ passwordHash, updatedAt: new Date() })
-      .where(eq(admins.id, admin.id));
-    return { ok: true };
-  });

@@ -23,7 +23,6 @@ import { Route as AdminAuthedIndexRouteImport } from './routes/admin/_authed/ind
 import { Route as AdminAuthedActivitiesRouteImport } from './routes/admin/_authed/activities'
 import { Route as AdminAuthedAdminsRouteImport } from './routes/admin/_authed/admins'
 import { Route as AdminAuthedCareerRouteImport } from './routes/admin/_authed/career'
-import { Route as AdminAuthedChangePasswordRouteImport } from './routes/admin/_authed/change-password'
 import { Route as AdminAuthedEducationRouteImport } from './routes/admin/_authed/education'
 import { Route as AdminAuthedExpertiseRouteImport } from './routes/admin/_authed/expertise'
 import { Route as AdminAuthedInterestsRouteImport } from './routes/admin/_authed/interests'
@@ -115,12 +114,6 @@ const AdminAuthedCareerRoute = AdminAuthedCareerRouteImport.update({
   path: '/career',
   getParentRoute: () => AdminAuthedRoute,
 } as any)
-const AdminAuthedChangePasswordRoute =
-  AdminAuthedChangePasswordRouteImport.update({
-    id: '/change-password',
-    path: '/change-password',
-    getParentRoute: () => AdminAuthedRoute,
-  } as any)
 const AdminAuthedEducationRoute = AdminAuthedEducationRouteImport.update({
   id: '/education',
   path: '/education',
@@ -247,7 +240,6 @@ export interface FileRoutesByFullPath {
   '/admin/activities': typeof AdminAuthedActivitiesRoute
   '/admin/admins': typeof AdminAuthedAdminsRoute
   '/admin/career': typeof AdminAuthedCareerRoute
-  '/admin/change-password': typeof AdminAuthedChangePasswordRoute
   '/admin/education': typeof AdminAuthedEducationRoute
   '/admin/expertise': typeof AdminAuthedExpertiseRoute
   '/admin/interests': typeof AdminAuthedInterestsRoute
@@ -284,7 +276,6 @@ export interface FileRoutesByTo {
   '/admin/activities': typeof AdminAuthedActivitiesRoute
   '/admin/admins': typeof AdminAuthedAdminsRoute
   '/admin/career': typeof AdminAuthedCareerRoute
-  '/admin/change-password': typeof AdminAuthedChangePasswordRoute
   '/admin/education': typeof AdminAuthedEducationRoute
   '/admin/expertise': typeof AdminAuthedExpertiseRoute
   '/admin/interests': typeof AdminAuthedInterestsRoute
@@ -322,7 +313,6 @@ export interface FileRoutesById {
   '/admin/_authed/activities': typeof AdminAuthedActivitiesRoute
   '/admin/_authed/admins': typeof AdminAuthedAdminsRoute
   '/admin/_authed/career': typeof AdminAuthedCareerRoute
-  '/admin/_authed/change-password': typeof AdminAuthedChangePasswordRoute
   '/admin/_authed/education': typeof AdminAuthedEducationRoute
   '/admin/_authed/expertise': typeof AdminAuthedExpertiseRoute
   '/admin/_authed/interests': typeof AdminAuthedInterestsRoute
@@ -361,7 +351,6 @@ export interface FileRouteTypes {
     | '/admin/activities'
     | '/admin/admins'
     | '/admin/career'
-    | '/admin/change-password'
     | '/admin/education'
     | '/admin/expertise'
     | '/admin/interests'
@@ -398,7 +387,6 @@ export interface FileRouteTypes {
     | '/admin/activities'
     | '/admin/admins'
     | '/admin/career'
-    | '/admin/change-password'
     | '/admin/education'
     | '/admin/expertise'
     | '/admin/interests'
@@ -435,7 +423,6 @@ export interface FileRouteTypes {
     | '/admin/_authed/activities'
     | '/admin/_authed/admins'
     | '/admin/_authed/career'
-    | '/admin/_authed/change-password'
     | '/admin/_authed/education'
     | '/admin/_authed/expertise'
     | '/admin/_authed/interests'
@@ -567,13 +554,6 @@ declare module '@tanstack/react-router' {
       path: '/career'
       fullPath: '/admin/career'
       preLoaderRoute: typeof AdminAuthedCareerRouteImport
-      parentRoute: typeof AdminAuthedRoute
-    }
-    '/admin/_authed/change-password': {
-      id: '/admin/_authed/change-password'
-      path: '/change-password'
-      fullPath: '/admin/change-password'
-      preLoaderRoute: typeof AdminAuthedChangePasswordRouteImport
       parentRoute: typeof AdminAuthedRoute
     }
     '/admin/_authed/education': {
@@ -730,7 +710,6 @@ interface AdminAuthedRouteChildren {
   AdminAuthedActivitiesRoute: typeof AdminAuthedActivitiesRoute
   AdminAuthedAdminsRoute: typeof AdminAuthedAdminsRoute
   AdminAuthedCareerRoute: typeof AdminAuthedCareerRoute
-  AdminAuthedChangePasswordRoute: typeof AdminAuthedChangePasswordRoute
   AdminAuthedEducationRoute: typeof AdminAuthedEducationRoute
   AdminAuthedExpertiseRoute: typeof AdminAuthedExpertiseRoute
   AdminAuthedInterestsRoute: typeof AdminAuthedInterestsRoute
@@ -759,7 +738,6 @@ const AdminAuthedRouteChildren: AdminAuthedRouteChildren = {
   AdminAuthedActivitiesRoute: AdminAuthedActivitiesRoute,
   AdminAuthedAdminsRoute: AdminAuthedAdminsRoute,
   AdminAuthedCareerRoute: AdminAuthedCareerRoute,
-  AdminAuthedChangePasswordRoute: AdminAuthedChangePasswordRoute,
   AdminAuthedEducationRoute: AdminAuthedEducationRoute,
   AdminAuthedExpertiseRoute: AdminAuthedExpertiseRoute,
   AdminAuthedInterestsRoute: AdminAuthedInterestsRoute,
