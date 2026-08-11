@@ -144,7 +144,7 @@ export function AdminShell({ admin, children }: { admin: CurrentAdmin; children:
           <div className="truncate text-xs text-sidebar-foreground/70">{admin.email}</div>
           <Button variant="outline" size="sm" className="justify-start" onClick={handleLogout}>
             <LogOut />
-            Log out
+            تسجيل الخروج
           </Button>
         </SidebarFooter>
       </Sidebar>
