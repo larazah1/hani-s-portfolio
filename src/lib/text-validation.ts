@@ -10,8 +10,7 @@ import { z } from "zod";
 // Arabic script/diacritics (`\p{L}`/`\p{M}` cover any script, not just
 // Latin), accented names, and the punctuation real titles/bios/names need
 // (apostrophes for "O'Brien", colons in subtitles, etc).
-export const SAFE_TEXT_PATTERN =
-  /^[\p{L}\p{M}\p{N}\s.,!?'"“”‘’()\[\]{}:;\-–—_/@#&%+*=~°$€،؛؟٪]*$/u;
+export const SAFE_TEXT_PATTERN = /^[\p{L}\p{M}\p{N}\s.,!?'"“”‘’()[\]{}:;\-–—_/@#&%+*=~°$€،؛؟٪]*$/u;
 
 const PATH_PATTERN = /^\/[a-z0-9-]*$/;
 const PHONE_PATTERN = /^[+\d][\d\s()-]*$/;
