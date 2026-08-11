@@ -8,10 +8,10 @@ import { requireAdmin } from "./require-admin";
 import { logActivity } from "./collection-helpers";
 
 const insertSchema = z.object({
-  name: safeString(200).min(1),
-  position: safeString(200).min(1),
+  name: safeString(200, 1),
+  position: safeString(200, 1),
   organization: safeString(200).optional().default(""),
-  body: safeString(5000).min(1),
+  body: safeString(5000, 1),
   dateLabel: safeString(100).optional(),
   featured: z.boolean().optional().default(false),
   status: z.enum(["draft", "published"]).optional().default("draft"),

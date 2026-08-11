@@ -15,7 +15,7 @@ import type { CollectionCrudApi } from "../collection-helpers";
 const ENTITY_TYPE = "social_link";
 const summarize = (row: Record<string, unknown>) => String(row["label"] ?? row["id"]);
 
-const insertSchema = z.object({ label: safeString(100).min(1), url: safeUrl() });
+const insertSchema = z.object({ label: safeString(100, 1), url: safeUrl() });
 const updateSchema = insertSchema.partial().and(z.object({ id: z.string().uuid() }));
 const idSchema = z.object({ id: z.string().uuid() });
 const reorderSchema = z.object({ orderedIds: z.array(z.string().uuid()) });

@@ -13,7 +13,6 @@ import {
   Sparkles,
   Landmark,
   Activity,
-  Languages,
   Heart,
   BarChart3,
   Link2,
@@ -48,42 +47,41 @@ type NavItem = { to: string; label: string; icon: typeof LayoutDashboard };
 type NavGroup = { label: string; items: NavItem[] };
 
 const NAV_GROUPS: NavGroup[] = [
-  { label: "Overview", items: [{ to: "/admin", label: "Dashboard", icon: LayoutDashboard }] },
-  { label: "Site Structure", items: [{ to: "/admin/pages", label: "Pages", icon: FileText }] },
+  { label: "نظرة عامة", items: [{ to: "/admin", label: "لوحة التحكم", icon: LayoutDashboard }] },
+  { label: "هيكل الموقع", items: [{ to: "/admin/pages", label: "الصفحات", icon: FileText }] },
   {
-    label: "Content",
+    label: "المحتوى",
     items: [
-      { to: "/admin/publications", label: "Publications", icon: BookMarked },
-      { to: "/admin/media", label: "Interviews & Articles", icon: Newspaper },
-      { to: "/admin/recommendations", label: "Recommendations", icon: Quote },
+      { to: "/admin/publications", label: "المنشورات", icon: BookMarked },
+      { to: "/admin/media", label: "المقابلات والمقالات", icon: Newspaper },
+      { to: "/admin/recommendations", label: "التوصيات", icon: Quote },
     ],
   },
   {
-    label: "Profile & About",
+    label: "الملف الشخصي ونبذة عني",
     items: [
-      { to: "/admin/profile", label: "Profile & Hero", icon: UserRound },
-      { to: "/admin/career", label: "Career & Experience", icon: Briefcase },
-      { to: "/admin/education", label: "Education", icon: GraduationCap },
-      { to: "/admin/expertise", label: "Expertise", icon: Sparkles },
-      { to: "/admin/research-specialties", label: "Research Specialties", icon: Sparkles },
-      { to: "/admin/memberships", label: "Memberships & Committees", icon: Landmark },
-      { to: "/admin/activities", label: "Scientific Activities", icon: Activity },
-      { to: "/admin/languages", label: "Languages", icon: Languages },
-      { to: "/admin/interests", label: "Interests", icon: Heart },
-      { to: "/admin/stats", label: "Statistics", icon: BarChart3 },
-      { to: "/admin/social-links", label: "Social Links", icon: Link2 },
+      { to: "/admin/profile", label: "الملف الشخصي والصفحة الرئيسية", icon: UserRound },
+      { to: "/admin/career", label: "المسيرة المهنية والخبرات", icon: Briefcase },
+      { to: "/admin/education", label: "التعليم", icon: GraduationCap },
+      { to: "/admin/expertise", label: "مجالات الخبرة", icon: Sparkles },
+      { to: "/admin/research-specialties", label: "التخصصات البحثية", icon: Sparkles },
+      { to: "/admin/memberships", label: "العضويات واللجان", icon: Landmark },
+      { to: "/admin/activities", label: "الأنشطة العلمية", icon: Activity },
+      { to: "/admin/interests", label: "الاهتمامات", icon: Heart },
+      { to: "/admin/stats", label: "الإحصائيات", icon: BarChart3 },
+      { to: "/admin/social-links", label: "روابط التواصل الاجتماعي", icon: Link2 },
     ],
   },
   {
-    label: "Inbox",
-    items: [{ to: "/admin/messages", label: "Contact Messages", icon: Inbox }],
+    label: "البريد الوارد",
+    items: [{ to: "/admin/messages", label: "رسائل التواصل", icon: Inbox }],
   },
   {
-    label: "Settings",
+    label: "الإعدادات",
     items: [
-      { to: "/admin/settings", label: "Website Settings", icon: Settings },
-      { to: "/admin/admins", label: "Admins", icon: ShieldCheck },
-      { to: "/admin/change-password", label: "Change Password", icon: KeyRound },
+      { to: "/admin/settings", label: "إعدادات الموقع", icon: Settings },
+      { to: "/admin/admins", label: "المسؤولون", icon: ShieldCheck },
+      { to: "/admin/change-password", label: "تغيير كلمة المرور", icon: KeyRound },
     ],
   },
 ];
@@ -108,9 +106,9 @@ export function AdminShell({ admin, children }: { admin: CurrentAdmin; children:
       <Sidebar>
         <SidebarHeader className="px-3 py-4">
           <p className="font-[family-name:var(--font-display)] text-base font-semibold leading-tight">
-            Zahran Portal
+            بوابة زهران
           </p>
-          <p className="eyebrow">Admin</p>
+          <p className="eyebrow">الإدارة</p>
         </SidebarHeader>
         <SidebarContent>
           {NAV_GROUPS.map((group) => (

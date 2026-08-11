@@ -16,13 +16,13 @@ const PUBLICATION_TYPES = [
 ] as const;
 
 const insertSchema = z.object({
-  title: safeString(500).min(1),
-  titleAr: safeString(500).min(1),
-  authors: safeString(500).min(1),
-  journal: safeString(300).min(1),
+  title: safeString(500, 1),
+  titleAr: safeString(500, 1),
+  authors: safeString(500, 1),
+  journal: safeString(300, 1),
   year: z.number().int().min(1900).max(2100),
   type: z.enum(PUBLICATION_TYPES),
-  area: safeString(200).min(1),
+  area: safeString(200, 1),
   areaAr: safeString(200).optional(),
   doi: safeDoi().optional(),
   url: safeUrl().optional(),

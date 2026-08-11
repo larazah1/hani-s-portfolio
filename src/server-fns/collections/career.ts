@@ -16,12 +16,12 @@ const ENTITY_TYPE = "career_entry";
 const summarize = (row: Record<string, unknown>) => String(row["position"] ?? row["id"]);
 
 const insertSchema = z.object({
-  position: safeString(300).min(1),
-  positionAr: safeString(300).min(1),
-  organization: safeString(300).min(1),
-  organizationAr: safeString(300).min(1),
-  startLabel: safeString(50).min(1),
-  endLabel: safeString(50).min(1),
+  position: safeString(300, 1),
+  positionAr: safeString(300, 1),
+  organization: safeString(300, 1),
+  organizationAr: safeString(300, 1),
+  startLabel: safeString(50, 1),
+  endLabel: safeString(50, 1),
   description: safeString(4000).optional(),
   descriptionAr: safeString(4000).optional(),
 });

@@ -10,10 +10,10 @@ import { logActivity } from "./collection-helpers";
 const MEDIA_TYPES = ["Interview", "Article", "Video", "News Feature", "Other"] as const;
 
 const insertSchema = z.object({
-  title: safeString(500).min(1),
+  title: safeString(500, 1),
   titleAr: safeString(500).optional(),
-  source: safeString(200).min(1),
-  dateLabel: safeString(100).min(1),
+  source: safeString(200, 1),
+  dateLabel: safeString(100, 1),
   type: z.enum(MEDIA_TYPES),
   description: safeString(5000).optional(),
   videoUrl: safeUrl().optional(),

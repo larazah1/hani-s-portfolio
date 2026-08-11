@@ -45,8 +45,8 @@ export const getPageForEdit = createServerFn({ method: "GET" })
 
 const createPageSchema = z.object({
   path: safePath().min(1),
-  title: safeString(200).min(1),
-  titleAr: safeString(200).min(1),
+  title: safeString(200, 1),
+  titleAr: safeString(200, 1),
   navLabel: safeString(100).optional(),
   navLabelAr: safeString(100).optional(),
   showInNav: z.boolean().optional().default(true),
@@ -70,8 +70,8 @@ export const createPage = createServerFn({ method: "POST" })
 const updatePageSchema = z.object({
   id: z.string().uuid(),
   path: safePath().optional(),
-  title: safeString(200).min(1).optional(),
-  titleAr: safeString(200).min(1).optional(),
+  title: safeString(200, 1).optional(),
+  titleAr: safeString(200, 1).optional(),
   navLabel: safeString(100).optional(),
   navLabelAr: safeString(100).optional(),
   showInNav: z.boolean().optional(),

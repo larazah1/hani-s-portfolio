@@ -2,7 +2,6 @@ import { createServerFn } from "@tanstack/react-start";
 import { desc, eq, sql } from "drizzle-orm";
 import { db } from "@/db/client";
 import {
-  activityLog,
   admins,
   contactMessages,
   mediaItems,
@@ -24,8 +23,8 @@ export const getDashboardData = createServerFn({ method: "GET" }).handler(async 
     [unreadMessageRow],
     [activeAdminRow],
     [totalViewsRow],
-    recentActivity,
     topPages,
+    [homePage],
   ] = await Promise.all([
     db.select({ count: sql<number>`count(*)::int` }).from(publications),
     db.select({ count: sql<number>`count(*)::int` }).from(mediaItems),
@@ -43,23 +42,11 @@ export const getDashboardData = createServerFn({ method: "GET" }).handler(async 
       .select({ total: sql<number>`coalesce(sum(${pageViewCounts.count}), 0)::int` })
       .from(pageViewCounts),
     db
-      .select({
-        id: activityLog.id,
-        action: activityLog.action,
-        entityType: activityLog.entityType,
-        summary: activityLog.summary,
-        createdAt: activityLog.createdAt,
-        adminEmail: admins.email,
-      })
-      .from(activityLog)
-      .leftJoin(admins, eq(activityLog.adminId, admins.id))
-      .orderBy(desc(activityLog.createdAt))
-      .limit(10),
-    db
       .select({ path: pageViewCounts.path, count: pageViewCounts.count })
       .from(pageViewCounts)
       .orderBy(desc(pageViewCounts.count))
       .limit(5),
+    db.select({ id: pages.id }).from(pages).where(eq(pages.path, "/")).limit(1),
   ]);
 
   return {
@@ -72,7 +59,7 @@ export const getDashboardData = createServerFn({ method: "GET" }).handler(async 
       activeAdmins: activeAdminRow?.count ?? 0,
       totalViews: totalViewsRow?.total ?? 0,
     },
-    recentActivity,
     topPages,
+    homePageId: homePage?.id ?? null,
   };
 });

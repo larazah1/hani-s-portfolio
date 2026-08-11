@@ -15,7 +15,7 @@ import type { CollectionCrudApi } from "../collection-helpers";
 const ENTITY_TYPE = "expertise_item";
 const summarize = (row: Record<string, unknown>) => String(row["en"] ?? row["id"]);
 
-const insertSchema = z.object({ en: safeString(300).min(1), ar: safeString(300).min(1) });
+const insertSchema = z.object({ en: safeString(300, 1), ar: safeString(300, 1) });
 const updateSchema = insertSchema.partial().and(z.object({ id: z.string().uuid() }));
 const idSchema = z.object({ id: z.string().uuid() });
 const reorderSchema = z.object({ orderedIds: z.array(z.string().uuid()) });

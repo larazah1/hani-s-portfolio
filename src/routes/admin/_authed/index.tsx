@@ -1,11 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import {
+  ArrowRight,
   BarChart3,
   BookMarked,
   Eye,
+  FilePlus2,
   FileText,
   Inbox,
+  LayoutTemplate,
   Newspaper,
   Quote,
   ShieldCheck,
@@ -57,52 +60,58 @@ function AdminDashboard() {
             ))}
           </div>
 
-          <div className="mt-8 grid gap-6 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
-            <div className="rounded-lg border border-border bg-card">
-              <div className="border-b border-border px-5 py-4">
-                <p className="text-sm font-medium">Recent Activity</p>
-              </div>
-              {data && data.recentActivity.length > 0 ? (
-                <ul className="divide-y divide-border">
-                  {data.recentActivity.map((entry) => (
-                    <li key={entry.id} className="px-5 py-3 text-sm">
-                      <p>
-                        <span className="font-medium">{entry.adminEmail ?? "An admin"}</span>{" "}
-                        {entry.action} {entry.entityType.replace(/-/g, " ")}
-                        {entry.summary ? ` — ${entry.summary}` : ""}
-                      </p>
-                      <p className="mt-0.5 text-xs text-muted-foreground">
-                        {new Date(entry.createdAt).toLocaleString()}
-                      </p>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="p-5 text-sm text-muted-foreground">No activity yet.</p>
+          <div className="mt-8">
+            <p className="text-sm font-medium">Quick Actions</p>
+            <div className="mt-3 grid gap-4 sm:grid-cols-2">
+              {data?.homePageId && (
+                <Link
+                  to="/admin/pages/$pageId"
+                  params={{ pageId: data.homePageId }}
+                  className="group flex items-center gap-4 rounded-lg border border-border bg-card p-5 transition-colors hover:border-accent-foreground/40 hover:bg-secondary/40"
+                >
+                  <LayoutTemplate className="h-6 w-6 shrink-0 text-muted-foreground" />
+                  <div className="min-w-0 flex-1">
+                    <p className="font-medium">Edit Homepage Sections</p>
+                    <p className="text-xs text-muted-foreground">
+                      Add, remove, and reorder sections on the homepage.
+                    </p>
+                  </div>
+                  <ArrowRight className="h-4 w-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
+                </Link>
               )}
+              <Link
+                to="/admin/pages/new"
+                className="group flex items-center gap-4 rounded-lg border border-border bg-card p-5 transition-colors hover:border-accent-foreground/40 hover:bg-secondary/40"
+              >
+                <FilePlus2 className="h-6 w-6 shrink-0 text-muted-foreground" />
+                <div className="min-w-0 flex-1">
+                  <p className="font-medium">Add New Page</p>
+                  <p className="text-xs text-muted-foreground">
+                    Create a new page and add it to the site navigation.
+                  </p>
+                </div>
+                <ArrowRight className="h-4 w-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
+              </Link>
             </div>
+          </div>
 
-            <div className="rounded-lg border border-border bg-card">
-              <div className="flex items-center justify-between border-b border-border px-5 py-4">
-                <p className="text-sm font-medium">Most Viewed Pages</p>
-                <BarChart3 className="h-4 w-4 text-muted-foreground" />
-              </div>
-              {data && data.topPages.length > 0 ? (
-                <ul className="divide-y divide-border">
-                  {data.topPages.map((p) => (
-                    <li
-                      key={p.path}
-                      className="flex items-center justify-between px-5 py-3 text-sm"
-                    >
-                      <span className="font-mono text-xs text-muted-foreground">{p.path}</span>
-                      <span className="font-medium">{p.count}</span>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="p-5 text-sm text-muted-foreground">No views recorded yet.</p>
-              )}
+          <div className="mt-8 rounded-lg border border-border bg-card">
+            <div className="flex items-center justify-between border-b border-border px-5 py-4">
+              <p className="text-sm font-medium">Most Viewed Pages</p>
+              <BarChart3 className="h-4 w-4 text-muted-foreground" />
             </div>
+            {data && data.topPages.length > 0 ? (
+              <ul className="divide-y divide-border">
+                {data.topPages.map((p) => (
+                  <li key={p.path} className="flex items-center justify-between px-5 py-3 text-sm">
+                    <span className="font-mono text-xs text-muted-foreground">{p.path}</span>
+                    <span className="font-medium">{p.count}</span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="p-5 text-sm text-muted-foreground">No views recorded yet.</p>
+            )}
           </div>
 
           <div className="mt-8 rounded-lg border border-border bg-card p-5">

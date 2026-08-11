@@ -27,7 +27,6 @@ import { Route as AdminAuthedChangePasswordRouteImport } from './routes/admin/_a
 import { Route as AdminAuthedEducationRouteImport } from './routes/admin/_authed/education'
 import { Route as AdminAuthedExpertiseRouteImport } from './routes/admin/_authed/expertise'
 import { Route as AdminAuthedInterestsRouteImport } from './routes/admin/_authed/interests'
-import { Route as AdminAuthedLanguagesRouteImport } from './routes/admin/_authed/languages'
 import { Route as AdminAuthedMembershipsRouteImport } from './routes/admin/_authed/memberships'
 import { Route as AdminAuthedMessagesRouteImport } from './routes/admin/_authed/messages'
 import { Route as AdminAuthedProfileRouteImport } from './routes/admin/_authed/profile'
@@ -136,11 +135,6 @@ const AdminAuthedExpertiseRoute = AdminAuthedExpertiseRouteImport.update({
 const AdminAuthedInterestsRoute = AdminAuthedInterestsRouteImport.update({
   id: '/interests',
   path: '/interests',
-  getParentRoute: () => AdminAuthedRoute,
-} as any)
-const AdminAuthedLanguagesRoute = AdminAuthedLanguagesRouteImport.update({
-  id: '/languages',
-  path: '/languages',
   getParentRoute: () => AdminAuthedRoute,
 } as any)
 const AdminAuthedMembershipsRoute = AdminAuthedMembershipsRouteImport.update({
@@ -263,7 +257,6 @@ export interface FileRoutesByFullPath {
   '/admin/education': typeof AdminAuthedEducationRoute
   '/admin/expertise': typeof AdminAuthedExpertiseRoute
   '/admin/interests': typeof AdminAuthedInterestsRoute
-  '/admin/languages': typeof AdminAuthedLanguagesRoute
   '/admin/memberships': typeof AdminAuthedMembershipsRoute
   '/admin/messages': typeof AdminAuthedMessagesRoute
   '/admin/profile': typeof AdminAuthedProfileRoute
@@ -302,7 +295,6 @@ export interface FileRoutesByTo {
   '/admin/education': typeof AdminAuthedEducationRoute
   '/admin/expertise': typeof AdminAuthedExpertiseRoute
   '/admin/interests': typeof AdminAuthedInterestsRoute
-  '/admin/languages': typeof AdminAuthedLanguagesRoute
   '/admin/memberships': typeof AdminAuthedMembershipsRoute
   '/admin/messages': typeof AdminAuthedMessagesRoute
   '/admin/profile': typeof AdminAuthedProfileRoute
@@ -342,7 +334,6 @@ export interface FileRoutesById {
   '/admin/_authed/education': typeof AdminAuthedEducationRoute
   '/admin/_authed/expertise': typeof AdminAuthedExpertiseRoute
   '/admin/_authed/interests': typeof AdminAuthedInterestsRoute
-  '/admin/_authed/languages': typeof AdminAuthedLanguagesRoute
   '/admin/_authed/memberships': typeof AdminAuthedMembershipsRoute
   '/admin/_authed/messages': typeof AdminAuthedMessagesRoute
   '/admin/_authed/profile': typeof AdminAuthedProfileRoute
@@ -383,7 +374,6 @@ export interface FileRouteTypes {
     | '/admin/education'
     | '/admin/expertise'
     | '/admin/interests'
-    | '/admin/languages'
     | '/admin/memberships'
     | '/admin/messages'
     | '/admin/profile'
@@ -422,7 +412,6 @@ export interface FileRouteTypes {
     | '/admin/education'
     | '/admin/expertise'
     | '/admin/interests'
-    | '/admin/languages'
     | '/admin/memberships'
     | '/admin/messages'
     | '/admin/profile'
@@ -461,7 +450,6 @@ export interface FileRouteTypes {
     | '/admin/_authed/education'
     | '/admin/_authed/expertise'
     | '/admin/_authed/interests'
-    | '/admin/_authed/languages'
     | '/admin/_authed/memberships'
     | '/admin/_authed/messages'
     | '/admin/_authed/profile'
@@ -621,13 +609,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminAuthedInterestsRouteImport
       parentRoute: typeof AdminAuthedRoute
     }
-    '/admin/_authed/languages': {
-      id: '/admin/_authed/languages'
-      path: '/languages'
-      fullPath: '/admin/languages'
-      preLoaderRoute: typeof AdminAuthedLanguagesRouteImport
-      parentRoute: typeof AdminAuthedRoute
-    }
     '/admin/_authed/memberships': {
       id: '/admin/_authed/memberships'
       path: '/memberships'
@@ -772,7 +753,6 @@ interface AdminAuthedRouteChildren {
   AdminAuthedEducationRoute: typeof AdminAuthedEducationRoute
   AdminAuthedExpertiseRoute: typeof AdminAuthedExpertiseRoute
   AdminAuthedInterestsRoute: typeof AdminAuthedInterestsRoute
-  AdminAuthedLanguagesRoute: typeof AdminAuthedLanguagesRoute
   AdminAuthedMembershipsRoute: typeof AdminAuthedMembershipsRoute
   AdminAuthedMessagesRoute: typeof AdminAuthedMessagesRoute
   AdminAuthedProfileRoute: typeof AdminAuthedProfileRoute
@@ -803,7 +783,6 @@ const AdminAuthedRouteChildren: AdminAuthedRouteChildren = {
   AdminAuthedEducationRoute: AdminAuthedEducationRoute,
   AdminAuthedExpertiseRoute: AdminAuthedExpertiseRoute,
   AdminAuthedInterestsRoute: AdminAuthedInterestsRoute,
-  AdminAuthedLanguagesRoute: AdminAuthedLanguagesRoute,
   AdminAuthedMembershipsRoute: AdminAuthedMembershipsRoute,
   AdminAuthedMessagesRoute: AdminAuthedMessagesRoute,
   AdminAuthedProfileRoute: AdminAuthedProfileRoute,

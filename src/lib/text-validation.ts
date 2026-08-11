@@ -4,13 +4,26 @@ import { z } from "zod";
 // admin panel. SQL injection itself is already structurally impossible here
 // (every query goes through Drizzle's parameterized query builder — see the
 // audit in project notes), so this isn't what makes queries safe. It's a
-// deliberate extra layer requested on top of that: reject the character
-// families associated with injection-style attacks (backticks, backslashes,
-// angle brackets, pipes) while still allowing normal bilingual content —
-// Arabic script/diacritics (`\p{L}`/`\p{M}` cover any script, not just
-// Latin), accented names, and the punctuation real titles/bios/names need
-// (apostrophes for "O'Brien", colons in subtitles, etc).
-export const SAFE_TEXT_PATTERN = /^[\p{L}\p{M}\p{N}\s.,!?'"“”‘’()[\]{}:;\-–—_/@#&%+*=~°$€،؛؟٪]*$/u;
+// deliberate extra layer requested on top of that.
+//
+// This allows every Unicode letter/mark/number/punctuation/symbol (any
+// script — Arabic included, with its own digits, decimal separator, and
+// punctuation, not just Latin) plus whitespace, and rejects only control
+// characters, invisible "format" characters (used for homograph/spoofing
+// tricks), and a small explicit blocklist of characters associated with
+// injection/templating attacks that would otherwise slip through the broad
+// punctuation/symbol categories (backtick, backslash, angle brackets, pipe).
+// An earlier version hand-picked individual punctuation marks instead of
+// using the Unicode categories, which is exactly what silently broke on
+// legitimate Arabic text (the Arabic decimal separator "٫" isn't a "number"
+// or "letter" by Unicode's own classification, and wasn't in the hand-picked
+// list) — categories are what to reach for instead of enumerating symbols.
+const BROAD_ALLOWED_PATTERN = /^[\p{L}\p{M}\p{N}\p{P}\p{S}\s]*$/u;
+const DANGEROUS_CHARS_PATTERN = /[`\\<>|]/;
+
+export function isSafeText(value: string): boolean {
+  return BROAD_ALLOWED_PATTERN.test(value) && !DANGEROUS_CHARS_PATTERN.test(value);
+}
 
 const PATH_PATTERN = /^\/[a-z0-9-]*$/;
 const PHONE_PATTERN = /^[+\d][\d\s()-]*$/;
@@ -20,13 +33,20 @@ const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{
 
 const UNSAFE_CHARS_MESSAGE = "Contains characters that aren't allowed.";
 
-/** Free text (names, titles, bios, messages) — English or Arabic, any length up to `maxLength`. */
-export function safeString(maxLength: number) {
+/**
+ * Free text (names, titles, bios, messages) — English or Arabic, any length
+ * up to `maxLength`. Pass `minLength` for required fields (default 0, i.e.
+ * optional) — `.min()`/`.max()` have to happen before `.refine()` here since
+ * `.refine()` returns a `ZodEffects` that no longer exposes `.min()` for
+ * callers to chain on afterward.
+ */
+export function safeString(maxLength: number, minLength = 0) {
   return z
     .string()
     .trim()
+    .min(minLength, "This field is required.")
     .max(maxLength, `Must be ${maxLength} characters or fewer.`)
-    .regex(SAFE_TEXT_PATTERN, UNSAFE_CHARS_MESSAGE);
+    .refine(isSafeText, { message: UNSAFE_CHARS_MESSAGE });
 }
 
 function isValidUrl(value: string): boolean {
@@ -83,14 +103,14 @@ export function safeToken(maxLength = 200) {
 
 /**
  * Recursively finds the first string value inside an arbitrary JSON value
- * that isn't a UUID and doesn't match SAFE_TEXT_PATTERN, returning a
- * dotted path to it (or null if everything's clean). Used for jsonb
- * `config` blobs (section config) whose shape varies by section type but
- * which can hold free text (e.g. a "summary" section's paragraph list).
+ * that isn't a UUID and isn't safe text, returning a dotted path to it (or
+ * null if everything's clean). Used for jsonb `config` blobs (section
+ * config) whose shape varies by section type but which can hold free text
+ * (e.g. a "summary" section's paragraph list).
  */
 export function findUnsafeJsonText(value: unknown, path: string[] = []): string | null {
   if (typeof value === "string") {
-    if (value === "" || UUID_PATTERN.test(value) || SAFE_TEXT_PATTERN.test(value)) return null;
+    if (value === "" || UUID_PATTERN.test(value) || isSafeText(value)) return null;
     return path.join(".") || "value";
   }
   if (Array.isArray(value)) {

@@ -16,15 +16,15 @@ const ENTITY_TYPE = "education_entry";
 const summarize = (row: Record<string, unknown>) => String(row["degree"] ?? row["id"]);
 
 const insertSchema = z.object({
-  degree: safeString(300).min(1),
-  degreeAr: safeString(300).min(1),
-  field: safeString(300).min(1),
-  fieldAr: safeString(300).min(1),
-  university: safeString(300).min(1),
-  universityAr: safeString(300).min(1),
-  location: safeString(300).min(1),
-  locationAr: safeString(300).min(1),
-  year: safeString(20).min(1),
+  degree: safeString(300, 1),
+  degreeAr: safeString(300, 1),
+  field: safeString(300, 1),
+  fieldAr: safeString(300, 1),
+  university: safeString(300, 1),
+  universityAr: safeString(300, 1),
+  location: safeString(300, 1),
+  locationAr: safeString(300, 1),
+  year: safeString(20, 1),
   description: safeString(4000).optional(),
   descriptionAr: safeString(4000).optional(),
 });

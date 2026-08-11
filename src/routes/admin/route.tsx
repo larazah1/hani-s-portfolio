@@ -7,14 +7,14 @@ export const Route = createFileRoute("/admin")({
 });
 
 function AdminLayout() {
-  // The admin panel is always English/LTR, regardless of what language a
+  // The admin panel is always Arabic/RTL, regardless of what language a
   // visitor left the public site in — `dir`/`lang` are global <html>
   // attributes, not scoped to a route subtree, so we force them here and
   // restore the public site's actual preference on the way out.
   const { language, dir } = useLanguage();
   useEffect(() => {
-    document.documentElement.lang = "en";
-    document.documentElement.dir = "ltr";
+    document.documentElement.lang = "ar";
+    document.documentElement.dir = "rtl";
     return () => {
       document.documentElement.lang = language;
       document.documentElement.dir = dir;

@@ -8,10 +8,10 @@ import { logActivity } from "./collection-helpers";
 import { requireAdmin } from "./require-admin";
 
 const submitContactMessageSchema = z.object({
-  name: safeString(200).min(1),
+  name: safeString(200, 1),
   email: z.string().trim().email().max(200),
-  subject: safeString(300).min(1),
-  message: safeString(5000).min(1),
+  subject: safeString(300, 1),
+  message: safeString(5000, 1),
 });
 
 export const submitContactMessage = createServerFn({ method: "POST" })

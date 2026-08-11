@@ -16,9 +16,9 @@ const ENTITY_TYPE = "stat";
 const summarize = (row: Record<string, unknown>) => String(row["label"] ?? row["id"]);
 
 const insertSchema = z.object({
-  label: safeString(100).min(1),
-  labelAr: safeString(100).min(1),
-  value: safeString(50).min(1),
+  label: safeString(100, 1),
+  labelAr: safeString(100, 1),
+  value: safeString(50, 1),
 });
 const updateSchema = insertSchema.partial().and(z.object({ id: z.string().uuid() }));
 const idSchema = z.object({ id: z.string().uuid() });

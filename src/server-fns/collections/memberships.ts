@@ -16,8 +16,8 @@ const ENTITY_TYPE = "membership";
 const summarize = (row: Record<string, unknown>) => String(row["title"] ?? row["id"]);
 
 const insertSchema = z.object({
-  title: safeString(300).min(1),
-  titleAr: safeString(300).min(1),
+  title: safeString(300, 1),
+  titleAr: safeString(300, 1),
   period: safeString(100).optional(),
   description: safeString(4000).optional(),
   descriptionAr: safeString(4000).optional(),

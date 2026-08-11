@@ -8,21 +8,21 @@ import { requireAdmin } from "./require-admin";
 import { logActivity } from "./collection-helpers";
 
 const updateSchema = z.object({
-  siteName: safeString(200).min(1),
-  siteNameAr: safeString(200).min(1),
-  siteDescription: safeString(500).min(1),
-  siteDescriptionAr: safeString(500).min(1),
+  siteName: safeString(200, 1),
+  siteNameAr: safeString(200, 1),
+  siteDescription: safeString(500, 1),
+  siteDescriptionAr: safeString(500, 1),
   logoUrl: safeUrl().optional(),
   faviconUrl: safeUrl().optional(),
-  defaultMetaTitle: safeString(300).min(1),
-  defaultMetaTitleAr: safeString(300).min(1),
-  defaultMetaDescription: safeString(500).min(1),
-  defaultMetaDescriptionAr: safeString(500).min(1),
+  defaultMetaTitle: safeString(300, 1),
+  defaultMetaTitleAr: safeString(300, 1),
+  defaultMetaDescription: safeString(500, 1),
+  defaultMetaDescriptionAr: safeString(500, 1),
   ogImageUrl: safeUrl().optional(),
-  footerDescription: safeString(1000).min(1),
-  footerDescriptionAr: safeString(1000).min(1),
-  copyrightText: safeString(300).min(1),
-  copyrightTextAr: safeString(300).min(1),
+  footerDescription: safeString(1000, 1),
+  footerDescriptionAr: safeString(1000, 1),
+  copyrightText: safeString(300, 1),
+  copyrightTextAr: safeString(300, 1),
 });
 
 export const getSiteSettings = createServerFn({ method: "GET" }).handler(async ({ context }) => {
