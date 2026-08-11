@@ -572,7 +572,19 @@ function RecommendationsGridSection({ section }: { section: ResolvedSection }) {
   const rows = (section.data as Record<string, unknown>[] | null) ?? [];
 
   return (
-    <Section eyebrow={heading.eyebrow} title={heading.title}>
+    <Section
+      eyebrow={heading.eyebrow}
+      title={heading.title}
+      action={
+        <Link
+          to="/about"
+          hash="recommendation-form"
+          className="shrink-0 rounded-sm bg-accent px-4 py-2 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90"
+        >
+          {t("leaveARecommendation")}
+        </Link>
+      }
+    >
       {rows.length === 0 ? (
         <EmptyNote>{t("emptyRecommendations")}</EmptyNote>
       ) : (
@@ -629,7 +641,7 @@ function RecommendationFormSection({ section }: { section: ResolvedSection }) {
   }
 
   return (
-    <Section eyebrow={heading.eyebrow} title={heading.title}>
+    <Section id="recommendation-form" eyebrow={heading.eyebrow} title={heading.title}>
       <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground md:text-base">
         {t("recommendationFormIntro")}
       </p>

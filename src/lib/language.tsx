@@ -55,6 +55,7 @@ const dictionary = {
     ar: "التوصيات والتقدير المهني",
   },
   shareYourExperience: { en: "Share Your Experience", ar: "شارك تجربتك" },
+  leaveARecommendation: { en: "Leave a Recommendation", ar: "اترك توصية" },
   recommendationFormIntro: {
     en: "Worked together? Leave a recommendation below — it will appear on the site once reviewed.",
     ar: "هل عملتما معًا؟ اترك توصية أدناه — ستظهر في الموقع بعد مراجعتها.",
