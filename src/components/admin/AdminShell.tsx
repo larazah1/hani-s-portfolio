@@ -103,7 +103,7 @@ export function AdminShell({ admin, children }: { admin: CurrentAdmin; children:
 
   return (
     <SidebarProvider>
-      <Sidebar>
+      <Sidebar side="right">
         <SidebarHeader className="px-3 py-4">
           <p className="font-[family-name:var(--font-display)] text-base font-semibold leading-tight">
             بوابة زهران

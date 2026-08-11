@@ -24,10 +24,10 @@ export type SectionEditorValues = {
 };
 
 const LIST_BLOCK_COLLECTIONS = [
-  { value: "researchSpecialties", label: "Research Specialties" },
-  { value: "activities", label: "Scientific Activities" },
-  { value: "languagesList", label: "Languages" },
-  { value: "interests", label: "Interests" },
+  { value: "researchSpecialties", label: "التخصصات البحثية" },
+  { value: "activities", label: "الأنشطة العلمية" },
+  { value: "languagesList", label: "اللغات" },
+  { value: "interests", label: "الاهتمامات" },
 ];
 
 export function SectionEditor({
@@ -50,27 +50,27 @@ export function SectionEditor({
     <div className="space-y-5">
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-1.5">
-          <label className="text-sm font-medium">Eyebrow override</label>
+          <label className="text-sm font-medium">تجاوز النص التمهيدي</label>
           <Input
             value={values.eyebrow}
             onChange={(e) => setField("eyebrow", e.target.value)}
-            placeholder="Leave blank to use the default"
+            placeholder="اتركه فارغًا لاستخدام القيمة الافتراضية"
           />
         </div>
         <div className="space-y-1.5">
-          <label className="text-sm font-medium">Eyebrow override (Arabic)</label>
+          <label className="text-sm font-medium">تجاوز النص التمهيدي (بالعربية)</label>
           <Input value={values.eyebrowAr} onChange={(e) => setField("eyebrowAr", e.target.value)} />
         </div>
         <div className="space-y-1.5">
-          <label className="text-sm font-medium">Title override</label>
+          <label className="text-sm font-medium">تجاوز العنوان</label>
           <Input
             value={values.title}
             onChange={(e) => setField("title", e.target.value)}
-            placeholder="Leave blank to use the default"
+            placeholder="اتركه فارغًا لاستخدام القيمة الافتراضية"
           />
         </div>
         <div className="space-y-1.5">
-          <label className="text-sm font-medium">Title override (Arabic)</label>
+          <label className="text-sm font-medium">تجاوز العنوان (بالعربية)</label>
           <Input value={values.titleAr} onChange={(e) => setField("titleAr", e.target.value)} />
         </div>
       </div>
@@ -96,7 +96,7 @@ function TypeSpecificConfig({
           checked={config["showCollaborations"] !== false}
           onCheckedChange={(v) => setConfig("showCollaborations", v)}
         />
-        Show research collaborations callout
+        إظهار إشارة التعاونات البحثية
       </label>
     );
   }
@@ -105,7 +105,7 @@ function TypeSpecificConfig({
     const collection = (config["collection"] as string) ?? "researchSpecialties";
     return (
       <div className="space-y-1.5">
-        <label className="text-sm font-medium">Which list?</label>
+        <label className="text-sm font-medium">أي قائمة؟</label>
         <Select value={collection} onValueChange={(v) => setConfig("collection", v)}>
           <SelectTrigger className="w-72">
             <SelectValue />
@@ -126,7 +126,7 @@ function TypeSpecificConfig({
     const contentEn = Array.isArray(config["contentEn"]) ? (config["contentEn"] as string[]) : [];
     return (
       <div className="space-y-1.5">
-        <label className="text-sm font-medium">Paragraphs (English) — one paragraph per line</label>
+        <label className="text-sm font-medium">الفقرات (الإنجليزية) — فقرة واحدة في كل سطر</label>
         <Textarea
           rows={8}
           value={contentEn.join("\n")}
@@ -138,8 +138,7 @@ function TypeSpecificConfig({
           }
         />
         <p className="text-xs text-muted-foreground">
-          Shown left-aligned in both languages, matching how the rest of the long-form prose on this
-          site is handled.
+          تظهر محاذاة لليسار في كلتا اللغتين، بنفس أسلوب بقية النصوص الطويلة في هذا الموقع.
         </p>
       </div>
     );
@@ -157,7 +156,7 @@ function TypeSpecificConfig({
 
   return (
     <p className="text-sm text-muted-foreground">
-      This section type has no extra settings — it always shows the full underlying list.
+      هذا النوع من الأقسام لا يحتوي على إعدادات إضافية — يعرض دائمًا القائمة الكاملة.
     </p>
   );
 }
@@ -178,12 +177,12 @@ function PublicationsPicker({
   const itemIds = Array.isArray(config["itemIds"]) ? (config["itemIds"] as string[]) : [];
   return (
     <div className="space-y-1.5">
-      <label className="text-sm font-medium">Publications in this carousel</label>
+      <label className="text-sm font-medium">المنشورات في عرض الشرائح هذا</label>
       <ItemPicker
         allItems={items}
         selectedIds={itemIds}
         onChange={(ids) => setConfig("itemIds", ids)}
-        emptyStateHint="Nothing selected — showing featured publications by default."
+        emptyStateHint="لم يتم اختيار شيء — سيتم عرض المنشورات المميزة افتراضيًا."
       />
     </div>
   );
@@ -201,12 +200,12 @@ function MediaPicker({
   const itemIds = Array.isArray(config["itemIds"]) ? (config["itemIds"] as string[]) : [];
   return (
     <div className="space-y-1.5">
-      <label className="text-sm font-medium">Items in this carousel</label>
+      <label className="text-sm font-medium">العناصر في عرض الشرائح هذا</label>
       <ItemPicker
         allItems={items}
         selectedIds={itemIds}
         onChange={(ids) => setConfig("itemIds", ids)}
-        emptyStateHint="Nothing selected — showing featured items by default."
+        emptyStateHint="لم يتم اختيار شيء — سيتم عرض العناصر المميزة افتراضيًا."
       />
     </div>
   );
@@ -227,12 +226,12 @@ function RecommendationsPicker({
   const itemIds = Array.isArray(config["itemIds"]) ? (config["itemIds"] as string[]) : [];
   return (
     <div className="space-y-1.5">
-      <label className="text-sm font-medium">Recommendations shown</label>
+      <label className="text-sm font-medium">التوصيات المعروضة</label>
       <ItemPicker
         allItems={items}
         selectedIds={itemIds}
         onChange={(ids) => setConfig("itemIds", ids)}
-        emptyStateHint="Nothing selected — showing featured recommendations by default."
+        emptyStateHint="لم يتم اختيار شيء — سيتم عرض التوصيات المميزة افتراضيًا."
       />
     </div>
   );

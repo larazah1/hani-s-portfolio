@@ -23,7 +23,11 @@ export const Route = createFileRoute("/admin/login")({
 });
 
 const loginFormSchema = z.object({
-  email: z.string().trim().min(1, "البريد الإلكتروني مطلوب.").email("أدخل بريدًا إلكترونيًا صالحًا."),
+  email: z
+    .string()
+    .trim()
+    .min(1, "البريد الإلكتروني مطلوب.")
+    .email("أدخل بريدًا إلكترونيًا صالحًا."),
   password: z.string().min(1, "كلمة المرور مطلوبة."),
   rememberMe: z.boolean(),
 });

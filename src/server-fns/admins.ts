@@ -35,7 +35,7 @@ export const inviteAdmin = createServerFn({ method: "POST" })
 
     const [existing] = await db.select().from(admins).where(eq(admins.email, email)).limit(1);
     if (existing && existing.status !== "pending") {
-      return { ok: false, error: "An admin with this email already exists." };
+      return { ok: false, error: "يوجد مسؤول بهذا البريد الإلكتروني بالفعل." };
     }
 
     const token = generateToken();
@@ -74,19 +74,19 @@ export const setAdminStatus = createServerFn({ method: "POST" })
 
     const [target] = await db.select().from(admins).where(eq(admins.id, data.adminId)).limit(1);
     if (!target || target.status === "pending") {
-      return { ok: false, error: "Admin not found or hasn't completed setup yet." };
+      return { ok: false, error: "المسؤول غير موجود أو لم يُكمل الإعداد بعد." };
     }
 
     if (data.status === "disabled") {
       if (data.adminId === current.id) {
-        return { ok: false, error: "You cannot disable your own account." };
+        return { ok: false, error: "لا يمكنك تعطيل حسابك الخاص." };
       }
       const [row] = await db
         .select({ count: sql<number>`count(*)::int` })
         .from(admins)
         .where(eq(admins.status, "active"));
       if ((row?.count ?? 0) <= 1) {
-        return { ok: false, error: "Cannot disable the last remaining active admin." };
+        return { ok: false, error: "لا يمكن تعطيل آخر مسؤول نشط متبقٍ." };
       }
     }
 
@@ -105,7 +105,7 @@ export const resetAdminPassword = createServerFn({ method: "POST" })
     requireAdmin(context);
 
     const [target] = await db.select().from(admins).where(eq(admins.id, data.adminId)).limit(1);
-    if (!target) return { ok: false, error: "Admin not found." };
+    if (!target) return { ok: false, error: "المسؤول غير موجود." };
 
     const token = generateToken();
     const setupTokenHash = await sha256Hex(token);

@@ -241,7 +241,7 @@ function PageSectionBuilder() {
         <DialogContent className="max-h-[85vh] max-w-2xl overflow-y-auto">
           <DialogHeader>
             <DialogTitle>
-              Edit {editingSection ? SECTION_TYPE_LABELS[editingSection.type] : ""} Section
+              تعديل قسم {editingSection ? SECTION_TYPE_LABELS[editingSection.type] : ""}
             </DialogTitle>
           </DialogHeader>
           {editingSection && (
@@ -259,18 +259,17 @@ function PageSectionBuilder() {
       <AlertDialog open={!!deleteTarget} onOpenChange={(open) => !open && setDeleteTarget(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete this section?</AlertDialogTitle>
+            <AlertDialogTitle>هل تريد حذف هذا القسم؟</AlertDialogTitle>
             <AlertDialogDescription>
-              This removes it from the page. The underlying content (publications, etc.) is not
-              deleted.
+              سيُحذف من الصفحة فقط. المحتوى الأساسي (المنشورات وغيرها) لن يُحذف.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>إلغاء</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => deleteTarget && deleteSectionMutation.mutate(deleteTarget.id)}
             >
-              Delete
+              حذف
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -300,7 +299,7 @@ function SectionEditorPanel({
     <div className="min-w-0 space-y-6">
       <SectionEditor type={section.type} values={values} onChange={setValues} />
       <Button onClick={() => onSave(values)} disabled={isSaving}>
-        {isSaving ? "Saving…" : "Save Section"}
+        {isSaving ? "جارٍ الحفظ…" : "حفظ القسم"}
       </Button>
     </div>
   );

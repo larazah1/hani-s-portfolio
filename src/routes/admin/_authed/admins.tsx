@@ -86,27 +86,27 @@ function AdminsPage() {
     if (!linkDialog) return;
     try {
       await navigator.clipboard.writeText(linkDialog.url);
-      toast.success("Link copied to clipboard.");
+      toast.success("تم نسخ الرابط.");
     } catch {
-      toast.error("Couldn't copy automatically — select and copy the link manually.");
+      toast.error("تعذّر النسخ تلقائيًا — انسخ الرابط يدويًا.");
     }
   }
 
   return (
     <div>
       <div>
-        <p className="eyebrow">Settings</p>
+        <p className="eyebrow">الإعدادات</p>
         <h1 className="mt-2 font-[family-name:var(--font-display)] text-2xl font-semibold">
-          Admins
+          المسؤولون
         </h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          Grant access to more emails. There&rsquo;s no automated email — copy the setup link and
-          send it to them directly.
+          امنح صلاحية الوصول لبريد إلكتروني إضافي. لا يوجد إرسال تلقائي — انسخ رابط الإعداد وأرسله
+          إليهم مباشرةً.
         </p>
       </div>
 
       <div className="mt-8 rounded-lg border border-border bg-card p-5">
-        <p className="text-sm font-medium">Invite a new admin</p>
+        <p className="text-sm font-medium">دعوة مسؤول جديد</p>
         <form
           className="mt-3 flex flex-wrap items-start gap-2"
           onSubmit={(e) => {
@@ -122,9 +122,10 @@ function AdminsPage() {
             value={inviteEmail}
             onChange={(e) => setInviteEmail(e.target.value)}
             className="max-w-xs"
+            dir="ltr"
           />
           <Button type="submit" disabled={inviteMutation.isPending}>
-            {inviteMutation.isPending ? "Sending…" : "Send Invite"}
+            {inviteMutation.isPending ? "جارٍ الإرسال…" : "إرسال الدعوة"}
           </Button>
         </form>
         {inviteError && (
@@ -137,7 +138,7 @@ function AdminsPage() {
 
       <div className="mt-8 overflow-hidden rounded-lg border border-border bg-card">
         {isLoading ? (
-          <p className="p-6 text-sm text-muted-foreground">Loading…</p>
+          <p className="p-6 text-sm text-muted-foreground">جارٍ التحميل…</p>
         ) : (
           <ul className="divide-y divide-border">
             {rows.map((row) => {
@@ -146,7 +147,9 @@ function AdminsPage() {
                 <li key={row.id} className="flex flex-wrap items-center gap-3 px-5 py-4">
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-2">
-                      <p className="font-medium">{row.email}</p>
+                      <p className="font-medium" dir="ltr">
+                        {row.email}
+                      </p>
                       <Badge
                         variant={
                           row.status === "active"
@@ -156,14 +159,18 @@ function AdminsPage() {
                               : "outline"
                         }
                       >
-                        {row.status}
+                        {row.status === "active"
+                          ? "نشط"
+                          : row.status === "pending"
+                            ? "قيد الإعداد"
+                            : "معطل"}
                       </Badge>
-                      {isSelf && <Badge variant="outline">You</Badge>}
+                      {isSelf && <Badge variant="outline">أنت</Badge>}
                     </div>
                     <p className="text-xs text-muted-foreground">
                       {row.lastLoginAt
-                        ? `Last signed in ${new Date(row.lastLoginAt).toLocaleString()}`
-                        : "Never signed in"}
+                        ? `آخر تسجيل دخول ${new Date(row.lastLoginAt).toLocaleString()}`
+                        : "لم يسجّل الدخول بعد"}
                     </p>
                   </div>
                   <div className="flex shrink-0 flex-wrap gap-2">
@@ -174,7 +181,7 @@ function AdminsPage() {
                         onClick={() => resetMutation.mutate({ adminId: row.id, email: row.email })}
                         disabled={resetMutation.isPending}
                       >
-                        Reset password
+                        إعادة تعيين كلمة المرور
                       </Button>
                     )}
                     {row.status === "pending" && (
@@ -184,13 +191,13 @@ function AdminsPage() {
                         onClick={() => resetMutation.mutate({ adminId: row.id, email: row.email })}
                         disabled={resetMutation.isPending}
                       >
-                        Resend setup link
+                        إعادة إرسال رابط الإعداد
                       </Button>
                     )}
                     {row.status === "active" && !isSelf && (
                       <Button variant="outline" size="sm" onClick={() => setDisableTarget(row)}>
                         <ShieldOff className="h-3.5 w-3.5" />
-                        Disable
+                        تعطيل
                       </Button>
                     )}
                     {row.status === "disabled" && (
@@ -200,7 +207,7 @@ function AdminsPage() {
                         onClick={() => statusMutation.mutate({ adminId: row.id, status: "active" })}
                       >
                         <ShieldCheckIcon className="h-3.5 w-3.5" />
-                        Enable
+                        تفعيل
                       </Button>
                     )}
                   </div>
@@ -214,21 +221,21 @@ function AdminsPage() {
       <AlertDialog open={!!disableTarget} onOpenChange={(open) => !open && setDisableTarget(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Disable this admin?</AlertDialogTitle>
+            <AlertDialogTitle>هل تريد تعطيل هذا المسؤول؟</AlertDialogTitle>
             <AlertDialogDescription>
-              {disableTarget?.email} will immediately lose access to the admin panel. You can
-              re-enable them at any time.
+              سيفقد {disableTarget?.email} صلاحية الوصول إلى لوحة الإدارة فورًا. يمكنك إعادة تفعيله
+              في أي وقت.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>إلغاء</AlertDialogCancel>
             <AlertDialogAction
               onClick={() =>
                 disableTarget &&
                 statusMutation.mutate({ adminId: disableTarget.id, status: "disabled" })
               }
             >
-              Disable
+              تعطيل
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -237,23 +244,29 @@ function AdminsPage() {
       <AlertDialog open={!!linkDialog} onOpenChange={(open) => !open && setLinkDialog(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Setup link for {linkDialog?.email}</AlertDialogTitle>
+            <AlertDialogTitle>رابط الإعداد لـ {linkDialog?.email}</AlertDialogTitle>
             <AlertDialogDescription>
-              Send this link to them directly (Slack, text, in person). It expires in 7 days and can
-              only be used once.
+              أرسل هذا الرابط إليهم مباشرةً (سلاك، رسالة نصية، شخصيًا). ينتهي بعد 7 أيام ويمكن
+              استخدامه مرة واحدة فقط.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <div className="flex items-center gap-2">
             <Label htmlFor="setup-link" className="sr-only">
-              Setup link
+              رابط الإعداد
             </Label>
-            <Input id="setup-link" readOnly value={linkDialog?.url ?? ""} className="text-xs" />
+            <Input
+              id="setup-link"
+              readOnly
+              value={linkDialog?.url ?? ""}
+              className="text-xs"
+              dir="ltr"
+            />
             <Button type="button" variant="outline" size="icon" onClick={copyLink}>
               <Copy className="h-4 w-4" />
             </Button>
           </div>
           <AlertDialogFooter>
-            <AlertDialogAction onClick={() => setLinkDialog(null)}>Done</AlertDialogAction>
+            <AlertDialogAction onClick={() => setLinkDialog(null)}>تم</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

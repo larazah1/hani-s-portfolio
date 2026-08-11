@@ -152,7 +152,9 @@ export function CollectionCrudScreen({
         {isLoading ? (
           <p className="p-6 text-sm text-muted-foreground">جارٍ التحميل…</p>
         ) : rows.length === 0 ? (
-          <p className="p-6 text-sm text-muted-foreground">لا يوجد شيء هنا بعد. أضف العنصر الأول.</p>
+          <p className="p-6 text-sm text-muted-foreground">
+            لا يوجد شيء هنا بعد. أضف العنصر الأول.
+          </p>
         ) : (
           <ul className="divide-y divide-border">
             {rows.map((row, index) => (

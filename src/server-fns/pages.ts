@@ -62,7 +62,7 @@ export const createPage = createServerFn({ method: "POST" })
       .insert(pages)
       .values({ ...data, isCore: false, status: "draft", sortOrder: maxOrder + 1 })
       .returning();
-    if (!row) throw new Error("Failed to create page.");
+    if (!row) throw new Error("فشل إنشاء الصفحة.");
     await logActivity(admin.id, "created", "page", row.id, row.title);
     return row;
   });
@@ -88,16 +88,16 @@ export const updatePage = createServerFn({ method: "POST" })
     const admin = requireAdmin(context);
     const { id, ...fields } = data;
     const [existing] = await db.select().from(pages).where(eq(pages.id, id)).limit(1);
-    if (!existing) throw new Error("Not found.");
+    if (!existing) throw new Error("العنصر غير موجود.");
     if (existing.isCore && fields.path && fields.path !== existing.path) {
-      throw new Error("Core pages can't have their path changed.");
+      throw new Error("لا يمكن تغيير مسار الصفحات الأساسية.");
     }
     const [row] = await db
       .update(pages)
       .set({ ...fields, updatedAt: new Date() })
       .where(eq(pages.id, id))
       .returning();
-    if (!row) throw new Error("Not found.");
+    if (!row) throw new Error("العنصر غير موجود.");
     await logActivity(admin.id, "updated", "page", id, row.title);
     return row;
   });
@@ -108,7 +108,7 @@ export const deletePage = createServerFn({ method: "POST" })
     const admin = requireAdmin(context);
     const [existing] = await db.select().from(pages).where(eq(pages.id, data.id)).limit(1);
     if (!existing) return { ok: true } as const;
-    if (existing.isCore) throw new Error("Core pages can't be deleted.");
+    if (existing.isCore) throw new Error("لا يمكن حذف الصفحات الأساسية.");
     await db.delete(pages).where(eq(pages.id, data.id));
     await logActivity(admin.id, "deleted", "page", data.id, existing.title);
     return { ok: true } as const;
@@ -134,7 +134,7 @@ export const addSection = createServerFn({ method: "POST" })
       .insert(sections)
       .values({ pageId: data.pageId, type: data.type, config: {}, sortOrder: maxOrder + 1 })
       .returning();
-    if (!row) throw new Error("Failed to add section.");
+    if (!row) throw new Error("فشلت إضافة القسم.");
     await logActivity(admin.id, "created", "section", row.id, `Added ${data.type} section`);
     return row;
   });
@@ -159,7 +159,7 @@ export const updateSection = createServerFn({ method: "POST" })
       .set({ ...fields, updatedAt: new Date() })
       .where(eq(sections.id, id))
       .returning();
-    if (!row) throw new Error("Not found.");
+    if (!row) throw new Error("العنصر غير موجود.");
     await logActivity(admin.id, "updated", "section", id, `Updated ${row.type} section`);
     return row;
   });

@@ -49,7 +49,7 @@ export function ItemPicker({
     <div>
       {selectedItems.length === 0 ? (
         <p className="rounded-md border border-dashed border-border px-3 py-4 text-sm text-muted-foreground">
-          {emptyStateHint ?? "Nothing selected — showing featured items by default."}
+          {emptyStateHint ?? "لم يتم اختيار شيء — سيتم عرض العناصر المميزة افتراضيًا."}
         </p>
       ) : (
         <ul className="divide-y divide-border rounded-md border border-border">
@@ -60,7 +60,7 @@ export function ItemPicker({
                   type="button"
                   disabled={index === 0}
                   onClick={() => moveItem(index, -1)}
-                  aria-label="Move up"
+                  aria-label="تحريك للأعلى"
                   className="text-muted-foreground hover:text-foreground disabled:opacity-30"
                 >
                   <ChevronUp className="h-3.5 w-3.5" />
@@ -69,7 +69,7 @@ export function ItemPicker({
                   type="button"
                   disabled={index === selectedItems.length - 1}
                   onClick={() => moveItem(index, 1)}
-                  aria-label="Move down"
+                  aria-label="تحريك للأسفل"
                   className="text-muted-foreground hover:text-foreground disabled:opacity-30"
                 >
                   <ChevronDown className="h-3.5 w-3.5" />
@@ -84,7 +84,7 @@ export function ItemPicker({
               <button
                 type="button"
                 onClick={() => onChange(selectedIds.filter((id) => id !== item.id))}
-                aria-label="Remove"
+                aria-label="إزالة"
                 className="text-muted-foreground hover:text-destructive"
               >
                 <X className="h-4 w-4" />
@@ -98,14 +98,14 @@ export function ItemPicker({
         <PopoverTrigger asChild>
           <Button type="button" variant="outline" size="sm" className="mt-3">
             <Plus className="h-3.5 w-3.5" />
-            Add item
+            إضافة عنصر
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-80 p-0" align="start">
           <Command>
-            <CommandInput placeholder="Search…" />
+            <CommandInput placeholder="بحث…" />
             <CommandList>
-              <CommandEmpty>No matches.</CommandEmpty>
+              <CommandEmpty>لا توجد نتائج مطابقة.</CommandEmpty>
               <CommandGroup>
                 {availableItems.map((item) => (
                   <CommandItem

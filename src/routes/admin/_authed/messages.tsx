@@ -59,20 +59,20 @@ function MessagesPage() {
   return (
     <div>
       <div>
-        <p className="eyebrow">Inbox</p>
+        <p className="eyebrow">البريد الوارد</p>
         <h1 className="mt-2 font-[family-name:var(--font-display)] text-2xl font-semibold">
-          Contact Messages
+          رسائل التواصل
         </h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          Messages submitted through the public contact form.
+          الرسائل المرسلة عبر نموذج التواصل في الموقع العام.
         </p>
       </div>
 
       <div className="mt-8 overflow-hidden rounded-lg border border-border bg-card">
         {isLoading ? (
-          <p className="p-6 text-sm text-muted-foreground">Loading…</p>
+          <p className="p-6 text-sm text-muted-foreground">جارٍ التحميل…</p>
         ) : rows.length === 0 ? (
-          <p className="p-6 text-sm text-muted-foreground">No messages yet.</p>
+          <p className="p-6 text-sm text-muted-foreground">لا توجد رسائل بعد.</p>
         ) : (
           <ul className="divide-y divide-border">
             {rows.map((row) => {
@@ -93,10 +93,10 @@ function MessagesPage() {
                     <div className="min-w-0 flex-1">
                       <div className="flex flex-wrap items-center gap-2">
                         <p className={isUnread ? "font-semibold" : "font-medium"}>{row.subject}</p>
-                        {isUnread && <Badge>New</Badge>}
+                        {isUnread && <Badge>جديدة</Badge>}
                       </div>
                       <p className="text-xs text-muted-foreground">
-                        {row.name} &lt;{row.email}&gt; &middot;{" "}
+                        {row.name} <span dir="ltr">&lt;{row.email}&gt;</span> &middot;{" "}
                         {new Date(row.createdAt).toLocaleString()}
                       </p>
                       {!isExpanded && (
@@ -113,7 +113,7 @@ function MessagesPage() {
                       </p>
                       <div className="mt-3 flex flex-wrap gap-2">
                         <Button variant="outline" size="sm" asChild>
-                          <a href={`mailto:${row.email}`}>Reply by email</a>
+                          <a href={`mailto:${row.email}`}>الرد عبر البريد الإلكتروني</a>
                         </Button>
                         <Button
                           variant="outline"
@@ -125,11 +125,11 @@ function MessagesPage() {
                             })
                           }
                         >
-                          Mark as {isUnread ? "read" : "unread"}
+                          {isUnread ? "تعليم كمقروءة" : "تعليم كغير مقروءة"}
                         </Button>
                         <Button variant="outline" size="sm" onClick={() => setDeleteTarget(row)}>
                           <Trash2 className="h-3.5 w-3.5" />
-                          Delete
+                          حذف
                         </Button>
                       </div>
                     </div>
@@ -144,17 +144,17 @@ function MessagesPage() {
       <AlertDialog open={!!deleteTarget} onOpenChange={(open) => !open && setDeleteTarget(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete this message?</AlertDialogTitle>
+            <AlertDialogTitle>هل تريد حذف هذه الرسالة؟</AlertDialogTitle>
             <AlertDialogDescription>
-              From {deleteTarget?.name} &mdash; this can&rsquo;t be undone.
+              من {deleteTarget?.name} — لا يمكن التراجع عن هذا الإجراء.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>إلغاء</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => deleteTarget && deleteMutation.mutate(deleteTarget.id)}
             >
-              Delete
+              حذف
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

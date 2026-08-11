@@ -99,7 +99,12 @@ function SettingsPage() {
               value={form.siteNameAr}
               onChange={(v) => set("siteNameAr", v)}
             />
-            <Field label="رابط الشعار" value={form.logoUrl} onChange={(v) => set("logoUrl", v)} full />
+            <Field
+              label="رابط الشعار"
+              value={form.logoUrl}
+              onChange={(v) => set("logoUrl", v)}
+              full
+            />
             <Field
               label="رابط أيقونة الموقع"
               value={form.faviconUrl}
@@ -126,7 +131,9 @@ function SettingsPage() {
         </div>
 
         <div>
-          <h2 className="text-sm font-semibold text-foreground">تحسين محركات البحث والبيانات الوصفية</h2>
+          <h2 className="text-sm font-semibold text-foreground">
+            تحسين محركات البحث والبيانات الوصفية
+          </h2>
           <div className="mt-4 grid gap-4 sm:grid-cols-2">
             <Field
               label="عنوان الصفحة الافتراضي"
@@ -147,7 +154,9 @@ function SettingsPage() {
               />
             </div>
             <div className="space-y-1.5 sm:col-span-2">
-              <label className="text-sm font-medium">الوصف الافتراضي للبيانات الوصفية (بالعربية)</label>
+              <label className="text-sm font-medium">
+                الوصف الافتراضي للبيانات الوصفية (بالعربية)
+              </label>
               <Textarea
                 rows={2}
                 value={form.defaultMetaDescriptionAr}
