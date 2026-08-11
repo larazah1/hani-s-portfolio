@@ -256,15 +256,15 @@ function StatsRowSection({ section }: { section: ResolvedSection }) {
   const looped = [...rows, ...rows];
 
   return (
-    <section className="overflow-hidden border-y border-border bg-card py-12">
+    <section className="overflow-hidden border-y border-border bg-card py-8">
       <div className="flex w-max animate-marquee hover:[animation-play-state:paused] motion-reduce:animate-none">
         {looped.map((s, index) => (
           <div
             key={`${String(s["id"])}-${index}`}
             className="me-10 min-w-36 shrink-0 px-4 text-center"
           >
-            <p className="font-[family-name:var(--font-display)] text-4xl">{String(s["value"])}</p>
-            <p className="eyebrow mt-2">{pick(String(s["label"]), String(s["labelAr"]))}</p>
+            <p className="font-[family-name:var(--font-display)] text-3xl">{String(s["value"])}</p>
+            <p className="eyebrow mt-1">{pick(String(s["label"]), String(s["labelAr"]))}</p>
           </div>
         ))}
       </div>
@@ -522,7 +522,7 @@ function PublicationsCarouselSection({ section }: { section: ResolvedSection }) 
           <CarouselContent>
             {items.map((p) => (
               <CarouselItem key={p.id} className="sm:basis-1/2 lg:basis-1/3">
-                <PublicationCard publication={p} />
+                <PublicationCard publication={p} compact />
               </CarouselItem>
             ))}
           </CarouselContent>

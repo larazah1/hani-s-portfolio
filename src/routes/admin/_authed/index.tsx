@@ -1,11 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import {
+  Activity,
   ArrowLeft,
   BarChart3,
   BookMarked,
   Eye,
-  FileText,
   Inbox,
   LayoutTemplate,
   Newspaper,
@@ -30,7 +30,6 @@ function AdminDashboard() {
         { label: "المنشورات", value: data.counts.publications, icon: BookMarked },
         { label: "المقابلات والمقالات", value: data.counts.media, icon: Newspaper },
         { label: "التوصيات", value: data.counts.recommendations, icon: Quote },
-        { label: "الصفحات", value: data.counts.pages, icon: FileText },
         { label: "رسائل غير مقروءة", value: data.counts.unreadMessages, icon: Inbox },
         { label: "المسؤولون النشطون", value: data.counts.activeAdmins, icon: ShieldCheck },
         { label: "إجمالي المشاهدات", value: data.counts.totalViews, icon: Eye },
@@ -59,27 +58,52 @@ function AdminDashboard() {
             ))}
           </div>
 
-          {data?.homePageId && (
-            <div className="mt-8">
-              <p className="text-sm font-medium">إجراءات سريعة</p>
-              <div className="mt-3 grid gap-4 sm:grid-cols-2">
-                <Link
-                  to="/admin/pages/$pageId"
-                  params={{ pageId: data.homePageId }}
-                  className="group flex items-center gap-4 rounded-lg border border-border bg-card p-5 transition-colors hover:border-accent-foreground/40 hover:bg-secondary/40"
-                >
-                  <LayoutTemplate className="h-6 w-6 shrink-0 text-muted-foreground" />
-                  <div className="min-w-0 flex-1">
-                    <p className="font-medium">تعديل أقسام الصفحة الرئيسية</p>
-                    <p className="text-xs text-muted-foreground">
-                      أضف الأقسام في الصفحة الرئيسية أو احذفها أو أعد ترتيبها.
-                    </p>
-                  </div>
-                  <ArrowLeft className="h-4 w-4 shrink-0 text-muted-foreground transition-transform group-hover:-translate-x-0.5" />
-                </Link>
-              </div>
+          <div className="mt-8">
+            <p className="text-sm font-medium">إجراءات سريعة</p>
+            <div className="mt-3 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              <Link
+                to="/admin/pages"
+                className="group flex items-center gap-4 rounded-lg border border-border bg-card p-5 transition-colors hover:border-accent-foreground/40 hover:bg-secondary/40"
+              >
+                <LayoutTemplate className="h-6 w-6 shrink-0 text-muted-foreground" />
+                <div className="min-w-0 flex-1">
+                  <p className="font-medium">تعديل أقسام الصفحات</p>
+                  <p className="text-xs text-muted-foreground">
+                    تصفح كل صفحات الموقع وعدّل أقسامها أو أضفها أو أعد ترتيبها.
+                  </p>
+                </div>
+                <ArrowLeft className="h-4 w-4 shrink-0 text-muted-foreground transition-transform group-hover:-translate-x-0.5" />
+              </Link>
+
+              <Link
+                to="/admin/stats"
+                className="group flex items-center gap-4 rounded-lg border border-border bg-card p-5 transition-colors hover:border-accent-foreground/40 hover:bg-secondary/40"
+              >
+                <Activity className="h-6 w-6 shrink-0 text-muted-foreground" />
+                <div className="min-w-0 flex-1">
+                  <p className="font-medium">تعديل الإحصائيات</p>
+                  <p className="text-xs text-muted-foreground">
+                    عدّل الأرقام التي تظهر في صف الإحصائيات بالصفحة الرئيسية.
+                  </p>
+                </div>
+                <ArrowLeft className="h-4 w-4 shrink-0 text-muted-foreground transition-transform group-hover:-translate-x-0.5" />
+              </Link>
+
+              <Link
+                to="/admin/media"
+                className="group flex items-center gap-4 rounded-lg border border-border bg-card p-5 transition-colors hover:border-accent-foreground/40 hover:bg-secondary/40"
+              >
+                <Newspaper className="h-6 w-6 shrink-0 text-muted-foreground" />
+                <div className="min-w-0 flex-1">
+                  <p className="font-medium">تعديل المقالات</p>
+                  <p className="text-xs text-muted-foreground">
+                    أضف أو عدّل المقابلات والمقالات الإعلامية أو احذفها.
+                  </p>
+                </div>
+                <ArrowLeft className="h-4 w-4 shrink-0 text-muted-foreground transition-transform group-hover:-translate-x-0.5" />
+              </Link>
             </div>
-          )}
+          </div>
 
           <div className="mt-8 rounded-lg border border-border bg-card">
             <div className="flex items-center justify-between border-b border-border px-5 py-4">

@@ -6,7 +6,6 @@ import {
   contactMessages,
   mediaItems,
   pageViewCounts,
-  pages,
   publications,
   recommendations,
 } from "@/db/schema";
@@ -19,17 +18,14 @@ export const getDashboardData = createServerFn({ method: "GET" }).handler(async 
     [publicationRow],
     [mediaRow],
     [recommendationRow],
-    [pageRow],
     [unreadMessageRow],
     [activeAdminRow],
     [totalViewsRow],
     topPages,
-    [homePage],
   ] = await Promise.all([
     db.select({ count: sql<number>`count(*)::int` }).from(publications),
     db.select({ count: sql<number>`count(*)::int` }).from(mediaItems),
     db.select({ count: sql<number>`count(*)::int` }).from(recommendations),
-    db.select({ count: sql<number>`count(*)::int` }).from(pages),
     db
       .select({ count: sql<number>`count(*)::int` })
       .from(contactMessages)
@@ -46,7 +42,6 @@ export const getDashboardData = createServerFn({ method: "GET" }).handler(async 
       .from(pageViewCounts)
       .orderBy(desc(pageViewCounts.count))
       .limit(5),
-    db.select({ id: pages.id }).from(pages).where(eq(pages.path, "/")).limit(1),
   ]);
 
   return {
@@ -54,12 +49,10 @@ export const getDashboardData = createServerFn({ method: "GET" }).handler(async 
       publications: publicationRow?.count ?? 0,
       media: mediaRow?.count ?? 0,
       recommendations: recommendationRow?.count ?? 0,
-      pages: pageRow?.count ?? 0,
       unreadMessages: unreadMessageRow?.count ?? 0,
       activeAdmins: activeAdminRow?.count ?? 0,
       totalViews: totalViewsRow?.total ?? 0,
     },
     topPages,
-    homePageId: homePage?.id ?? null,
   };
 });

@@ -111,4 +111,3 @@ export const acceptInvite = createServerFn({ method: "POST" })
     await createAdminSession(admin.id, false);
     return { ok: true };
   });
-
