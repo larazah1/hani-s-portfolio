@@ -42,6 +42,7 @@ import { Button } from "@/components/ui/button";
 import { logout } from "@/server-fns/auth";
 import { getUnreadMessageCount } from "@/server-fns/contact";
 import type { CurrentAdmin } from "@/server-fns/current-admin";
+import { getPendingRecommendationCount } from "@/server-fns/recommendations";
 
 type NavItem = { to: string; label: string; icon: typeof LayoutDashboard };
 type NavGroup = { label: string; items: NavItem[] };
@@ -94,6 +95,15 @@ export function AdminShell({ admin, children }: { admin: CurrentAdmin; children:
     queryFn: () => getUnreadMessageCount(),
     refetchInterval: 30_000,
   });
+  const { data: pendingRecommendationCount } = useQuery({
+    queryKey: ["pending-recommendation-count"],
+    queryFn: () => getPendingRecommendationCount(),
+    refetchInterval: 30_000,
+  });
+  const navBadges: Record<string, number | undefined> = {
+    "/admin/messages": unreadCount,
+    "/admin/recommendations": pendingRecommendationCount,
+  };
 
   async function handleLogout() {
     await logout();
@@ -119,15 +129,16 @@ export function AdminShell({ admin, children }: { admin: CurrentAdmin; children:
                   {group.items.map((item) => {
                     const isActive =
                       item.to === "/admin" ? pathname === "/admin" : pathname.startsWith(item.to);
+                    const badgeCount = navBadges[item.to];
                     return (
                       <SidebarMenuItem key={item.to}>
                         <SidebarMenuButton asChild isActive={isActive}>
                           <Link to={item.to}>
                             <item.icon />
                             <span>{item.label}</span>
-                            {item.to === "/admin/messages" && !!unreadCount && (
+                            {!!badgeCount && (
                               <Badge className="ms-auto h-5 min-w-5 justify-center px-1">
-                                {unreadCount}
+                                {badgeCount}
                               </Badge>
                             )}
                           </Link>

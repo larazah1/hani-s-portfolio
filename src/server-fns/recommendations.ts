@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
-import { asc, eq, sql } from "drizzle-orm";
+import { and, asc, eq, ne, sql } from "drizzle-orm";
 import { z } from "zod";
 import { db } from "@/db/client";
 import { recommendations, sections } from "@/db/schema";
@@ -18,6 +18,13 @@ const insertSchema = z.object({
 });
 const updateSchema = insertSchema.partial().and(z.object({ id: z.string().uuid() }));
 const idSchema = z.object({ id: z.string().uuid() });
+
+const submitSchema = z.object({
+  name: safeString(200, 1),
+  position: safeString(200, 1),
+  organization: safeString(200).optional().default(""),
+  body: safeString(5000, 1),
+});
 
 async function scrubSectionReferences(deletedId: string) {
   const rows = await db
@@ -39,6 +46,19 @@ export const listRecommendations = createServerFn({ method: "GET" }).handler(
   async ({ context }) => {
     requireAdmin(context);
     return db.select().from(recommendations).orderBy(asc(recommendations.sortOrder));
+  },
+);
+
+export const getPendingRecommendationCount = createServerFn({ method: "GET" }).handler(
+  async ({ context }) => {
+    requireAdmin(context);
+    const [row] = await db
+      .select({ count: sql<number>`count(*)::int` })
+      .from(recommendations)
+      .where(
+        and(eq(recommendations.submittedByPublic, true), ne(recommendations.status, "published")),
+      );
+    return row?.count ?? 0;
   },
 );
 
@@ -97,6 +117,27 @@ export const deleteRecommendation = createServerFn({ method: "POST" })
       await logActivity(admin.id, "deleted", "recommendation", data.id, row.name);
       await scrubSectionReferences(data.id);
     }
+    return { ok: true } as const;
+  });
+
+/**
+ * Public-facing submission (no auth required — anyone visiting the site can
+ * submit) — always lands as an unpublished draft flagged `submittedByPublic`
+ * so it never appears live until an admin reviews and publishes it.
+ */
+export const submitRecommendation = createServerFn({ method: "POST" })
+  .validator(submitSchema)
+  .handler(async ({ data }) => {
+    const [row0] = await db
+      .select({ maxOrder: sql<number>`coalesce(max(${recommendations.sortOrder}), -1)` })
+      .from(recommendations);
+    await db.insert(recommendations).values({
+      ...data,
+      sortOrder: (row0?.maxOrder ?? -1) + 1,
+      status: "draft",
+      featured: false,
+      submittedByPublic: true,
+    });
     return { ok: true } as const;
   });
 

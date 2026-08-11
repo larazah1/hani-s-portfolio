@@ -54,6 +54,33 @@ const dictionary = {
     en: "Recommendations & professional recognition",
     ar: "التوصيات والتقدير المهني",
   },
+  shareYourExperience: { en: "Share Your Experience", ar: "شارك تجربتك" },
+  recommendationFormIntro: {
+    en: "Worked together? Leave a recommendation below — it will appear on the site once reviewed.",
+    ar: "هل عملتما معًا؟ اترك توصية أدناه — ستظهر في الموقع بعد مراجعتها.",
+  },
+  recommendationPosition: { en: "Position / Title", ar: "المنصب / اللقب الوظيفي" },
+  recommendationPositionPlaceholder: {
+    en: "e.g. Research Director, XYZ Institute",
+    ar: "مثال: مدير أبحاث، معهد كذا",
+  },
+  recommendationOrganization: { en: "Organization (optional)", ar: "الجهة (اختياري)" },
+  recommendationOrganizationPlaceholder: { en: "Organization", ar: "اسم الجهة" },
+  recommendationBody: { en: "Your Recommendation", ar: "نص التوصية" },
+  recommendationBodyPlaceholder: {
+    en: "Write your recommendation…",
+    ar: "اكتب توصيتك هنا…",
+  },
+  submitRecommendation: { en: "Submit Recommendation", ar: "إرسال التوصية" },
+  submittingRecommendation: { en: "Submitting…", ar: "جارٍ الإرسال…" },
+  recommendationSubmitSuccess: {
+    en: "Thank you — your recommendation has been submitted and will appear once reviewed.",
+    ar: "شكرًا لك — تم إرسال توصيتك وستظهر بعد مراجعتها.",
+  },
+  recommendationSubmitError: {
+    en: "Something went wrong submitting your recommendation. Please try again.",
+    ar: "حدث خطأ أثناء إرسال توصيتك. يرجى المحاولة مرة أخرى.",
+  },
 
   about: { en: "About", ar: "نبذة" },
   biography: { en: "Biography", ar: "السيرة الذاتية" },

@@ -50,7 +50,10 @@ const ADMIN_ROUTES = [
   console.log("Post-login dir/lang:", htmlDir, htmlLang);
 
   // Sidebar should now be docked on the visual RIGHT.
-  const sidebarBox = await page.locator('[data-slot="sidebar"], [data-sidebar="sidebar"]').first().boundingBox();
+  const sidebarBox = await page
+    .locator('[data-slot="sidebar"], [data-sidebar="sidebar"]')
+    .first()
+    .boundingBox();
   const viewport = page.viewportSize();
   console.log(
     "Sidebar docked on the right?",

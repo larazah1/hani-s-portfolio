@@ -63,6 +63,7 @@ async function resolveSectionData(section: typeof sections.$inferSelect) {
   switch (section.type) {
     case "hero":
     case "contact-block":
+    case "recommendation-form":
       return null;
 
     case "summary": {

@@ -255,6 +255,11 @@ export const recommendations = pgTable("recommendations", {
   dateLabel: text("date_label"),
   featured: boolean("featured").notNull().default(false),
   status: contentStatusEnum("status").notNull().default("draft"),
+  // True for recommendations submitted through the public website form,
+  // which always land as an unpublished draft pending admin review — this
+  // flag is what lets the admin UI tell "awaiting your approval" apart from
+  // an admin's own unfinished draft.
+  submittedByPublic: boolean("submitted_by_public").notNull().default(false),
 });
 
 // ---------------------------------------------------------------------------

@@ -51,6 +51,7 @@ import { publicationTypeAr } from "@/lib/publication-i18n";
 import { useLanguage, type DictionaryKey } from "@/lib/language";
 import type { SectionType } from "@/lib/section-types";
 import { submitContactMessage } from "@/server-fns/contact";
+import { submitRecommendation } from "@/server-fns/recommendations";
 
 export type ResolvedSection = {
   id: string;
@@ -148,6 +149,8 @@ export function SectionRenderer({
       return <RichTextSection section={section} />;
     case "contact-block":
       return profile ? <ContactBlockSection profile={profile} socialLinks={socialLinks} /> : null;
+    case "recommendation-form":
+      return <RecommendationFormSection section={section} />;
     default:
       return null;
   }
@@ -592,6 +595,127 @@ function RecommendationsGridSection({ section }: { section: ResolvedSection }) {
           ))}
         </div>
       )}
+    </Section>
+  );
+}
+
+const recommendationFormSchema = z.object({
+  name: z.string().trim().min(2, "Please enter your full name."),
+  position: z.string().trim().min(2, "Please enter your position."),
+  organization: z.string().trim(),
+  body: z.string().trim().min(20, "Please write at least a few sentences."),
+});
+type RecommendationFormValues = z.infer<typeof recommendationFormSchema>;
+
+function RecommendationFormSection({ section }: { section: ResolvedSection }) {
+  const { t } = useLanguage();
+  const heading = useHeading(section, "recommendations", "shareYourExperience");
+  const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
+
+  const form = useForm<RecommendationFormValues>({
+    resolver: zodResolver(recommendationFormSchema),
+    defaultValues: { name: "", position: "", organization: "", body: "" },
+  });
+
+  async function onSubmit(values: RecommendationFormValues) {
+    setStatus("idle");
+    try {
+      await submitRecommendation({ data: values });
+      setStatus("success");
+      form.reset();
+    } catch {
+      setStatus("error");
+    }
+  }
+
+  return (
+    <Section eyebrow={heading.eyebrow} title={heading.title}>
+      <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground md:text-base">
+        {t("recommendationFormIntro")}
+      </p>
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="mt-6 max-w-2xl space-y-4"
+          noValidate
+        >
+          <div className="grid gap-4 sm:grid-cols-2">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("fullName")}</FormLabel>
+                  <FormControl>
+                    <Input placeholder={t("fullNamePlaceholder")} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="position"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("recommendationPosition")}</FormLabel>
+                  <FormControl>
+                    <Input placeholder={t("recommendationPositionPlaceholder")} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          <FormField
+            control={form.control}
+            name="organization"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t("recommendationOrganization")}</FormLabel>
+                <FormControl>
+                  <Input placeholder={t("recommendationOrganizationPlaceholder")} {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="body"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t("recommendationBody")}</FormLabel>
+                <FormControl>
+                  <Textarea rows={6} placeholder={t("recommendationBodyPlaceholder")} {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <Button type="submit" disabled={form.formState.isSubmitting} size="lg">
+            {form.formState.isSubmitting
+              ? t("submittingRecommendation")
+              : t("submitRecommendation")}
+          </Button>
+
+          {status === "success" && (
+            <div className="flex items-center gap-2 rounded-md border border-border bg-secondary/60 px-4 py-3 text-sm text-foreground">
+              <CheckCircle2 className="h-4 w-4 shrink-0 text-accent-foreground" />
+              {t("recommendationSubmitSuccess")}
+            </div>
+          )}
+          {status === "error" && (
+            <div className="flex items-center gap-2 rounded-md border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+              <AlertCircle className="h-4 w-4 shrink-0" />
+              {t("recommendationSubmitError")}
+            </div>
+          )}
+        </form>
+      </Form>
     </Section>
   );
 }

@@ -20,6 +20,7 @@ export const SECTION_TYPES = [
   "media-full-grid",
   "rich-text",
   "contact-block",
+  "recommendation-form",
 ] as const;
 
 export type SectionType = (typeof SECTION_TYPES)[number];
@@ -41,6 +42,7 @@ export const SECTION_TYPE_LABELS: Record<SectionType, string> = {
   "media-full-grid": "الشبكة الكاملة للوسائط",
   "rich-text": "كتلة نص منسق",
   "contact-block": "نموذج ومعلومات التواصل",
+  "recommendation-form": "نموذج إرسال توصية",
 };
 
 /** Section types that make sense to add to an arbitrary/custom page, as
@@ -56,4 +58,5 @@ export const GENERAL_PURPOSE_SECTION_TYPES: SectionType[] = [
   "media-carousel",
   "recommendations-grid",
   "rich-text",
+  "recommendation-form",
 ];
