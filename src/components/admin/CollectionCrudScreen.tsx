@@ -78,7 +78,7 @@ export function CollectionCrudScreen({
       void queryClient.invalidateQueries({ queryKey: key });
       setDialogOpen(false);
     },
-    onError: (e: Error) => setFormError(e.message || "Something went wrong."),
+    onError: (e: Error) => setFormError(e.message || "حدث خطأ ما."),
   });
   const updateMutation = useMutation({
     mutationFn: (data: Record<string, unknown> & { id: string }) => api.update({ data }),
@@ -86,7 +86,7 @@ export function CollectionCrudScreen({
       void queryClient.invalidateQueries({ queryKey: key });
       setDialogOpen(false);
     },
-    onError: (e: Error) => setFormError(e.message || "Something went wrong."),
+    onError: (e: Error) => setFormError(e.message || "حدث خطأ ما."),
   });
   const removeMutation = useMutation({
     mutationFn: (id: string) => api.remove({ data: { id } }),
@@ -105,7 +105,7 @@ export function CollectionCrudScreen({
     setFormError(null);
     const missing = fields.find((f) => f.required !== false && !(formValues[f.name] ?? "").trim());
     if (missing) {
-      setFormError(`${missing.label} is required.`);
+      setFormError(`حقل «${missing.label}» مطلوب.`);
       return;
     }
     const payload: Record<string, string | undefined> = {};
@@ -144,15 +144,15 @@ export function CollectionCrudScreen({
         </div>
         <Button onClick={openAddDialog}>
           <Plus />
-          Add
+          إضافة
         </Button>
       </div>
 
       <div className="mt-8 overflow-hidden rounded-lg border border-border bg-card">
         {isLoading ? (
-          <p className="p-6 text-sm text-muted-foreground">Loading…</p>
+          <p className="p-6 text-sm text-muted-foreground">جارٍ التحميل…</p>
         ) : rows.length === 0 ? (
-          <p className="p-6 text-sm text-muted-foreground">Nothing here yet. Add the first one.</p>
+          <p className="p-6 text-sm text-muted-foreground">لا يوجد شيء هنا بعد. أضف العنصر الأول.</p>
         ) : (
           <ul className="divide-y divide-border">
             {rows.map((row, index) => (
@@ -162,7 +162,7 @@ export function CollectionCrudScreen({
                     type="button"
                     disabled={index === 0}
                     onClick={() => moveRow(index, -1)}
-                    aria-label="Move up"
+                    aria-label="تحريك للأعلى"
                     className="text-muted-foreground hover:text-foreground disabled:opacity-30"
                   >
                     <ChevronUp className="h-4 w-4" />
@@ -171,7 +171,7 @@ export function CollectionCrudScreen({
                     type="button"
                     disabled={index === rows.length - 1}
                     onClick={() => moveRow(index, 1)}
-                    aria-label="Move down"
+                    aria-label="تحريك للأسفل"
                     className="text-muted-foreground hover:text-foreground disabled:opacity-30"
                   >
                     <ChevronDown className="h-4 w-4" />
@@ -184,7 +184,7 @@ export function CollectionCrudScreen({
                   )}
                 </div>
                 <Button variant="outline" size="sm" onClick={() => openEditDialog(row)}>
-                  Edit
+                  تعديل
                 </Button>
                 <Button variant="outline" size="sm" onClick={() => setDeleteTarget(row)}>
                   <Trash2 className="h-3.5 w-3.5" />
@@ -198,7 +198,7 @@ export function CollectionCrudScreen({
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent className="max-h-[85vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>{editingRow ? `Edit ${title}` : `Add ${title}`}</DialogTitle>
+            <DialogTitle>{editingRow ? `تعديل ${title}` : `إضافة ${title}`}</DialogTitle>
           </DialogHeader>
           <form onSubmit={handleSubmit} className="space-y-4">
             {fields.map((f) => (
@@ -221,10 +221,10 @@ export function CollectionCrudScreen({
             {formError && <p className="text-sm text-destructive">{formError}</p>}
             <div className="flex justify-end gap-2 pt-2">
               <Button type="button" variant="outline" onClick={() => setDialogOpen(false)}>
-                Cancel
+                إلغاء
               </Button>
               <Button type="submit" disabled={isSaving}>
-                {isSaving ? "Saving…" : "Save"}
+                {isSaving ? "جارٍ الحفظ…" : "حفظ"}
               </Button>
             </div>
           </form>
@@ -235,16 +235,16 @@ export function CollectionCrudScreen({
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>
-              Delete {deleteTarget ? getRowTitle(deleteTarget) : ""}?
+              حذف {deleteTarget ? getRowTitle(deleteTarget) : ""}؟
             </AlertDialogTitle>
-            <AlertDialogDescription>This can&rsquo;t be undone.</AlertDialogDescription>
+            <AlertDialogDescription>لا يمكن التراجع عن هذا الإجراء.</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>إلغاء</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => deleteTarget && removeMutation.mutate(deleteTarget.id)}
             >
-              Delete
+              حذف
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

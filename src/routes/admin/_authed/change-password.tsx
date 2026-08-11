@@ -22,12 +22,12 @@ export const Route = createFileRoute("/admin/_authed/change-password")({
 
 const formSchema = z
   .object({
-    currentPassword: z.string().min(1, "Enter your current password."),
-    newPassword: z.string().min(10, "Password must be at least 10 characters."),
-    confirmPassword: z.string().min(1, "Confirm your new password."),
+    currentPassword: z.string().min(1, "أدخل كلمة المرور الحالية."),
+    newPassword: z.string().min(10, "يجب أن تتكون كلمة المرور من 10 أحرف على الأقل."),
+    confirmPassword: z.string().min(1, "أكّد كلمة المرور الجديدة."),
   })
   .refine((data) => data.newPassword === data.confirmPassword, {
-    message: "Passwords don't match.",
+    message: "كلمتا المرور غير متطابقتين.",
     path: ["confirmPassword"],
   });
 type FormValues = z.infer<typeof formSchema>;
@@ -57,12 +57,12 @@ function ChangePasswordPage() {
 
   return (
     <div>
-      <p className="eyebrow">Settings</p>
+      <p className="eyebrow">الإعدادات</p>
       <h1 className="mt-2 font-[family-name:var(--font-display)] text-2xl font-semibold">
-        Change Password
+        تغيير كلمة المرور
       </h1>
       <p className="mt-1 max-w-md text-sm text-muted-foreground">
-        Choose a strong, unique password. You&rsquo;ll stay signed in on this device.
+        اختر كلمة مرور قوية وفريدة. ستبقى مسجّلاً للدخول على هذا الجهاز.
       </p>
 
       <div className="mt-8 max-w-sm rounded-lg border border-border bg-card p-6">
@@ -73,7 +73,7 @@ function ChangePasswordPage() {
               name="currentPassword"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Current password</FormLabel>
+                  <FormLabel>كلمة المرور الحالية</FormLabel>
                   <FormControl>
                     <Input type="password" autoComplete="current-password" {...field} />
                   </FormControl>
@@ -86,7 +86,7 @@ function ChangePasswordPage() {
               name="newPassword"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>New password</FormLabel>
+                  <FormLabel>كلمة المرور الجديدة</FormLabel>
                   <FormControl>
                     <Input type="password" autoComplete="new-password" {...field} />
                   </FormControl>
@@ -99,7 +99,7 @@ function ChangePasswordPage() {
               name="confirmPassword"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Confirm new password</FormLabel>
+                  <FormLabel>تأكيد كلمة المرور الجديدة</FormLabel>
                   <FormControl>
                     <Input type="password" autoComplete="new-password" {...field} />
                   </FormControl>
@@ -117,12 +117,12 @@ function ChangePasswordPage() {
             {success && (
               <div className="flex items-center gap-2 rounded-md border border-border bg-secondary/60 px-3 py-2 text-sm text-foreground">
                 <CheckCircle2 className="h-4 w-4 shrink-0 text-accent-foreground" />
-                Password updated.
+                تم تحديث كلمة المرور.
               </div>
             )}
 
             <Button type="submit" disabled={form.formState.isSubmitting}>
-              {form.formState.isSubmitting ? "Saving…" : "Update Password"}
+              {form.formState.isSubmitting ? "جارٍ الحفظ…" : "تحديث كلمة المرور"}
             </Button>
           </form>
         </Form>

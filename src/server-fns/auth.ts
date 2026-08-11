@@ -10,8 +10,8 @@ import { requireAdmin } from "./require-admin";
 
 const FAILED_ATTEMPT_LIMIT = 5;
 const LOCKOUT_MS = 15 * 60 * 1000;
-const GENERIC_LOGIN_ERROR = "Invalid email or password.";
-const GENERIC_INVITE_ERROR = "This setup link is invalid or has expired.";
+const GENERIC_LOGIN_ERROR = "البريد الإلكتروني أو كلمة المرور غير صحيحة.";
+const GENERIC_INVITE_ERROR = "رابط الإعداد هذا غير صالح أو منتهي الصلاحية.";
 
 type Result = { ok: true } | { ok: false; error: string };
 
@@ -34,7 +34,7 @@ export const login = createServerFn({ method: "POST" })
     }
 
     if (admin.lockedUntil && admin.lockedUntil.getTime() > Date.now()) {
-      return { ok: false, error: "Too many failed attempts. Please try again in a few minutes." };
+      return { ok: false, error: "محاولات فاشلة كثيرة جدًا. الرجاء المحاولة مرة أخرى بعد دقائق." };
     }
 
     const passwordOk =
@@ -71,7 +71,7 @@ export const getCurrentAdmin = createServerFn({ method: "GET" }).handler(async (
 
 const acceptInviteSchema = z.object({
   token: safeToken(),
-  password: z.string().min(10, "Password must be at least 10 characters."),
+  password: z.string().min(10, "يجب أن تتكون كلمة المرور من 10 أحرف على الأقل."),
 });
 
 /** Used both for first-time account setup and for peer-assisted password resets. */
@@ -115,7 +115,7 @@ export const acceptInvite = createServerFn({ method: "POST" })
 
 const changePasswordSchema = z.object({
   currentPassword: z.string().min(1),
-  newPassword: z.string().min(10, "Password must be at least 10 characters."),
+  newPassword: z.string().min(10, "يجب أن تتكون كلمة المرور من 10 أحرف على الأقل."),
 });
 
 export const changePassword = createServerFn({ method: "POST" })
@@ -128,7 +128,7 @@ export const changePassword = createServerFn({ method: "POST" })
       admin?.passwordHash != null &&
       (await verifyPassword(data.currentPassword, admin.passwordHash));
     if (!admin || !currentOk) {
-      return { ok: false, error: "Current password is incorrect." };
+      return { ok: false, error: "كلمة المرور الحالية غير صحيحة." };
     }
 
     const passwordHash = await hashPassword(data.newPassword);

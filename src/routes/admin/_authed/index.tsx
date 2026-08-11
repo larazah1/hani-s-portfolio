@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import {
-  ArrowRight,
+  ArrowLeft,
   BarChart3,
   BookMarked,
   Eye,
@@ -28,26 +28,26 @@ function AdminDashboard() {
 
   const cards = data
     ? [
-        { label: "Publications", value: data.counts.publications, icon: BookMarked },
-        { label: "Interviews & Articles", value: data.counts.media, icon: Newspaper },
-        { label: "Recommendations", value: data.counts.recommendations, icon: Quote },
-        { label: "Pages", value: data.counts.pages, icon: FileText },
-        { label: "Unread messages", value: data.counts.unreadMessages, icon: Inbox },
-        { label: "Active admins", value: data.counts.activeAdmins, icon: ShieldCheck },
-        { label: "Total page views", value: data.counts.totalViews, icon: Eye },
+        { label: "المنشورات", value: data.counts.publications, icon: BookMarked },
+        { label: "المقابلات والمقالات", value: data.counts.media, icon: Newspaper },
+        { label: "التوصيات", value: data.counts.recommendations, icon: Quote },
+        { label: "الصفحات", value: data.counts.pages, icon: FileText },
+        { label: "رسائل غير مقروءة", value: data.counts.unreadMessages, icon: Inbox },
+        { label: "المسؤولون النشطون", value: data.counts.activeAdmins, icon: ShieldCheck },
+        { label: "إجمالي المشاهدات", value: data.counts.totalViews, icon: Eye },
       ]
     : [];
 
   return (
     <div>
-      <p className="eyebrow">Dashboard</p>
+      <p className="eyebrow">لوحة التحكم</p>
       <h1 className="mt-2 font-[family-name:var(--font-display)] text-2xl font-semibold">
-        Welcome back
+        مرحبًا بعودتك
       </h1>
-      <p className="mt-2 text-sm text-muted-foreground">Signed in as {admin.email}</p>
+      <p className="mt-2 text-sm text-muted-foreground">تم تسجيل الدخول باسم {admin.email}</p>
 
       {isLoading ? (
-        <p className="mt-8 text-sm text-muted-foreground">Loading…</p>
+        <p className="mt-8 text-sm text-muted-foreground">جارٍ التحميل…</p>
       ) : (
         <>
           <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
@@ -61,7 +61,7 @@ function AdminDashboard() {
           </div>
 
           <div className="mt-8">
-            <p className="text-sm font-medium">Quick Actions</p>
+            <p className="text-sm font-medium">إجراءات سريعة</p>
             <div className="mt-3 grid gap-4 sm:grid-cols-2">
               {data?.homePageId && (
                 <Link
@@ -71,12 +71,12 @@ function AdminDashboard() {
                 >
                   <LayoutTemplate className="h-6 w-6 shrink-0 text-muted-foreground" />
                   <div className="min-w-0 flex-1">
-                    <p className="font-medium">Edit Homepage Sections</p>
+                    <p className="font-medium">تعديل أقسام الصفحة الرئيسية</p>
                     <p className="text-xs text-muted-foreground">
-                      Add, remove, and reorder sections on the homepage.
+                      أضف الأقسام في الصفحة الرئيسية أو احذفها أو أعد ترتيبها.
                     </p>
                   </div>
-                  <ArrowRight className="h-4 w-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
+                  <ArrowLeft className="h-4 w-4 shrink-0 text-muted-foreground transition-transform group-hover:-translate-x-0.5" />
                 </Link>
               )}
               <Link
@@ -85,57 +85,59 @@ function AdminDashboard() {
               >
                 <FilePlus2 className="h-6 w-6 shrink-0 text-muted-foreground" />
                 <div className="min-w-0 flex-1">
-                  <p className="font-medium">Add New Page</p>
+                  <p className="font-medium">إضافة صفحة جديدة</p>
                   <p className="text-xs text-muted-foreground">
-                    Create a new page and add it to the site navigation.
+                    أنشئ صفحة جديدة وأضفها إلى قائمة تنقّل الموقع.
                   </p>
                 </div>
-                <ArrowRight className="h-4 w-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
+                <ArrowLeft className="h-4 w-4 shrink-0 text-muted-foreground transition-transform group-hover:-translate-x-0.5" />
               </Link>
             </div>
           </div>
 
           <div className="mt-8 rounded-lg border border-border bg-card">
             <div className="flex items-center justify-between border-b border-border px-5 py-4">
-              <p className="text-sm font-medium">Most Viewed Pages</p>
+              <p className="text-sm font-medium">الصفحات الأكثر مشاهدة</p>
               <BarChart3 className="h-4 w-4 text-muted-foreground" />
             </div>
             {data && data.topPages.length > 0 ? (
               <ul className="divide-y divide-border">
                 {data.topPages.map((p) => (
                   <li key={p.path} className="flex items-center justify-between px-5 py-3 text-sm">
-                    <span className="font-mono text-xs text-muted-foreground">{p.path}</span>
+                    <span className="font-mono text-xs text-muted-foreground" dir="ltr">
+                      {p.path}
+                    </span>
                     <span className="font-medium">{p.count}</span>
                   </li>
                 ))}
               </ul>
             ) : (
-              <p className="p-5 text-sm text-muted-foreground">No views recorded yet.</p>
+              <p className="p-5 text-sm text-muted-foreground">لا توجد مشاهدات مسجَّلة بعد.</p>
             )}
           </div>
 
           <div className="mt-8 rounded-lg border border-border bg-card p-5">
-            <p className="text-sm font-medium">Quick links</p>
+            <p className="text-sm font-medium">روابط سريعة</p>
             <div className="mt-3 flex flex-wrap gap-2 text-sm">
               <Link
                 className="underline underline-offset-4 hover:text-accent-foreground"
                 to="/admin/messages"
               >
-                Contact Messages
+                رسائل التواصل
               </Link>
               <span className="text-muted-foreground">·</span>
               <Link
                 className="underline underline-offset-4 hover:text-accent-foreground"
                 to="/admin/pages"
               >
-                Pages
+                الصفحات
               </Link>
               <span className="text-muted-foreground">·</span>
               <Link
                 className="underline underline-offset-4 hover:text-accent-foreground"
                 to="/admin/admins"
               >
-                Admins
+                المسؤولون
               </Link>
             </div>
           </div>

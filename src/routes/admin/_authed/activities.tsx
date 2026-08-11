@@ -10,11 +10,11 @@ function ActivitiesPage() {
   return (
     <CollectionCrudScreen
       queryKey="activities"
-      title="Scientific Activities"
-      description="Shown on the About page."
+      title="الأنشطة العلمية"
+      description="تظهر في صفحة نبذة عني."
       fields={[
-        { name: "en", label: "English" },
-        { name: "ar", label: "Arabic" },
+        { name: "en", label: "الإنجليزية" },
+        { name: "ar", label: "العربية" },
       ]}
       api={activitiesCrud}
       getRowTitle={(row: CrudRow) => String(row["en"])}

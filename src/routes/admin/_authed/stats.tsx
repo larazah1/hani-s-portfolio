@@ -10,12 +10,12 @@ function StatsPage() {
   return (
     <CollectionCrudScreen
       queryKey="stats"
-      title="Statistics"
-      description="Shown as the stat row on the homepage (e.g. Years of Experience, Publications)."
+      title="الإحصائيات"
+      description="تظهر كصف إحصائيات في الصفحة الرئيسية (مثال: سنوات الخبرة، المنشورات)."
       fields={[
-        { name: "label", label: "Label" },
-        { name: "labelAr", label: "Label (Arabic)" },
-        { name: "value", label: "Value (e.g. 34+)" },
+        { name: "label", label: "التسمية" },
+        { name: "labelAr", label: "التسمية (بالعربية)" },
+        { name: "value", label: "القيمة (مثال: 34+)" },
       ]}
       api={statsCrud}
       getRowTitle={(row: CrudRow) => String(row["label"])}

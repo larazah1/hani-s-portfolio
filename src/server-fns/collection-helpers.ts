@@ -74,7 +74,7 @@ export async function genericUpdate(
     .set({ ...fields, updatedAt: new Date() })
     .where(eq(table.id, id))
     .returning();
-  if (!row) throw new Error("Not found.");
+  if (!row) throw new Error("العنصر غير موجود.");
   const savedRow = row as Record<string, any>;
   await logActivity(adminId, "updated", entityType, id, summarize(savedRow));
   return savedRow;

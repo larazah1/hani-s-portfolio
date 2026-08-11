@@ -10,11 +10,11 @@ function SocialLinksPage() {
   return (
     <CollectionCrudScreen
       queryKey="social-links"
-      title="Social Links"
-      description="Shown in the footer and contact page. Only appears on the public site when a link is present."
+      title="روابط التواصل الاجتماعي"
+      description="تظهر في التذييل وصفحة التواصل. لا تظهر في الموقع العام إلا عند توفر رابط."
       fields={[
-        { name: "label", label: "Label (e.g. LinkedIn)" },
-        { name: "url", label: "URL" },
+        { name: "label", label: "التسمية (مثال: LinkedIn)" },
+        { name: "url", label: "الرابط" },
       ]}
       api={socialLinksCrud}
       getRowTitle={(row: CrudRow) => String(row["label"])}

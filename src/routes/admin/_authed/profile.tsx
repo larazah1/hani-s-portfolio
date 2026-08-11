@@ -32,41 +32,41 @@ type FormState = {
 
 const FIELD_GROUPS: { heading: string; fields: { name: keyof FormState; label: string }[] }[] = [
   {
-    heading: "Identity",
+    heading: "الهوية",
     fields: [
-      { name: "name", label: "Name" },
-      { name: "nameAr", label: "Name (Arabic)" },
-      { name: "credentials", label: "Credentials (e.g. PhD)" },
-      { name: "credentialsAr", label: "Credentials (Arabic)" },
+      { name: "name", label: "الاسم" },
+      { name: "nameAr", label: "الاسم (بالعربية)" },
+      { name: "credentials", label: "المؤهلات (مثال: دكتوراه)" },
+      { name: "credentialsAr", label: "المؤهلات (بالعربية)" },
     ],
   },
   {
-    heading: "Hero",
+    heading: "الصفحة الرئيسية",
     fields: [
-      { name: "title", label: "Professional Title" },
-      { name: "titleAr", label: "Professional Title (Arabic)" },
-      { name: "tagline", label: "Short Description" },
-      { name: "taglineAr", label: "Short Description (Arabic)" },
-      { name: "location", label: "Location" },
-      { name: "locationAr", label: "Location (Arabic)" },
+      { name: "title", label: "المسمى الوظيفي" },
+      { name: "titleAr", label: "المسمى الوظيفي (بالعربية)" },
+      { name: "tagline", label: "وصف مختصر" },
+      { name: "taglineAr", label: "وصف مختصر (بالعربية)" },
+      { name: "location", label: "الموقع" },
+      { name: "locationAr", label: "الموقع (بالعربية)" },
     ],
   },
   {
-    heading: "Contact",
+    heading: "التواصل",
     fields: [
-      { name: "email", label: "Email" },
-      { name: "phone", label: "Phone" },
+      { name: "email", label: "البريد الإلكتروني" },
+      { name: "phone", label: "الهاتف" },
     ],
   },
   {
-    heading: "Hero Buttons",
+    heading: "أزرار الصفحة الرئيسية",
     fields: [
-      { name: "primaryCtaLabel", label: "Primary Button Text" },
-      { name: "primaryCtaLabelAr", label: "Primary Button Text (Arabic)" },
-      { name: "primaryCtaTo", label: "Primary Button Link (e.g. /publications)" },
-      { name: "secondaryCtaLabel", label: "Secondary Button Text" },
-      { name: "secondaryCtaLabelAr", label: "Secondary Button Text (Arabic)" },
-      { name: "secondaryCtaTo", label: "Secondary Button Link (e.g. /contact)" },
+      { name: "primaryCtaLabel", label: "نص الزر الأساسي" },
+      { name: "primaryCtaLabelAr", label: "نص الزر الأساسي (بالعربية)" },
+      { name: "primaryCtaTo", label: "رابط الزر الأساسي (مثال: /publications)" },
+      { name: "secondaryCtaLabel", label: "نص الزر الثانوي" },
+      { name: "secondaryCtaLabelAr", label: "نص الزر الثانوي (بالعربية)" },
+      { name: "secondaryCtaTo", label: "رابط الزر الثانوي (مثال: /contact)" },
     ],
   },
 ];
@@ -112,7 +112,7 @@ function ProfilePage() {
   });
 
   if (isLoading || !form) {
-    return <p className="text-sm text-muted-foreground">Loading…</p>;
+    return <p className="text-sm text-muted-foreground">جارٍ التحميل…</p>;
   }
 
   function set<K extends keyof FormState>(key: K, value: string) {
@@ -121,12 +121,12 @@ function ProfilePage() {
 
   return (
     <div className="max-w-3xl">
-      <p className="eyebrow">Profile & Hero</p>
+      <p className="eyebrow">الملف الشخصي والصفحة الرئيسية</p>
       <h1 className="mt-2 font-[family-name:var(--font-display)] text-2xl font-semibold">
-        Profile & Hero
+        الملف الشخصي والصفحة الرئيسية
       </h1>
       <p className="mt-1 text-sm text-muted-foreground">
-        Powers the header, homepage hero, and contact details shown across the site.
+        يغذّي هذا القسم الترويسة وواجهة الصفحة الرئيسية وبيانات التواصل الظاهرة في أنحاء الموقع.
       </p>
 
       <form
@@ -152,9 +152,9 @@ function ProfilePage() {
 
         <div className="flex items-center gap-3">
           <Button type="submit" disabled={saveMutation.isPending}>
-            {saveMutation.isPending ? "Saving…" : "Save Changes"}
+            {saveMutation.isPending ? "جارٍ الحفظ…" : "حفظ التغييرات"}
           </Button>
-          {saved && <span className="text-sm text-muted-foreground">Saved.</span>}
+          {saved && <span className="text-sm text-muted-foreground">تم الحفظ.</span>}
         </div>
       </form>
     </div>

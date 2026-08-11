@@ -10,11 +10,11 @@ function ExpertisePage() {
   return (
     <CollectionCrudScreen
       queryKey="expertise"
-      title="Expertise"
-      description="Shown as the Key Expertise grid on the homepage."
+      title="مجالات الخبرة"
+      description="تظهر ضمن شبكة أبرز مجالات الخبرة في الصفحة الرئيسية."
       fields={[
-        { name: "en", label: "English" },
-        { name: "ar", label: "Arabic" },
+        { name: "en", label: "الإنجليزية" },
+        { name: "ar", label: "العربية" },
       ]}
       api={expertiseCrud}
       getRowTitle={(row: CrudRow) => String(row["en"])}

@@ -30,6 +30,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { publicationTypeAr } from "@/lib/publication-i18n";
 import {
   deletePublication,
   duplicatePublication,
@@ -39,6 +40,8 @@ import {
 export const Route = createFileRoute("/admin/_authed/publications/")({
   component: PublicationsListPage,
 });
+
+const STATUS_AR: Record<string, string> = { published: "منشور", draft: "مسودة" };
 
 function PublicationsListPage() {
   const router = useRouter();
@@ -85,15 +88,15 @@ function PublicationsListPage() {
     <div>
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <p className="eyebrow">Publications</p>
+          <p className="eyebrow">المنشورات</p>
           <h1 className="mt-2 font-[family-name:var(--font-display)] text-2xl font-semibold">
-            Publications
+            المنشورات
           </h1>
         </div>
         <Button asChild>
           <Link to="/admin/publications/new">
             <Plus />
-            Add Publication
+            إضافة منشور
           </Link>
         </Button>
       </div>
@@ -102,7 +105,7 @@ function PublicationsListPage() {
         <Input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search publications"
+          placeholder="البحث في المنشورات"
           className="max-w-xs"
         />
         <Select value={type} onValueChange={setType}>
@@ -112,7 +115,7 @@ function PublicationsListPage() {
           <SelectContent>
             {types.map((t) => (
               <SelectItem key={t} value={t}>
-                {t === "All" ? "All types" : t}
+                {t === "All" ? "كل الأنواع" : (publicationTypeAr[t] ?? t)}
               </SelectItem>
             ))}
           </SelectContent>
@@ -121,19 +124,19 @@ function PublicationsListPage() {
 
       <div className="mt-6 overflow-hidden rounded-lg border border-border bg-card">
         {isLoading ? (
-          <p className="p-6 text-sm text-muted-foreground">Loading…</p>
+          <p className="p-6 text-sm text-muted-foreground">جارٍ التحميل…</p>
         ) : filtered.length === 0 ? (
-          <p className="p-6 text-sm text-muted-foreground">No publications match.</p>
+          <p className="p-6 text-sm text-muted-foreground">لا توجد منشورات مطابقة.</p>
         ) : (
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Title</TableHead>
-                <TableHead>Year</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Featured</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
+                <TableHead>العنوان</TableHead>
+                <TableHead>السنة</TableHead>
+                <TableHead>النوع</TableHead>
+                <TableHead>الحالة</TableHead>
+                <TableHead>مميز</TableHead>
+                <TableHead className="text-end">الإجراءات</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -144,13 +147,13 @@ function PublicationsListPage() {
                     <p className="truncate text-xs text-muted-foreground">{p.journal}</p>
                   </TableCell>
                   <TableCell>{p.year}</TableCell>
-                  <TableCell>{p.type}</TableCell>
+                  <TableCell>{publicationTypeAr[p.type] ?? p.type}</TableCell>
                   <TableCell>
                     <Badge variant={p.status === "published" ? "default" : "secondary"}>
-                      {p.status}
+                      {STATUS_AR[p.status] ?? p.status}
                     </Badge>
                   </TableCell>
-                  <TableCell>{p.featured ? "Yes" : "—"}</TableCell>
+                  <TableCell>{p.featured ? "نعم" : "—"}</TableCell>
                   <TableCell>
                     <div className="flex justify-end gap-2">
                       {p.url && (
@@ -165,7 +168,7 @@ function PublicationsListPage() {
                           to="/admin/publications/$publicationId"
                           params={{ publicationId: p.id }}
                         >
-                          Edit
+                          تعديل
                         </Link>
                       </Button>
                       <Button
@@ -190,18 +193,18 @@ function PublicationsListPage() {
       <AlertDialog open={!!deleteTarget} onOpenChange={(open) => !open && setDeleteTarget(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete this publication?</AlertDialogTitle>
+            <AlertDialogTitle>هل تريد حذف هذا المنشور؟</AlertDialogTitle>
             <AlertDialogDescription>
-              {deleteTarget?.title} — this can&rsquo;t be undone, and it will be removed from any
-              homepage carousel it appears in.
+              {deleteTarget?.title} — لا يمكن التراجع عن هذا الإجراء، وسيُحذف المنشور من أي عرض
+              شرائح في الصفحة الرئيسية يظهر فيه.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>إلغاء</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => deleteTarget && deleteMutation.mutate(deleteTarget.id)}
             >
-              Delete
+              حذف
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

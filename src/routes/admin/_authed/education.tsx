@@ -10,22 +10,22 @@ function EducationPage() {
   return (
     <CollectionCrudScreen
       queryKey="education"
-      title="Education"
-      description="Academic background shown on the About page."
+      title="التعليم"
+      description="المؤهلات الأكاديمية التي تظهر في صفحة نبذة عني."
       fields={[
-        { name: "degree", label: "Degree (e.g. PhD)" },
-        { name: "degreeAr", label: "Degree (Arabic)" },
-        { name: "field", label: "Field of Study" },
-        { name: "fieldAr", label: "Field of Study (Arabic)" },
-        { name: "university", label: "University" },
-        { name: "universityAr", label: "University (Arabic)" },
-        { name: "location", label: "Location" },
-        { name: "locationAr", label: "Location (Arabic)" },
-        { name: "year", label: "Year" },
-        { name: "description", label: "Description", type: "textarea", required: false },
+        { name: "degree", label: "الدرجة العلمية (مثال: دكتوراه)" },
+        { name: "degreeAr", label: "الدرجة العلمية (بالعربية)" },
+        { name: "field", label: "التخصص" },
+        { name: "fieldAr", label: "التخصص (بالعربية)" },
+        { name: "university", label: "الجامعة" },
+        { name: "universityAr", label: "الجامعة (بالعربية)" },
+        { name: "location", label: "الموقع" },
+        { name: "locationAr", label: "الموقع (بالعربية)" },
+        { name: "year", label: "السنة" },
+        { name: "description", label: "الوصف", type: "textarea", required: false },
         {
           name: "descriptionAr",
-          label: "Description (Arabic)",
+          label: "الوصف (بالعربية)",
           type: "textarea",
           required: false,
         },

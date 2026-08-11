@@ -7,16 +7,16 @@ export const Route = createFileRoute("/admin/forgot-password")({
 
 function ForgotPasswordPage() {
   return (
-    <AuthLayout title="Forgot Password" subtitle="Password resets are peer-assisted.">
+    <AuthLayout title="نسيت كلمة المرور" subtitle="إعادة تعيين كلمة المرور تتم بمساعدة مسؤول آخر.">
       <div className="space-y-4 text-sm text-muted-foreground">
         <p>
-          For security, this site doesn&rsquo;t email password reset links. Instead, ask another
-          active admin to sign in and generate a new setup link for you from{" "}
-          <span className="font-medium text-foreground">Admin → Admins</span>.
+          لأسباب أمنية، لا يرسل هذا الموقع روابط إعادة تعيين كلمة المرور عبر البريد الإلكتروني.
+          بدلاً من ذلك، اطلب من مسؤول آخر نشط تسجيل الدخول وإنشاء رابط إعداد جديد لك من{" "}
+          <span className="font-medium text-foreground">الإدارة ← المسؤولون</span>.
         </p>
         <p>
-          If no other admin is available, whoever manages the server can run a recovery script
-          directly against the database.
+          إذا لم يتوفر أي مسؤول آخر، يمكن لمن يدير الخادم تشغيل نص استرداد مباشرةً على قاعدة
+          البيانات.
         </p>
       </div>
       <div className="mt-6 text-center text-sm">
@@ -24,7 +24,7 @@ function ForgotPasswordPage() {
           to="/admin/login"
           className="text-muted-foreground underline underline-offset-4 hover:text-foreground"
         >
-          Back to sign in
+          العودة إلى تسجيل الدخول
         </Link>
       </div>
     </AuthLayout>

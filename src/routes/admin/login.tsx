@@ -23,8 +23,8 @@ export const Route = createFileRoute("/admin/login")({
 });
 
 const loginFormSchema = z.object({
-  email: z.string().trim().min(1, "Email is required.").email("Enter a valid email address."),
-  password: z.string().min(1, "Password is required."),
+  email: z.string().trim().min(1, "البريد الإلكتروني مطلوب.").email("أدخل بريدًا إلكترونيًا صالحًا."),
+  password: z.string().min(1, "كلمة المرور مطلوبة."),
   rememberMe: z.boolean(),
 });
 type LoginFormValues = z.infer<typeof loginFormSchema>;
@@ -51,7 +51,7 @@ function AdminLoginPage() {
   }
 
   return (
-    <AuthLayout title="Admin Sign In" subtitle="Sign in to manage the website.">
+    <AuthLayout title="تسجيل دخول المسؤول" subtitle="سجّل الدخول لإدارة الموقع.">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4" noValidate>
           <FormField
@@ -59,7 +59,7 @@ function AdminLoginPage() {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <FormLabel>البريد الإلكتروني</FormLabel>
                 <FormControl>
                   <Input type="email" autoComplete="username" {...field} />
                 </FormControl>
@@ -73,20 +73,20 @@ function AdminLoginPage() {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Password</FormLabel>
+                <FormLabel>كلمة المرور</FormLabel>
                 <FormControl>
                   <div className="relative">
                     <Input
                       type={showPassword ? "text" : "password"}
                       autoComplete="current-password"
-                      className="pr-10"
+                      className="pe-10"
                       {...field}
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword((v) => !v)}
-                      aria-label={showPassword ? "Hide password" : "Show password"}
-                      className="absolute inset-y-0 right-0 flex w-10 items-center justify-center text-muted-foreground hover:text-foreground"
+                      aria-label={showPassword ? "إخفاء كلمة المرور" : "إظهار كلمة المرور"}
+                      className="absolute inset-y-0 end-0 flex w-10 items-center justify-center text-muted-foreground hover:text-foreground"
                     >
                       {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                     </button>
@@ -105,7 +105,7 @@ function AdminLoginPage() {
                 <FormControl>
                   <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                 </FormControl>
-                <FormLabel className="cursor-pointer font-normal">Remember me</FormLabel>
+                <FormLabel className="cursor-pointer font-normal">تذكرني</FormLabel>
               </FormItem>
             )}
           />
@@ -118,7 +118,7 @@ function AdminLoginPage() {
           )}
 
           <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
-            {form.formState.isSubmitting ? "Signing in…" : "Sign In"}
+            {form.formState.isSubmitting ? "جارٍ تسجيل الدخول…" : "تسجيل الدخول"}
           </Button>
 
           <div className="text-center text-sm">
@@ -126,7 +126,7 @@ function AdminLoginPage() {
               to="/admin/forgot-password"
               className="text-muted-foreground underline underline-offset-4 hover:text-foreground"
             >
-              Forgot password?
+              نسيت كلمة المرور؟
             </Link>
           </div>
         </form>

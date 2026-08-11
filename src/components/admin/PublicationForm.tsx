@@ -10,6 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { publicationTypeAr } from "@/lib/publication-i18n";
 
 const PUBLICATION_TYPES = [
   "Journal Article",
@@ -80,25 +81,25 @@ export function PublicationForm({
     >
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-1.5 sm:col-span-2">
-          <label className="text-sm font-medium">Publication Title</label>
+          <label className="text-sm font-medium">عنوان المنشور</label>
           <Input value={form.title} onChange={(e) => set("title", e.target.value)} required />
         </div>
         <div className="space-y-1.5 sm:col-span-2">
-          <label className="text-sm font-medium">Publication Title (Arabic)</label>
+          <label className="text-sm font-medium">عنوان المنشور (بالعربية)</label>
           <Input value={form.titleAr} onChange={(e) => set("titleAr", e.target.value)} required />
         </div>
 
         <div className="space-y-1.5">
-          <label className="text-sm font-medium">Authors</label>
+          <label className="text-sm font-medium">المؤلفون</label>
           <Input value={form.authors} onChange={(e) => set("authors", e.target.value)} required />
         </div>
         <div className="space-y-1.5">
-          <label className="text-sm font-medium">Journal / Publisher</label>
+          <label className="text-sm font-medium">المجلة / الناشر</label>
           <Input value={form.journal} onChange={(e) => set("journal", e.target.value)} required />
         </div>
 
         <div className="space-y-1.5">
-          <label className="text-sm font-medium">Publication Year</label>
+          <label className="text-sm font-medium">سنة النشر</label>
           <Input
             type="number"
             value={form.year}
@@ -107,7 +108,7 @@ export function PublicationForm({
           />
         </div>
         <div className="space-y-1.5">
-          <label className="text-sm font-medium">Publication Type</label>
+          <label className="text-sm font-medium">نوع المنشور</label>
           <Select
             value={form.type}
             onValueChange={(v) => set("type", v as PublicationFormValues["type"])}
@@ -118,7 +119,7 @@ export function PublicationForm({
             <SelectContent>
               {PUBLICATION_TYPES.map((t) => (
                 <SelectItem key={t} value={t}>
-                  {t}
+                  {publicationTypeAr[t] ?? t}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -126,25 +127,25 @@ export function PublicationForm({
         </div>
 
         <div className="space-y-1.5">
-          <label className="text-sm font-medium">Research Area</label>
+          <label className="text-sm font-medium">المجال البحثي</label>
           <Input value={form.area} onChange={(e) => set("area", e.target.value)} required />
         </div>
         <div className="space-y-1.5">
-          <label className="text-sm font-medium">Research Area (Arabic)</label>
+          <label className="text-sm font-medium">المجال البحثي (بالعربية)</label>
           <Input value={form.areaAr} onChange={(e) => set("areaAr", e.target.value)} />
         </div>
 
         <div className="space-y-1.5">
           <label className="text-sm font-medium">DOI</label>
-          <Input value={form.doi} onChange={(e) => set("doi", e.target.value)} />
+          <Input value={form.doi} onChange={(e) => set("doi", e.target.value)} dir="ltr" />
         </div>
         <div className="space-y-1.5">
-          <label className="text-sm font-medium">Publication URL</label>
-          <Input value={form.url} onChange={(e) => set("url", e.target.value)} />
+          <label className="text-sm font-medium">رابط المنشور</label>
+          <Input value={form.url} onChange={(e) => set("url", e.target.value)} dir="ltr" />
         </div>
 
         <div className="space-y-1.5 sm:col-span-2">
-          <label className="text-sm font-medium">Short Summary</label>
+          <label className="text-sm font-medium">ملخص مختصر</label>
           <Textarea
             rows={4}
             value={form.summary}
@@ -156,14 +157,14 @@ export function PublicationForm({
       <div className="flex flex-wrap items-center gap-8 rounded-md border border-border bg-card px-4 py-3">
         <label className="flex items-center gap-2 text-sm font-medium">
           <Switch checked={form.featured} onCheckedChange={(v) => set("featured", v)} />
-          Featured on homepage
+          مميز في الصفحة الرئيسية
         </label>
         <label className="flex items-center gap-2 text-sm font-medium">
           <Switch
             checked={form.status === "published"}
             onCheckedChange={(v) => set("status", v ? "published" : "draft")}
           />
-          Published
+          منشور
         </label>
       </div>
 
@@ -174,7 +175,7 @@ export function PublicationForm({
       )}
 
       <Button type="submit" disabled={isSubmitting}>
-        {isSubmitting ? "Saving…" : submitLabel}
+        {isSubmitting ? "جارٍ الحفظ…" : submitLabel}
       </Button>
     </form>
   );

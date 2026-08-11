@@ -36,17 +36,17 @@ function EditPublicationPage() {
       void queryClient.invalidateQueries({ queryKey: ["publications"] });
       void router.navigate({ to: "/admin/publications" });
     },
-    onError: (e: Error) => setError(e.message || "Something went wrong."),
+    onError: (e: Error) => setError(e.message || "حدث خطأ ما."),
   });
 
-  if (isLoading) return <p className="text-sm text-muted-foreground">Loading…</p>;
-  if (!data) return <p className="text-sm text-muted-foreground">Publication not found.</p>;
+  if (isLoading) return <p className="text-sm text-muted-foreground">جارٍ التحميل…</p>;
+  if (!data) return <p className="text-sm text-muted-foreground">المنشور غير موجود.</p>;
 
   return (
     <div>
-      <p className="eyebrow">Publications</p>
+      <p className="eyebrow">المنشورات</p>
       <h1 className="mt-2 font-[family-name:var(--font-display)] text-2xl font-semibold">
-        Edit Publication
+        تعديل المنشور
       </h1>
       <div className="mt-8">
         <PublicationForm
@@ -65,7 +65,7 @@ function EditPublicationPage() {
             featured: data.featured,
             status: data.status,
           }}
-          submitLabel="Save Changes"
+          submitLabel="حفظ التغييرات"
           isSubmitting={mutation.isPending}
           error={error}
           onSubmit={(values) => {

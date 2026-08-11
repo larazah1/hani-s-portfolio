@@ -33,19 +33,19 @@ function NewPublicationPage() {
       void queryClient.invalidateQueries({ queryKey: ["publications"] });
       void router.navigate({ to: "/admin/publications" });
     },
-    onError: (e: Error) => setError(e.message || "Something went wrong."),
+    onError: (e: Error) => setError(e.message || "حدث خطأ ما."),
   });
 
   return (
     <div>
-      <p className="eyebrow">Publications</p>
+      <p className="eyebrow">المنشورات</p>
       <h1 className="mt-2 font-[family-name:var(--font-display)] text-2xl font-semibold">
-        Add Publication
+        إضافة منشور
       </h1>
       <div className="mt-8">
         <PublicationForm
           initial={emptyPublicationForm}
-          submitLabel="Create Publication"
+          submitLabel="إنشاء منشور"
           isSubmitting={mutation.isPending}
           error={error}
           onSubmit={(values) => {

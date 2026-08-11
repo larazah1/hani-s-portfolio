@@ -10,11 +10,11 @@ function ResearchSpecialtiesPage() {
   return (
     <CollectionCrudScreen
       queryKey="research-specialties"
-      title="Research Specialties"
-      description="Shown on the About page."
+      title="التخصصات البحثية"
+      description="تظهر في صفحة نبذة عني."
       fields={[
-        { name: "en", label: "English" },
-        { name: "ar", label: "Arabic" },
+        { name: "en", label: "الإنجليزية" },
+        { name: "ar", label: "العربية" },
       ]}
       api={researchSpecialtiesCrud}
       getRowTitle={(row: CrudRow) => String(row["en"])}

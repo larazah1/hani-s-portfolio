@@ -10,16 +10,16 @@ function MembershipsPage() {
   return (
     <CollectionCrudScreen
       queryKey="memberships"
-      title="Memberships & Committees"
-      description="Shown on the About page."
+      title="العضويات واللجان"
+      description="تظهر في صفحة نبذة عني."
       fields={[
-        { name: "title", label: "Title" },
-        { name: "titleAr", label: "Title (Arabic)" },
-        { name: "period", label: "Period (e.g. 2014 – 2023)", required: false },
-        { name: "description", label: "Description", type: "textarea", required: false },
+        { name: "title", label: "العنوان" },
+        { name: "titleAr", label: "العنوان (بالعربية)" },
+        { name: "period", label: "الفترة (مثال: 2014 – 2023)", required: false },
+        { name: "description", label: "الوصف", type: "textarea", required: false },
         {
           name: "descriptionAr",
-          label: "Description (Arabic)",
+          label: "الوصف (بالعربية)",
           type: "textarea",
           required: false,
         },
