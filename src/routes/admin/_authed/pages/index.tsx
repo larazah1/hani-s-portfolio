@@ -1,6 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { listPages } from "@/server-fns/pages";
@@ -15,22 +14,14 @@ function PagesListPage() {
 
   return (
     <div>
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <div>
-          <p className="eyebrow">هيكل الموقع</p>
-          <h1 className="mt-2 font-[family-name:var(--font-display)] text-2xl font-semibold">
-            الصفحات
-          </h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            كل صفحة مبنية من أقسام يمكنك إضافتها أو حذفها أو إعادة ترتيبها.
-          </p>
-        </div>
-        <Button asChild>
-          <Link to="/admin/pages/new">
-            <Plus />
-            إضافة صفحة
-          </Link>
-        </Button>
+      <div>
+        <p className="eyebrow">هيكل الموقع</p>
+        <h1 className="mt-2 font-[family-name:var(--font-display)] text-2xl font-semibold">
+          الصفحات
+        </h1>
+        <p className="mt-1 text-sm text-muted-foreground">
+          كل صفحة مبنية من أقسام يمكنك إضافتها أو حذفها أو إعادة ترتيبها.
+        </p>
       </div>
 
       <div className="mt-8 overflow-hidden rounded-lg border border-border bg-card">

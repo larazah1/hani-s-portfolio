@@ -39,7 +39,6 @@ import { Route as AdminAuthedMediaMediaIdRouteImport } from './routes/admin/_aut
 import { Route as AdminAuthedMediaNewRouteImport } from './routes/admin/_authed/media/new'
 import { Route as AdminAuthedPagesIndexRouteImport } from './routes/admin/_authed/pages/index'
 import { Route as AdminAuthedPagesPageIdRouteImport } from './routes/admin/_authed/pages/$pageId'
-import { Route as AdminAuthedPagesNewRouteImport } from './routes/admin/_authed/pages/new'
 import { Route as AdminAuthedPublicationsIndexRouteImport } from './routes/admin/_authed/publications/index'
 import { Route as AdminAuthedPublicationsPublicationIdRouteImport } from './routes/admin/_authed/publications/$publicationId'
 import { Route as AdminAuthedPublicationsNewRouteImport } from './routes/admin/_authed/publications/new'
@@ -198,11 +197,6 @@ const AdminAuthedPagesPageIdRoute = AdminAuthedPagesPageIdRouteImport.update({
   path: '/pages/$pageId',
   getParentRoute: () => AdminAuthedRoute,
 } as any)
-const AdminAuthedPagesNewRoute = AdminAuthedPagesNewRouteImport.update({
-  id: '/pages/new',
-  path: '/pages/new',
-  getParentRoute: () => AdminAuthedRoute,
-} as any)
 const AdminAuthedPublicationsIndexRoute =
   AdminAuthedPublicationsIndexRouteImport.update({
     id: '/publications/',
@@ -268,7 +262,6 @@ export interface FileRoutesByFullPath {
   '/admin/media/$mediaId': typeof AdminAuthedMediaMediaIdRoute
   '/admin/media/new': typeof AdminAuthedMediaNewRoute
   '/admin/pages/$pageId': typeof AdminAuthedPagesPageIdRoute
-  '/admin/pages/new': typeof AdminAuthedPagesNewRoute
   '/admin/publications/$publicationId': typeof AdminAuthedPublicationsPublicationIdRoute
   '/admin/publications/new': typeof AdminAuthedPublicationsNewRoute
   '/admin/recommendations/$recommendationId': typeof AdminAuthedRecommendationsRecommendationIdRoute
@@ -305,7 +298,6 @@ export interface FileRoutesByTo {
   '/admin/media/$mediaId': typeof AdminAuthedMediaMediaIdRoute
   '/admin/media/new': typeof AdminAuthedMediaNewRoute
   '/admin/pages/$pageId': typeof AdminAuthedPagesPageIdRoute
-  '/admin/pages/new': typeof AdminAuthedPagesNewRoute
   '/admin/publications/$publicationId': typeof AdminAuthedPublicationsPublicationIdRoute
   '/admin/publications/new': typeof AdminAuthedPublicationsNewRoute
   '/admin/recommendations/$recommendationId': typeof AdminAuthedRecommendationsRecommendationIdRoute
@@ -345,7 +337,6 @@ export interface FileRoutesById {
   '/admin/_authed/media/$mediaId': typeof AdminAuthedMediaMediaIdRoute
   '/admin/_authed/media/new': typeof AdminAuthedMediaNewRoute
   '/admin/_authed/pages/$pageId': typeof AdminAuthedPagesPageIdRoute
-  '/admin/_authed/pages/new': typeof AdminAuthedPagesNewRoute
   '/admin/_authed/publications/$publicationId': typeof AdminAuthedPublicationsPublicationIdRoute
   '/admin/_authed/publications/new': typeof AdminAuthedPublicationsNewRoute
   '/admin/_authed/recommendations/$recommendationId': typeof AdminAuthedRecommendationsRecommendationIdRoute
@@ -385,7 +376,6 @@ export interface FileRouteTypes {
     | '/admin/media/$mediaId'
     | '/admin/media/new'
     | '/admin/pages/$pageId'
-    | '/admin/pages/new'
     | '/admin/publications/$publicationId'
     | '/admin/publications/new'
     | '/admin/recommendations/$recommendationId'
@@ -422,7 +412,6 @@ export interface FileRouteTypes {
     | '/admin/media/$mediaId'
     | '/admin/media/new'
     | '/admin/pages/$pageId'
-    | '/admin/pages/new'
     | '/admin/publications/$publicationId'
     | '/admin/publications/new'
     | '/admin/recommendations/$recommendationId'
@@ -461,7 +450,6 @@ export interface FileRouteTypes {
     | '/admin/_authed/media/$mediaId'
     | '/admin/_authed/media/new'
     | '/admin/_authed/pages/$pageId'
-    | '/admin/_authed/pages/new'
     | '/admin/_authed/publications/$publicationId'
     | '/admin/_authed/publications/new'
     | '/admin/_authed/recommendations/$recommendationId'
@@ -693,13 +681,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminAuthedPagesPageIdRouteImport
       parentRoute: typeof AdminAuthedRoute
     }
-    '/admin/_authed/pages/new': {
-      id: '/admin/_authed/pages/new'
-      path: '/pages/new'
-      fullPath: '/admin/pages/new'
-      preLoaderRoute: typeof AdminAuthedPagesNewRouteImport
-      parentRoute: typeof AdminAuthedRoute
-    }
     '/admin/_authed/publications/': {
       id: '/admin/_authed/publications/'
       path: '/publications'
@@ -764,7 +745,6 @@ interface AdminAuthedRouteChildren {
   AdminAuthedMediaMediaIdRoute: typeof AdminAuthedMediaMediaIdRoute
   AdminAuthedMediaNewRoute: typeof AdminAuthedMediaNewRoute
   AdminAuthedPagesPageIdRoute: typeof AdminAuthedPagesPageIdRoute
-  AdminAuthedPagesNewRoute: typeof AdminAuthedPagesNewRoute
   AdminAuthedPublicationsPublicationIdRoute: typeof AdminAuthedPublicationsPublicationIdRoute
   AdminAuthedPublicationsNewRoute: typeof AdminAuthedPublicationsNewRoute
   AdminAuthedRecommendationsRecommendationIdRoute: typeof AdminAuthedRecommendationsRecommendationIdRoute
@@ -794,7 +774,6 @@ const AdminAuthedRouteChildren: AdminAuthedRouteChildren = {
   AdminAuthedMediaMediaIdRoute: AdminAuthedMediaMediaIdRoute,
   AdminAuthedMediaNewRoute: AdminAuthedMediaNewRoute,
   AdminAuthedPagesPageIdRoute: AdminAuthedPagesPageIdRoute,
-  AdminAuthedPagesNewRoute: AdminAuthedPagesNewRoute,
   AdminAuthedPublicationsPublicationIdRoute:
     AdminAuthedPublicationsPublicationIdRoute,
   AdminAuthedPublicationsNewRoute: AdminAuthedPublicationsNewRoute,

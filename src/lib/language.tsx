@@ -42,13 +42,10 @@ const dictionary = {
     en: "Selected research and scientific contributions in geophysics, seismology, seismic hazards, and the geology of Saudi Arabia.",
     ar: "أبحاث ومساهمات علمية مختارة في الجيوفيزياء وعلم الزلازل والمخاطر الزلزالية وجيولوجيا المملكة العربية السعودية.",
   },
-  exploreAllPublications: { en: "Explore All Publications", ar: "استعراض جميع المنشورات" },
+  exploreAllPublications: { en: "Explore All", ar: "استعراض الكل" },
   media: { en: "Media", ar: "الإعلام" },
   interviewsArticlesHeadline: { en: "Interviews & articles", ar: "لقاءات ومقالات" },
-  exploreInterviewsArticles: {
-    en: "Explore Interviews & Articles",
-    ar: "استعراض اللقاءات والمقالات",
-  },
+  exploreInterviewsArticles: { en: "Explore All", ar: "استعراض الكل" },
   recommendations: { en: "Recommendations", ar: "توصيات" },
   recommendationsHeadline: {
     en: "Recommendations & professional recognition",

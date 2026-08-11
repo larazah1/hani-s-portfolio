@@ -43,30 +43,6 @@ export const getPageForEdit = createServerFn({ method: "GET" })
     return { page, sections: pageSections };
   });
 
-const createPageSchema = z.object({
-  path: safePath().min(1),
-  title: safeString(200, 1),
-  titleAr: safeString(200, 1),
-  navLabel: safeString(100).optional(),
-  navLabelAr: safeString(100).optional(),
-  showInNav: z.boolean().optional().default(true),
-});
-
-export const createPage = createServerFn({ method: "POST" })
-  .validator(createPageSchema)
-  .handler(async ({ data, context }) => {
-    const admin = requireAdmin(context);
-    const existing = await db.select({ sortOrder: pages.sortOrder }).from(pages);
-    const maxOrder = existing.reduce((max, p) => Math.max(max, p.sortOrder), -1);
-    const [row] = await db
-      .insert(pages)
-      .values({ ...data, isCore: false, status: "draft", sortOrder: maxOrder + 1 })
-      .returning();
-    if (!row) throw new Error("فشل إنشاء الصفحة.");
-    await logActivity(admin.id, "created", "page", row.id, row.title);
-    return row;
-  });
-
 const updatePageSchema = z.object({
   id: z.string().uuid(),
   path: safePath().optional(),

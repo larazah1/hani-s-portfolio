@@ -495,7 +495,18 @@ function PublicationsCarouselSection({ section }: { section: ResolvedSection }) 
   const items = (section.data as Publication[] | null) ?? [];
 
   return (
-    <Section eyebrow={heading.eyebrow} title={heading.title}>
+    <Section
+      eyebrow={heading.eyebrow}
+      title={heading.title}
+      action={
+        <Button asChild variant="outline" className="shrink-0">
+          <Link to="/publications">
+            {t("exploreAllPublications")}
+            <ArrowRight className="rtl:rotate-180" />
+          </Link>
+        </Button>
+      }
+    >
       <p className="-mt-2 mb-8 max-w-2xl text-sm text-muted-foreground">{t("publicationsIntro")}</p>
       {items.length === 0 ? (
         <EmptyNote>{t("emptyFeaturedPublications")}</EmptyNote>
@@ -514,14 +525,6 @@ function PublicationsCarouselSection({ section }: { section: ResolvedSection }) 
           </div>
         </Carousel>
       )}
-      <div className="mt-8">
-        <Button asChild variant="outline">
-          <Link to="/publications">
-            {t("exploreAllPublications")}
-            <ArrowRight className="rtl:rotate-180" />
-          </Link>
-        </Button>
-      </div>
     </Section>
   );
 }
@@ -536,7 +539,18 @@ function MediaCarouselSection({ section }: { section: ResolvedSection }) {
   }));
 
   return (
-    <Section eyebrow={heading.eyebrow} title={heading.title}>
+    <Section
+      eyebrow={heading.eyebrow}
+      title={heading.title}
+      action={
+        <Button asChild variant="outline" className="shrink-0">
+          <Link to="/interviews">
+            {t("exploreInterviewsArticles")}
+            <ArrowRight className="rtl:rotate-180" />
+          </Link>
+        </Button>
+      }
+    >
       {items.length === 0 ? (
         <EmptyNote>{t("emptyFeaturedMedia")}</EmptyNote>
       ) : (
@@ -554,14 +568,6 @@ function MediaCarouselSection({ section }: { section: ResolvedSection }) {
           </div>
         </Carousel>
       )}
-      <div className="mt-8">
-        <Button asChild variant="outline">
-          <Link to="/interviews">
-            {t("exploreInterviewsArticles")}
-            <ArrowRight className="rtl:rotate-180" />
-          </Link>
-        </Button>
-      </div>
     </Section>
   );
 }

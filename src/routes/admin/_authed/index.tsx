@@ -5,7 +5,6 @@ import {
   BarChart3,
   BookMarked,
   Eye,
-  FilePlus2,
   FileText,
   Inbox,
   LayoutTemplate,
@@ -60,10 +59,10 @@ function AdminDashboard() {
             ))}
           </div>
 
-          <div className="mt-8">
-            <p className="text-sm font-medium">إجراءات سريعة</p>
-            <div className="mt-3 grid gap-4 sm:grid-cols-2">
-              {data?.homePageId && (
+          {data?.homePageId && (
+            <div className="mt-8">
+              <p className="text-sm font-medium">إجراءات سريعة</p>
+              <div className="mt-3 grid gap-4 sm:grid-cols-2">
                 <Link
                   to="/admin/pages/$pageId"
                   params={{ pageId: data.homePageId }}
@@ -78,22 +77,9 @@ function AdminDashboard() {
                   </div>
                   <ArrowLeft className="h-4 w-4 shrink-0 text-muted-foreground transition-transform group-hover:-translate-x-0.5" />
                 </Link>
-              )}
-              <Link
-                to="/admin/pages/new"
-                className="group flex items-center gap-4 rounded-lg border border-border bg-card p-5 transition-colors hover:border-accent-foreground/40 hover:bg-secondary/40"
-              >
-                <FilePlus2 className="h-6 w-6 shrink-0 text-muted-foreground" />
-                <div className="min-w-0 flex-1">
-                  <p className="font-medium">إضافة صفحة جديدة</p>
-                  <p className="text-xs text-muted-foreground">
-                    أنشئ صفحة جديدة وأضفها إلى قائمة تنقّل الموقع.
-                  </p>
-                </div>
-                <ArrowLeft className="h-4 w-4 shrink-0 text-muted-foreground transition-transform group-hover:-translate-x-0.5" />
-              </Link>
+              </div>
             </div>
-          </div>
+          )}
 
           <div className="mt-8 rounded-lg border border-border bg-card">
             <div className="flex items-center justify-between border-b border-border px-5 py-4">
