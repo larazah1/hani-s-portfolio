@@ -3,7 +3,7 @@ import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { db } from "@/db/client";
 import { profile } from "@/db/schema";
-import { safePath, safePhone, safeString } from "@/lib/text-validation";
+import { safePath, safePhone, safeString, safeUrl } from "@/lib/text-validation";
 import { requireAdmin } from "./require-admin";
 import { logActivity } from "./collection-helpers";
 
@@ -26,6 +26,7 @@ const updateSchema = z.object({
   secondaryCtaLabel: safeString(100, 1),
   secondaryCtaLabelAr: safeString(100, 1),
   secondaryCtaTo: safePath(),
+  cvUrl: safeUrl().optional(),
 });
 
 export const getProfile = createServerFn({ method: "GET" }).handler(async ({ context }) => {

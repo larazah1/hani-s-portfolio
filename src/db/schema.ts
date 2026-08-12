@@ -86,6 +86,7 @@ export const profile = pgTable("profile", {
   secondaryCtaLabel: text("secondary_cta_label").notNull(),
   secondaryCtaLabelAr: text("secondary_cta_label_ar").notNull(),
   secondaryCtaTo: text("secondary_cta_to").notNull(),
+  cvUrl: text("cv_url"),
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
 });
 

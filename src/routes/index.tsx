@@ -11,6 +11,9 @@ export const Route = createFileRoute("/")({
   head: ({ loaderData }) => {
     const title = loaderData?.page.metaTitle ?? loaderData?.page.title ?? "Dr. Hani Mahmoud Zahran";
     const description = loaderData?.page.metaDescription ?? "";
+    const profile = loaderData?.profile;
+    const socialLinks = loaderData?.socialLinks ?? [];
+
     return {
       meta: [
         { title },
@@ -19,6 +22,25 @@ export const Route = createFileRoute("/")({
         { property: "og:description", content: description },
         { property: "og:type", content: "profile" },
         { name: "twitter:card", content: "summary_large_image" },
+        // Person structured data — helps search engines recognize this site
+        // as the authoritative result for searches on his name.
+        ...(profile
+          ? [
+              {
+                "script:ld+json": {
+                  "@context": "https://schema.org",
+                  "@type": "Person",
+                  name: profile.name,
+                  alternateName: profile.nameAr,
+                  jobTitle: profile.title,
+                  description: profile.tagline,
+                  email: `mailto:${profile.email}`,
+                  address: { "@type": "PostalAddress", addressLocality: profile.location },
+                  sameAs: socialLinks.map((s) => s.url),
+                },
+              },
+            ]
+          : []),
       ],
     };
   },

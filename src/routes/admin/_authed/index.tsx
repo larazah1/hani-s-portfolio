@@ -4,6 +4,7 @@ import {
   Activity,
   ArrowLeft,
   BarChart3,
+  Bell,
   BookMarked,
   Eye,
   Inbox,
@@ -12,7 +13,10 @@ import {
   Quote,
   ShieldCheck,
 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { getDashboardData } from "@/server-fns/dashboard";
+import { getUnreadMessageCount } from "@/server-fns/contact";
+import { getPendingRecommendationCount } from "@/server-fns/recommendations";
 
 export const Route = createFileRoute("/admin/_authed/")({
   component: AdminDashboard,
@@ -24,6 +28,35 @@ function AdminDashboard() {
     queryKey: ["dashboard"],
     queryFn: () => getDashboardData(),
   });
+  const { data: unreadCount } = useQuery({
+    queryKey: ["unread-message-count"],
+    queryFn: () => getUnreadMessageCount(),
+    refetchInterval: 30_000,
+  });
+  const { data: pendingRecommendationCount } = useQuery({
+    queryKey: ["pending-recommendation-count"],
+    queryFn: () => getPendingRecommendationCount(),
+    refetchInterval: 30_000,
+  });
+
+  const notices = [
+    unreadCount
+      ? {
+          count: unreadCount,
+          label: "رسالة تواصل غير مقروءة",
+          to: "/admin/messages",
+          cta: "عرض الرسائل",
+        }
+      : null,
+    pendingRecommendationCount
+      ? {
+          count: pendingRecommendationCount,
+          label: "توصية بانتظار المراجعة",
+          to: "/admin/recommendations",
+          cta: "مراجعة التوصيات",
+        }
+      : null,
+  ].filter((n): n is { count: number; label: string; to: string; cta: string } => n !== null);
 
   const cards = data
     ? [
@@ -43,6 +76,34 @@ function AdminDashboard() {
         مرحبًا بعودتك
       </h1>
       <p className="mt-2 text-sm text-muted-foreground">تم تسجيل الدخول باسم {admin.email}</p>
+
+      {notices.length > 0 && (
+        <div className="mt-6 flex flex-wrap items-center gap-4 rounded-lg border border-green-200 bg-green-50 px-5 py-4">
+          <Bell className="h-5 w-5 shrink-0 text-green-700" />
+          <p className="min-w-0 flex-1 text-sm font-medium text-green-900">
+            لديك{" "}
+            {notices.map((n, i) => (
+              <span key={n.to}>
+                {i > 0 && " و"}
+                {n.count} {n.label}
+              </span>
+            ))}
+            .
+          </p>
+          <div className="flex shrink-0 flex-wrap gap-2">
+            {notices.map((n) => (
+              <Button
+                key={n.to}
+                asChild
+                size="sm"
+                className="bg-green-600 text-white hover:bg-green-700"
+              >
+                <Link to={n.to}>{n.cta}</Link>
+              </Button>
+            ))}
+          </div>
+        </div>
+      )}
 
       {isLoading ? (
         <p className="mt-8 text-sm text-muted-foreground">جارٍ التحميل…</p>

@@ -43,6 +43,7 @@ const dictionary = {
     ar: "أبحاث ومساهمات علمية مختارة في الجيوفيزياء وعلم الزلازل والمخاطر الزلزالية وجيولوجيا المملكة العربية السعودية.",
   },
   exploreAllPublications: { en: "Explore All", ar: "استعراض الكل" },
+  downloadCv: { en: "Download CV", ar: "تحميل السيرة الذاتية" },
   media: { en: "Media", ar: "الإعلام" },
   interviewsArticlesHeadline: { en: "Interviews & articles", ar: "لقاءات ومقالات" },
   exploreInterviewsArticles: { en: "Explore All", ar: "استعراض الكل" },

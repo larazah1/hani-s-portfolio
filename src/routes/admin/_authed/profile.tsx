@@ -28,6 +28,7 @@ type FormState = {
   secondaryCtaLabel: string;
   secondaryCtaLabelAr: string;
   secondaryCtaTo: string;
+  cvUrl: string;
 };
 
 const FIELD_GROUPS: { heading: string; fields: { name: keyof FormState; label: string }[] }[] = [
@@ -69,6 +70,10 @@ const FIELD_GROUPS: { heading: string; fields: { name: keyof FormState; label: s
       { name: "secondaryCtaTo", label: "رابط الزر الثانوي (مثال: /contact)" },
     ],
   },
+  {
+    heading: "السيرة الذاتية",
+    fields: [{ name: "cvUrl", label: "رابط السيرة الذاتية (PDF)" }],
+  },
 ];
 
 function ProfilePage() {
@@ -98,6 +103,7 @@ function ProfilePage() {
         secondaryCtaLabel: data.secondaryCtaLabel,
         secondaryCtaLabelAr: data.secondaryCtaLabelAr,
         secondaryCtaTo: data.secondaryCtaTo,
+        cvUrl: data.cvUrl ?? "",
       });
     }
   }, [data, form]);

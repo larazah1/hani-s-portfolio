@@ -20,6 +20,7 @@ import {
   Phone,
   CheckCircle2,
   AlertCircle,
+  Download,
   type LucideIcon,
 } from "lucide-react";
 import { useForm } from "react-hook-form";
@@ -81,6 +82,7 @@ export type PublicProfile = {
   secondaryCtaTo: string;
   email: string;
   phone: string;
+  cvUrl?: string | null;
 };
 
 function useHeading(section: ResolvedSection, eyebrowKey: DictionaryKey, titleKey: DictionaryKey) {
@@ -157,7 +159,7 @@ export function SectionRenderer({
 }
 
 function HeroSection({ profile }: { profile: PublicProfile }) {
-  const { pick } = useLanguage();
+  const { t, pick } = useLanguage();
   return (
     <section className="relative overflow-hidden bg-surface-deep text-surface-deep-foreground">
       <img
@@ -193,6 +195,18 @@ function HeroSection({ profile }: { profile: PublicProfile }) {
           >
             {pick(profile.secondaryCtaLabel, profile.secondaryCtaLabelAr)}
           </Link>
+          {profile.cvUrl && (
+            <a
+              href={profile.cvUrl}
+              target="_blank"
+              rel="noreferrer noopener"
+              download
+              className="inline-flex items-center gap-2 rounded-sm border border-white/30 px-6 py-3 text-sm font-medium transition-colors hover:bg-white/10"
+            >
+              <Download className="h-4 w-4" />
+              {t("downloadCv")}
+            </a>
+          )}
         </div>
       </div>
     </section>

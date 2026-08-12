@@ -17,11 +17,6 @@ type FormState = {
   siteDescriptionAr: string;
   logoUrl: string;
   faviconUrl: string;
-  defaultMetaTitle: string;
-  defaultMetaTitleAr: string;
-  defaultMetaDescription: string;
-  defaultMetaDescriptionAr: string;
-  ogImageUrl: string;
   footerDescription: string;
   footerDescriptionAr: string;
   copyrightText: string;
@@ -46,11 +41,6 @@ function SettingsPage() {
         siteDescriptionAr: data.siteDescriptionAr,
         logoUrl: data.logoUrl ?? "",
         faviconUrl: data.faviconUrl ?? "",
-        defaultMetaTitle: data.defaultMetaTitle,
-        defaultMetaTitleAr: data.defaultMetaTitleAr,
-        defaultMetaDescription: data.defaultMetaDescription,
-        defaultMetaDescriptionAr: data.defaultMetaDescriptionAr,
-        ogImageUrl: data.ogImageUrl ?? "",
         footerDescription: data.footerDescription,
         footerDescriptionAr: data.footerDescriptionAr,
         copyrightText: data.copyrightText,
@@ -127,48 +117,6 @@ function SettingsPage() {
                 onChange={(e) => set("siteDescriptionAr", e.target.value)}
               />
             </div>
-          </div>
-        </div>
-
-        <div>
-          <h2 className="text-sm font-semibold text-foreground">
-            تحسين محركات البحث والبيانات الوصفية
-          </h2>
-          <div className="mt-4 grid gap-4 sm:grid-cols-2">
-            <Field
-              label="عنوان الصفحة الافتراضي"
-              value={form.defaultMetaTitle}
-              onChange={(v) => set("defaultMetaTitle", v)}
-            />
-            <Field
-              label="عنوان الصفحة الافتراضي (بالعربية)"
-              value={form.defaultMetaTitleAr}
-              onChange={(v) => set("defaultMetaTitleAr", v)}
-            />
-            <div className="space-y-1.5 sm:col-span-2">
-              <label className="text-sm font-medium">الوصف الافتراضي للبيانات الوصفية</label>
-              <Textarea
-                rows={2}
-                value={form.defaultMetaDescription}
-                onChange={(e) => set("defaultMetaDescription", e.target.value)}
-              />
-            </div>
-            <div className="space-y-1.5 sm:col-span-2">
-              <label className="text-sm font-medium">
-                الوصف الافتراضي للبيانات الوصفية (بالعربية)
-              </label>
-              <Textarea
-                rows={2}
-                value={form.defaultMetaDescriptionAr}
-                onChange={(e) => set("defaultMetaDescriptionAr", e.target.value)}
-              />
-            </div>
-            <Field
-              label="رابط صورة المشاركة (Open Graph)"
-              value={form.ogImageUrl}
-              onChange={(v) => set("ogImageUrl", v)}
-              full
-            />
           </div>
         </div>
 
