@@ -12,11 +12,15 @@ const submitContactMessageSchema = z.object({
   email: z.string().trim().email().max(200),
   subject: safeString(300, 1),
   message: safeString(5000, 1),
+  /** Hidden "website" field: people leave it empty, spam bots fill it in. */
+  website: z.string().max(500).optional(),
 });
 
 export const submitContactMessage = createServerFn({ method: "POST" })
   .validator(submitContactMessageSchema)
-  .handler(async ({ data }) => {
+  .handler(async ({ data: { website, ...data } }) => {
+    // Spam bot: report success, store nothing.
+    if (website) return { ok: true } as const;
     await db.insert(contactMessages).values(data);
     return { ok: true } as const;
   });

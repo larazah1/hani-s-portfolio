@@ -4,6 +4,8 @@ import { useLanguage, type DictionaryKey } from "@/lib/language";
 import { MetaLine } from "./Section";
 import { PreviewCard } from "./PreviewCard";
 import type { PreviewItem } from "./LinkPreview";
+import { SourceBadge, SourceCover } from "./SourceLogo";
+import { sourceName } from "@/lib/media-sources";
 
 export type MediaItem = {
   id: string;
@@ -41,11 +43,13 @@ const typeLabelKey: Record<string, DictionaryKey> = {
 };
 
 function useMediaText(item: MediaItem) {
-  const { t, pick } = useLanguage();
+  const { t, pick, language } = useLanguage();
   const key = typeLabelKey[item.type];
   return {
     title: pick(item.title, item.titleAr ?? item.title),
     typeLabel: key ? t(key) : item.type,
+    /** Outlet name in the visitor's language (as stored if unknown). */
+    source: sourceName(item.source, language),
   };
 }
 
@@ -61,16 +65,19 @@ function previewOf(item: MediaItem, url: string | null | undefined): PreviewItem
 
 function Thumb({ item, playSize = "md" }: { item: MediaItem; playSize?: "md" | "lg" }) {
   const [broken, setBroken] = useState(false);
+  const { language } = useLanguage();
   const image = mediaImage(item);
   const play: readonly [string, string] =
     playSize === "lg" ? ["h-14 w-14", "h-6 w-6"] : ["h-12 w-12", "h-5 w-5"];
 
   if (!image || broken) {
     return (
-      <div className="relative flex aspect-video w-full items-end bg-surface-deep p-6 text-surface-deep-foreground">
-        <span dir="auto" className="text-2xl font-medium opacity-90">
-          {item.source}
-        </span>
+      // No picture: the linked site's logo (or the outlet's name without one).
+      <div className="relative">
+        <SourceCover
+          url={item.videoUrl ?? item.articleUrl}
+          name={sourceName(item.source, language)}
+        />
         {item.videoUrl && <PlayBadge sizes={play} />}
       </div>
     );
@@ -103,7 +110,7 @@ function PlayBadge({ sizes }: { sizes: readonly [string, string] }) {
 
 /** Home page carousel card: the whole card opens the preview overlay. */
 export function MediaCard({ item }: { item: MediaItem }) {
-  const { title, typeLabel } = useMediaText(item);
+  const { title, typeLabel, source } = useMediaText(item);
   return (
     <PreviewCard
       item={previewOf(item, item.videoUrl ?? item.articleUrl)}
@@ -116,7 +123,7 @@ export function MediaCard({ item }: { item: MediaItem }) {
           {title}
         </h3>
         <MetaLine
-          parts={[item.source, item.date]}
+          parts={[source, item.date]}
           className="mt-auto pt-3 text-sm text-muted-foreground"
         />
       </div>
@@ -126,7 +133,7 @@ export function MediaCard({ item }: { item: MediaItem }) {
 
 /** Interviews page: a video tile. */
 export function VideoTile({ item }: { item: MediaItem }) {
-  const { title } = useMediaText(item);
+  const { title, source } = useMediaText(item);
   return (
     <PreviewCard
       item={previewOf(item, item.videoUrl)}
@@ -134,7 +141,7 @@ export function VideoTile({ item }: { item: MediaItem }) {
     >
       <Thumb item={item} />
       <div className="p-5">
-        <MetaLine className="eyebrow" parts={[item.source, item.date]} />
+        <MetaLine className="eyebrow" parts={[source, item.date]} />
         <h4 dir="auto" className="mt-2 text-base leading-snug">
           {title}
         </h4>
@@ -146,17 +153,20 @@ export function VideoTile({ item }: { item: MediaItem }) {
 /** Interviews page: one row in the press-articles list. */
 export function ArticleRow({ item }: { item: MediaItem }) {
   const { t } = useLanguage();
-  const { title } = useMediaText(item);
+  const { title, source } = useMediaText(item);
   return (
     <PreviewCard
       item={previewOf(item, item.articleUrl)}
       className="group grid w-full gap-1 px-6 py-5 text-start transition-colors hover:bg-muted/60 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center sm:gap-6"
     >
-      <div className="min-w-0">
-        <MetaLine className="eyebrow" parts={[item.source, item.date]} />
-        <h4 dir="auto" className="mt-1.5 text-base leading-snug">
-          {title}
-        </h4>
+      <div className="flex min-w-0 items-center gap-4">
+        <SourceBadge url={item.articleUrl} />
+        <div className="min-w-0">
+          <MetaLine className="eyebrow" parts={[source, item.date]} />
+          <h4 dir="auto" className="mt-1.5 text-base leading-snug">
+            {title}
+          </h4>
+        </div>
       </div>
       {item.articleUrl && (
         <span className="inline-flex items-center gap-1 text-sm text-muted-foreground group-hover:text-foreground">

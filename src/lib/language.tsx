@@ -157,6 +157,25 @@ const dictionary = {
   phone: { en: "Phone", ar: "الهاتف" },
   location: { en: "Location", ar: "الموقع" },
   profiles: { en: "Profiles", ar: "الحسابات" },
+  contactHeadingMuted: {
+    en: "Research, advisory or speaking.",
+    ar: "بحث علمي أو استشارة أو مشاركة في فعالية.",
+  },
+  contactHeadingLead: { en: "Let’s start a ", ar: "لنبدأ " },
+  contactHeadingAccent: { en: "conversation.", ar: "الحديث." },
+  contactsLabel: { en: "Contacts", ar: "وسائل التواصل" },
+  viewProfile: { en: "View profile", ar: "عرض الملف الشخصي" },
+  contactHint: {
+    en: "// Prefer to talk? The contacts are on this page.",
+    ar: "// تفضّل التواصل المباشر؟ وسائل التواصل في هذه الصفحة.",
+  },
+  fieldRequired: { en: "Please fill in this field.", ar: "يُرجى تعبئة هذا الحقل." },
+  invalidEmail: {
+    en: "Please enter a valid email address.",
+    ar: "يُرجى إدخال بريد إلكتروني صحيح.",
+  },
+  subjectExample: { en: "e.g. Research collaboration", ar: "مثال: تعاون بحثي" },
+  messageExample: { en: "How can Dr. Zahran help?", ar: "كيف يمكن للدكتور زهران مساعدتك؟" },
 
   quickLinks: { en: "Quick Links", ar: "روابط سريعة" },
   geophysicistSeismologist: { en: "Geophysicist & Seismologist", ar: "جيوفيزيائي وعالم زلازل" },

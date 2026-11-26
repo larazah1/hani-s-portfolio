@@ -1,26 +1,16 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useLocation } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import {
   ArrowRight,
   MapPin,
   Users,
-  Compass,
-  Activity,
-  ShieldAlert,
-  Waves,
-  Mountain,
-  AudioLines,
-  ShieldCheck,
-  Gem,
-  Flame,
-  Sigma,
-  BarChart3,
-  Cpu,
   Mail,
   Phone,
   CheckCircle2,
   AlertCircle,
   Download,
+  Linkedin,
+  Loader2,
   type LucideIcon,
 } from "lucide-react";
 import { useForm } from "react-hook-form";
@@ -36,6 +26,8 @@ import { CareerSteps, type CareerStep } from "@/components/site/CareerSteps";
 import { ContactIcons } from "@/components/site/ContactIcons";
 import { LoopCarousel } from "@/components/site/LoopCarousel";
 import { StatsMarquee, type MarqueeStat } from "@/components/site/StatsMarquee";
+import { ExpertiseList } from "@/components/site/ExpertiseList";
+import { ResearchSpecialties } from "@/components/site/ResearchSpecialties";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -89,21 +81,6 @@ function useHeading(section: ResolvedSection, titleKey: DictionaryKey) {
   const title = section.title ? pick(section.title, section.titleAr ?? section.title) : t(titleKey);
   return { title };
 }
-
-const expertiseIcons: Record<string, LucideIcon> = {
-  "Applied Geophysics": Compass,
-  Seismology: Activity,
-  "Seismic Hazard Assessment": ShieldAlert,
-  "Earthquake Research": Waves,
-  "Volcanic Hazard Assessment": Mountain,
-  "Seismic Signal Processing": AudioLines,
-  "Disaster Risk Reduction": ShieldCheck,
-  "Mineral Exploration": Gem,
-  "Geothermal Prospecting": Flame,
-  "Numerical Simulation": Sigma,
-  "Geophysical Data Analysis": BarChart3,
-  "High-Performance Computing": Cpu,
-};
 
 export function SectionRenderer({
   section,
@@ -175,20 +152,10 @@ function HeroSection({
         height={1088}
         className="absolute inset-0 h-full w-full object-cover opacity-35"
       />
-      <div className="relative mx-auto grid max-w-6xl items-center gap-12 px-5 py-16 md:grid-cols-[minmax(0,1fr)_320px] md:py-28">
+      {/* The portrait lives in the site header now; the hero is a single text column. */}
+      <div className="relative mx-auto max-w-6xl px-5 pt-10 pb-10 md:pt-16 md:pb-16">
         <div>
-          {/* Phones: a small round portrait with the location under it instead of the large photo. */}
-          <div className="mb-6 flex flex-col items-start gap-3 md:hidden">
-            <img
-              src={portrait}
-              alt={name}
-              width={80}
-              height={80}
-              className="h-20 w-20 shrink-0 rounded-full bg-white object-cover object-top ring-2 ring-white/25"
-            />
-            <p className="eyebrow !text-current opacity-80">{location}</p>
-          </div>
-          <p className="eyebrow hidden !text-current opacity-70 md:block">{location}</p>
+          <p className="eyebrow !text-current opacity-70">{location}</p>
           <h1 className="mt-4 max-w-3xl text-4xl leading-tight md:text-6xl">{name}</h1>
           <p className="mt-4 max-w-2xl text-lg opacity-85 md:text-xl">
             {pick(profile.title, profile.titleAr)}
@@ -229,18 +196,6 @@ function HeroSection({
             tone="dark"
             className="mt-6"
           />
-        </div>
-
-        <div className="hidden md:block">
-          <div className="overflow-hidden rounded-md bg-white shadow-2xl ring-1 ring-white/15">
-            <img
-              src={portrait}
-              alt={name}
-              width={502}
-              height={610}
-              className="aspect-[4/5] w-full object-cover object-top"
-            />
-          </div>
         </div>
       </div>
     </section>
@@ -317,7 +272,7 @@ function matchStats(rows: Record<string, unknown>[], patterns: RegExp[]) {
 function StatsRowSection({ section }: { section: ResolvedSection }) {
   const { t } = useLanguage();
   const stats = useMarqueeStats((section.data as Record<string, unknown>[] | null) ?? []);
-  return <StatsMarquee stats={stats} label={t("keyFigures")} />;
+  return <StatsMarquee stats={stats} label={t("keyFigures")} tone="dark" />;
 }
 
 /** Career rows from the DB → steps in the visitor's language. */
@@ -427,28 +382,14 @@ function ExpertiseGridSection({ section }: { section: ResolvedSection }) {
     );
   }
 
+  // Sticky title beside a numbered list; the row in the middle of the screen
+  // turns gold while scrolling.
   return (
-    <Section title={heading.title} className="!pt-0">
-      <LoopCarousel label={heading.title}>
-        {rows.map((e) => {
-          const en = String(e["en"]);
-          const Icon = expertiseIcons[en] ?? Compass;
-          return (
-            <div
-              key={String(e["id"])}
-              className="flex h-full min-h-44 flex-col justify-between gap-8 rounded-md border border-border bg-card p-6 md:p-8"
-            >
-              <span className="flex h-12 w-12 items-center justify-center rounded-md bg-primary/10 text-primary">
-                <Icon className="h-6 w-6" strokeWidth={1.6} aria-hidden />
-              </span>
-              <p className="text-xl leading-snug font-medium md:text-2xl">
-                {pick(en, String(e["ar"]))}
-              </p>
-            </div>
-          );
-        })}
-      </LoopCarousel>
-    </Section>
+    <ExpertiseList
+      title={heading.title}
+      items={rows.map((e) => pick(String(e["en"]), String(e["ar"])))}
+      className="!pt-0"
+    />
   );
 }
 
@@ -512,13 +453,32 @@ const LIST_BLOCK_HEADINGS: Record<string, [DictionaryKey, DictionaryKey, Diction
 };
 
 function ListBlockSection({ section }: { section: ResolvedSection }) {
-  const { pick } = useLanguage();
+  const { t, pick } = useLanguage();
   const collection = (section.config["collection"] as string) ?? "researchSpecialties";
   const [, titleKey] =
     LIST_BLOCK_HEADINGS[collection] ?? LIST_BLOCK_HEADINGS["researchSpecialties"]!;
   const heading = useHeading(section, titleKey);
   const rows = (section.data as Record<string, unknown>[] | null) ?? [];
   if (rows.length === 0) return null;
+
+  // Research specialties: sticky title beside an accordion that opens the
+  // item in the middle of the screen while scrolling.
+  if (collection === "researchSpecialties") {
+    return (
+      <ResearchSpecialties
+        title={heading.title}
+        linkLabel={t("exploreAllPublications")}
+        items={rows.map((i) => ({
+          id: String(i["id"]),
+          title: pick(String(i["en"]), String(i["ar"])),
+          description: i["description"]
+            ? pick(String(i["description"]), String(i["descriptionAr"] ?? i["description"]))
+            : null,
+        }))}
+        className="!pt-0"
+      />
+    );
+  }
 
   // Activities are full sentences: a two-column list of cards. Others: chips.
   if (collection === "activities") {
@@ -564,7 +524,11 @@ function PublicationsCarouselSection({ section }: { section: ResolvedSection }) 
       {items.length === 0 ? (
         <EmptyNote>{t("emptyFeaturedPublications")}</EmptyNote>
       ) : (
-        <LoopCarousel label={heading.title} footer={<ExploreLink to="/publications" />}>
+        <LoopCarousel
+          emphasizeCenter
+          label={heading.title}
+          footer={<ExploreLink to="/publications" />}
+        >
           {items.map((p) => (
             <PublicationCard key={p.id} publication={p} compact />
           ))}
@@ -598,7 +562,11 @@ function MediaCarouselSection({ section }: { section: ResolvedSection }) {
       {items.length === 0 ? (
         <EmptyNote>{t("emptyFeaturedMedia")}</EmptyNote>
       ) : (
-        <LoopCarousel label={heading.title} footer={<ExploreLink to="/interviews" />}>
+        <LoopCarousel
+          emphasizeCenter
+          label={heading.title}
+          footer={<ExploreLink to="/interviews" />}
+        >
           {items.map((m) => (
             <MediaCard key={m.id} item={m} />
           ))}
@@ -616,7 +584,7 @@ function RecommendationsGridSection({ section }: { section: ResolvedSection }) {
   return (
     <Section
       title={heading.title}
-      className="!pt-0"
+      className="!pt-0 !pb-6 md:!pb-8"
       action={
         <Link
           to="/about"
@@ -630,7 +598,7 @@ function RecommendationsGridSection({ section }: { section: ResolvedSection }) {
       {rows.length === 0 ? (
         <EmptyNote>{t("emptyRecommendations")}</EmptyNote>
       ) : (
-        <LoopCarousel label={heading.title} wide autoplay>
+        <LoopCarousel label={heading.title} loop={false}>
           {rows.map((r) => (
             <blockquote
               key={String(r["id"])}
@@ -1031,7 +999,8 @@ function RichTextSection({
 
 /** A highlighted quote on a dark band (About page). */
 function QuoteSection({ section }: { section: ResolvedSection }) {
-  const { language, pick } = useLanguage();
+  const { pick } = useLanguage();
+  const isHome = useLocation({ select: (l) => l.pathname === "/" });
   const c = section.config as {
     textEn?: string;
     textAr?: string;
@@ -1041,30 +1010,48 @@ function QuoteSection({ section }: { section: ResolvedSection }) {
   const text = pick(c.textEn ?? "", c.textAr || c.textEn);
   if (!text) return null;
   const attribution = pick(c.attributionEn ?? "", c.attributionAr || c.attributionEn);
+  const mark = "inline-block size-5 text-accent md:size-6";
 
   return (
     <section className="bg-surface-deep text-surface-deep-foreground">
-      <figure className="mx-auto max-w-4xl px-5 py-16 text-center md:py-20">
-        <Quote className="mx-auto h-8 w-8 text-accent rtl:-scale-x-100" aria-hidden />
-        <blockquote className="mt-6 font-[family-name:var(--font-display)] text-xl leading-relaxed md:text-2xl">
-          {language === "ar" ? `«${text}»` : `“${text}”`}
+      <figure className="mx-auto max-w-6xl px-5 py-10 md:py-12">
+        <blockquote
+          className={`max-w-4xl text-start font-[family-name:var(--font-display)] text-lg leading-relaxed md:text-xl ${
+            isHome ? "italic" : ""
+          }`}
+        >
+          <Quote className={`${mark} me-2 -translate-y-1 align-top rtl:-scale-x-100`} aria-hidden />
+          {text}
+          <Quote
+            className={`${mark} ms-2 translate-y-1 rotate-180 align-bottom rtl:-scale-x-100`}
+            aria-hidden
+          />
         </blockquote>
         {attribution && (
-          <figcaption className="mt-6 text-sm opacity-70">— {attribution}</figcaption>
+          <figcaption className="mt-5 text-start text-sm opacity-70">— {attribution}</figcaption>
         )}
       </figure>
     </section>
   );
 }
 
-const contactSchema = z.object({
-  name: z.string().trim().min(2, "Please enter your full name."),
-  email: z.string().trim().min(1, "Email is required.").email("Enter a valid email address."),
-  subject: z.string().trim().min(3, "Please enter a subject."),
-  message: z.string().trim().min(10, "Message should be at least 10 characters."),
-});
-type ContactValues = z.infer<typeof contactSchema>;
+type ContactField = "name" | "email" | "subject" | "message";
+const CONTACT_FIELDS: ContactField[] = ["name", "email", "subject", "message"];
+const CONTACT_EMPTY = { name: "", email: "", subject: "", message: "", website: "" };
+const CONTACT_LIMITS: Record<ContactField, number> = {
+  name: 200,
+  email: 200,
+  subject: 300,
+  message: 5000,
+};
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+/**
+ * Contact page (layout adapted from narsyss.com/contact): heading and a
+ * contacts card on one side, the message form on the other. Each field is
+ * checked when the visitor leaves it and again on send; messages go to the
+ * admin inbox.
+ */
 function ContactBlockSection({
   profile,
   socialLinks,
@@ -1073,166 +1060,282 @@ function ContactBlockSection({
   socialLinks: { label: string; url: string }[];
 }) {
   const { t, pick } = useLanguage();
-  const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
+  const location = pick(profile.location, profile.locationAr);
+  const [values, setValues] = useState(CONTACT_EMPTY);
+  const [errors, setErrors] = useState<Partial<Record<ContactField, string>>>({});
+  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
 
-  const form = useForm<ContactValues>({
-    resolver: zodResolver(contactSchema),
-    defaultValues: { name: "", email: "", subject: "", message: "" },
-  });
+  const check = (k: ContactField, v: string) => {
+    if (!v.trim()) return t("fieldRequired");
+    if (k === "email" && !EMAIL_RE.test(v.trim())) return t("invalidEmail");
+    return undefined;
+  };
+  const set =
+    (k: ContactField) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      const v = e.target.value;
+      setValues((s) => ({ ...s, [k]: v }));
+      // Once a field shows an error, re-check it while typing so it clears when fixed.
+      if (errors[k]) setErrors((er) => ({ ...er, [k]: check(k, v) }));
+      if (status === "error" || status === "sent") setStatus("idle");
+    };
+  const blur = (k: ContactField) => () => {
+    if (values[k]) setErrors((er) => ({ ...er, [k]: check(k, values[k]) }));
+  };
 
-  async function onSubmit(values: ContactValues) {
-    setStatus("idle");
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (status === "sending") return;
+    const found: Partial<Record<ContactField, string>> = {};
+    for (const k of CONTACT_FIELDS) {
+      const m = check(k, values[k]);
+      if (m) found[k] = m;
+    }
+    setErrors(found);
+    const first = CONTACT_FIELDS.find((k) => found[k]);
+    if (first) {
+      document.getElementById(`contact-${first}`)?.focus();
+      return;
+    }
+    setStatus("sending");
     try {
       await submitContactMessage({ data: values });
-      setStatus("success");
-      form.reset();
+      setStatus("sent");
+      setValues(CONTACT_EMPTY);
     } catch {
       setStatus("error");
     }
   }
 
+  const linkedin = socialLinks.find((l) => /linkedin/i.test(l.label) || /linkedin/i.test(l.url));
+  const channels = [
+    profile.email && {
+      Icon: Mail,
+      label: t("email"),
+      value: profile.email,
+      href: `mailto:${profile.email}`,
+      ltr: true,
+    },
+    profile.phone && {
+      Icon: Phone,
+      label: t("phone"),
+      value: profile.phone,
+      href: `tel:${profile.phone.replace(/\s+/g, "")}`,
+      ltr: true,
+    },
+    linkedin && {
+      Icon: Linkedin,
+      label: "LinkedIn",
+      value: t("viewProfile"),
+      href: linkedin.url,
+      external: true,
+    },
+    location && { Icon: MapPin, label: t("location"), value: location },
+  ].filter(Boolean) as {
+    Icon: LucideIcon;
+    label: string;
+    value: string;
+    href?: string;
+    ltr?: boolean;
+    external?: boolean;
+  }[];
+
+  const field =
+    "w-full rounded-md border bg-card px-4 text-base text-foreground placeholder:text-muted-foreground/70 outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-ring/30";
+  const border = (k: ContactField) => (errors[k] ? "border-destructive" : "border-input");
+  const aria = (k: ContactField) => ({
+    id: `contact-${k}`,
+    name: k,
+    maxLength: CONTACT_LIMITS[k],
+    "aria-invalid": errors[k] ? true : undefined,
+    "aria-describedby": errors[k] ? `contact-${k}-error` : undefined,
+  });
+  const err = (k: ContactField) =>
+    errors[k] && (
+      <span id={`contact-${k}-error`} className="text-sm text-destructive">
+        {errors[k]}
+      </span>
+    );
+  const note =
+    status === "sent"
+      ? t("sendSuccess")
+      : status === "error"
+        ? t("sendError")
+        : status === "idle"
+          ? t("contactHint")
+          : "";
+
   return (
-    <>
-      <section className="border-b border-border bg-card">
-        <div className="mx-auto max-w-6xl px-5 py-16 md:py-20">
-          <h1 className="text-3xl md:text-4xl">{t("letsConnect")}</h1>
-          <p className="mt-4 max-w-2xl text-sm leading-relaxed text-muted-foreground md:text-base">
-            {t("contactIntro")}
+    <section className="mx-auto max-w-6xl px-5 py-16 md:py-24">
+      <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-x-20 lg:gap-y-10">
+        {/* Heading */}
+        <div className="lg:col-start-1 lg:row-start-1">
+          <p className="eyebrow">
+            {t("contact")}
+            {location ? ` · ${location}` : ""}
           </p>
+          <h1 className="mt-6 text-4xl leading-[1.1] md:text-5xl lg:text-[3.25rem]">
+            <span className="block text-muted-foreground/70">{t("contactHeadingMuted")}</span>
+            <span className="mt-1 block">
+              {t("contactHeadingLead")}
+              <span className="text-accent">{t("contactHeadingAccent")}</span>
+            </span>
+          </h1>
         </div>
-      </section>
 
-      <Section>
-        <div className="grid gap-12 md:grid-cols-[minmax(0,1fr)_320px]">
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4" noValidate>
-              <div className="grid gap-4 sm:grid-cols-2">
-                <FormField
-                  control={form.control}
-                  name="name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{t("fullName")}</FormLabel>
-                      <FormControl>
-                        <Input placeholder={t("fullNamePlaceholder")} {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+        {/* Form */}
+        <div id="message" className="scroll-mt-28 lg:col-start-2 lg:row-span-2 lg:row-start-1">
+          <form onSubmit={onSubmit} noValidate className="relative flex flex-col gap-6">
+            {/* Spam trap: hidden from people and screen readers; bots fill it in. */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute h-px w-px overflow-hidden opacity-0 [clip-path:inset(50%)]"
+            >
+              <label>
+                Website
+                <input
+                  tabIndex={-1}
+                  autoComplete="off"
+                  value={values.website}
+                  onChange={(e) => setValues((s) => ({ ...s, website: e.target.value }))}
                 />
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{t("email")}</FormLabel>
-                      <FormControl>
-                        <Input type="email" placeholder={t("emailPlaceholder")} {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+              </label>
+            </div>
+
+            <div className="grid gap-6 sm:grid-cols-2">
+              <label className="flex flex-col gap-2.5">
+                <span className="eyebrow">{t("fullName")}</span>
+                <input
+                  {...aria("name")}
+                  required
+                  autoComplete="name"
+                  placeholder={t("fullNamePlaceholder")}
+                  value={values.name}
+                  onChange={set("name")}
+                  onBlur={blur("name")}
+                  className={`${field} h-12 ${border("name")}`}
                 />
-              </div>
-
-              <FormField
-                control={form.control}
-                name="subject"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t("subject")}</FormLabel>
-                    <FormControl>
-                      <Input placeholder={t("subjectPlaceholder")} {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="message"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t("message")}</FormLabel>
-                    <FormControl>
-                      <Textarea rows={6} placeholder={t("messagePlaceholder")} {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <Button type="submit" disabled={form.formState.isSubmitting} size="lg">
-                {form.formState.isSubmitting ? t("sending") : t("sendMessage")}
-              </Button>
-
-              {status === "success" && (
-                <div className="flex items-center gap-2 rounded-md border border-border bg-secondary/60 px-4 py-3 text-sm text-foreground">
-                  <CheckCircle2 className="h-4 w-4 shrink-0 text-accent-foreground" />
-                  {t("sendSuccess")}
-                </div>
-              )}
-              {status === "error" && (
-                <div className="flex items-center gap-2 rounded-md border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm text-destructive">
-                  <AlertCircle className="h-4 w-4 shrink-0" />
-                  {t("sendError")}
-                </div>
-              )}
-            </form>
-          </Form>
-
-          <aside className="space-y-4 text-sm">
-            <div>
-              <p className="eyebrow">{t("email")}</p>
-              <a
-                href={`mailto:${profile.email}`}
-                dir="ltr"
-                className="mt-1 flex items-center gap-2 hover:underline"
-              >
-                <Mail className="h-4 w-4 shrink-0" />
-                {profile.email}
-              </a>
+                {err("name")}
+              </label>
+              <label className="flex flex-col gap-2.5">
+                <span className="eyebrow">{t("email")}</span>
+                <input
+                  {...aria("email")}
+                  required
+                  type="email"
+                  inputMode="email"
+                  autoComplete="email"
+                  dir="ltr"
+                  placeholder="you@example.com"
+                  value={values.email}
+                  onChange={set("email")}
+                  onBlur={blur("email")}
+                  className={`${field} h-12 rtl:text-right ${border("email")}`}
+                />
+                {err("email")}
+              </label>
             </div>
+            <label className="flex flex-col gap-2.5">
+              <span className="eyebrow">{t("subject")}</span>
+              <input
+                {...aria("subject")}
+                required
+                placeholder={t("subjectExample")}
+                value={values.subject}
+                onChange={set("subject")}
+                onBlur={blur("subject")}
+                className={`${field} h-12 ${border("subject")}`}
+              />
+              {err("subject")}
+            </label>
+            <label className="flex flex-col gap-2.5">
+              <span className="eyebrow">{t("message")}</span>
+              <textarea
+                {...aria("message")}
+                required
+                rows={6}
+                placeholder={t("messageExample")}
+                value={values.message}
+                onChange={set("message")}
+                onBlur={blur("message")}
+                className={`${field} min-h-40 resize-y py-3 ${border("message")}`}
+              />
+              {err("message")}
+            </label>
+
             <div>
-              <p className="eyebrow">{t("phone")}</p>
-              <a
-                href={`tel:${profile.phone.replace(/\s+/g, "")}`}
-                dir="ltr"
-                className="mt-1 flex items-center gap-2 hover:underline"
+              <button
+                type="submit"
+                disabled={status === "sending"}
+                className="group inline-flex h-12 items-center gap-3 rounded-sm bg-primary ps-6 pe-5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring disabled:cursor-not-allowed disabled:opacity-60"
               >
-                <Phone className="h-4 w-4 shrink-0" />
-                {profile.phone}
-              </a>
+                {status === "sending" ? t("sending") : t("sendMessage")}
+                {status === "sending" ? (
+                  <Loader2 className="size-4 animate-spin" aria-hidden />
+                ) : (
+                  <ArrowRight
+                    className="size-4 transition-transform duration-300 group-hover:translate-x-1 rtl:-scale-x-100 rtl:group-hover:-translate-x-1"
+                    aria-hidden
+                  />
+                )}
+              </button>
+              <p
+                aria-live="polite"
+                className={`mt-5 text-sm ${
+                  status === "error"
+                    ? "text-destructive"
+                    : status === "sent"
+                      ? "text-foreground"
+                      : "text-muted-foreground"
+                }`}
+              >
+                {note}
+              </p>
             </div>
-            {profile.location && (
-              <div>
-                <p className="eyebrow">{t("location")}</p>
-                <p className="mt-1">{pick(profile.location, profile.locationAr)}</p>
-              </div>
-            )}
-            {socialLinks.length > 0 && (
-              <div>
-                <p className="eyebrow">{t("profiles")}</p>
-                <ul className="mt-1 space-y-1">
-                  {socialLinks.map((s) => (
-                    <li key={s.url}>
-                      <a
-                        href={s.url}
-                        target="_blank"
-                        rel="noreferrer noopener"
-                        className="underline underline-offset-4"
+          </form>
+        </div>
+
+        {/* Contacts card */}
+        <div className="lg:col-start-1 lg:row-start-2 lg:self-end">
+          <div className="rounded-md border border-border bg-card p-3">
+            <p className="eyebrow px-3 pt-3 pb-2">{t("contactsLabel")}</p>
+            <ul>
+              {channels.map((ch) => {
+                const inner = (
+                  <>
+                    <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-muted text-primary transition-colors duration-300 group-hover:bg-primary group-hover:text-primary-foreground">
+                      <ch.Icon className="size-[18px]" strokeWidth={1.75} aria-hidden />
+                    </span>
+                    <span className="min-w-0">
+                      <span className="block text-xs text-muted-foreground">{ch.label}</span>
+                      <span
+                        dir={ch.ltr ? "ltr" : undefined}
+                        className="mt-0.5 block truncate text-base text-foreground"
                       >
-                        {s.label}
+                        {ch.value}
+                      </span>
+                    </span>
+                  </>
+                );
+                return (
+                  <li key={ch.label}>
+                    {ch.href ? (
+                      <a
+                        href={ch.href}
+                        {...(ch.external ? { target: "_blank", rel: "noreferrer noopener" } : {})}
+                        className="group flex items-center gap-4 rounded-md p-3 transition-colors duration-300 hover:bg-muted/60"
+                      >
+                        {inner}
                       </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </aside>
+                    ) : (
+                      <div className="flex items-center gap-4 p-3">{inner}</div>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
         </div>
-      </Section>
-    </>
+      </div>
+    </section>
   );
 }

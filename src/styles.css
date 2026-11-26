@@ -14,36 +14,44 @@
   src: url("./assets/fonts/thmanyah/thmanyahsans-Regular.woff2") format("woff2");
   font-weight: 400;
   font-display: swap;
+  /* Arabic script only: Latin text (e.g. English publication titles) falls
+     through to IBM Plex Sans in the font stack. */
+  unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF, U+200C-200F;
 }
 @font-face {
   font-family: "Thmanyah Sans";
   src: url("./assets/fonts/thmanyah/thmanyahsans-Medium.woff2") format("woff2");
   font-weight: 500;
   font-display: swap;
+  unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF, U+200C-200F;
 }
 @font-face {
   font-family: "Thmanyah Sans";
   src: url("./assets/fonts/thmanyah/thmanyahsans-Bold.woff2") format("woff2");
   font-weight: 600 700;
   font-display: swap;
+  unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF, U+200C-200F;
 }
 @font-face {
   font-family: "Thmanyah Serif Display";
   src: url("./assets/fonts/thmanyah/thmanyahserifdisplay-Regular.woff2") format("woff2");
   font-weight: 400;
   font-display: swap;
+  unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF, U+200C-200F;
 }
 @font-face {
   font-family: "Thmanyah Serif Display";
   src: url("./assets/fonts/thmanyah/thmanyahserifdisplay-Medium.woff2") format("woff2");
   font-weight: 500 600;
   font-display: swap;
+  unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF, U+200C-200F;
 }
 @font-face {
   font-family: "Thmanyah Serif Display";
   src: url("./assets/fonts/thmanyah/thmanyahserifdisplay-Bold.woff2") format("woff2");
   font-weight: 700;
   font-display: swap;
+  unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF, U+200C-200F;
 }
 
 /*
@@ -215,10 +223,12 @@
   color: var(--muted-foreground);
 }
 
-/* Arabic uses Thmanyah, falling back to IBM Plex Sans Arabic while it loads. */
+/* Arabic uses Thmanyah for Arabic letters (see unicode-range above); Latin text
+   such as English publication titles uses IBM Plex Sans, and IBM Plex Sans Arabic
+   covers Arabic while Thmanyah loads. */
 html[lang="ar"] {
-  --font-display: "Thmanyah Serif Display", "IBM Plex Sans Arabic", "IBM Plex Sans", sans-serif;
-  --font-body: "Thmanyah Sans", "IBM Plex Sans Arabic", "IBM Plex Sans", sans-serif;
+  --font-display: "Thmanyah Serif Display", "IBM Plex Sans", "IBM Plex Sans Arabic", sans-serif;
+  --font-body: "Thmanyah Sans", "IBM Plex Sans", "IBM Plex Sans Arabic", sans-serif;
 }
 
 /* Arabic: letter-spacing and uppercase break connected Arabic script. */

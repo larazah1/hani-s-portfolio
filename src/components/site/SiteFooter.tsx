@@ -28,7 +28,7 @@ export function SiteFooter({
   const { t, pick } = useLanguage();
 
   return (
-    <footer className="bg-contour-pattern mt-24 bg-surface-deep text-surface-deep-foreground">
+    <footer className="bg-contour-pattern mt-12 bg-surface-deep text-surface-deep-foreground">
       <div className="mx-auto grid max-w-6xl gap-10 px-5 py-14 md:grid-cols-3">
         <div>
           <h2 className="font-[family-name:var(--font-display)] text-xl font-semibold">

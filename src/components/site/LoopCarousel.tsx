@@ -26,6 +26,8 @@ export function LoopCarousel({
   footer,
   wide = false,
   autoplay = false,
+  emphasizeCenter = false,
+  loop = true,
 }: {
   children: ReactNode;
   label: string;
@@ -35,31 +37,45 @@ export function LoopCarousel({
   wide?: boolean;
   /** Moves to the next card on its own; pauses on hover, focus or touch. */
   autoplay?: boolean;
+  /** Side cards shrink and fade a little so the centre card reads as bigger. */
+  emphasizeCenter?: boolean;
+  /**
+   * false: a plain carousel, two cards per view from tablets up, starting at the
+   * first card. Arrows grey out at either end.
+   */
+  loop?: boolean;
 }) {
   const { dir, t } = useLanguage();
   const [viewportRef, api] = useEmblaCarousel({
-    loop: true,
-    align: "center",
+    loop,
+    align: loop ? "center" : "start",
+    containScroll: "trimSnaps",
     direction: dir,
     // Slower, eased glide between cards (Embla default is 25).
     duration: 45,
   });
   const [selected, setSelected] = useState(0);
+  const [canPrev, setCanPrev] = useState(loop);
+  const [canNext, setCanNext] = useState(loop);
 
   // Looping needs enough cards to fill both sides; repeat short lists.
   const items = Children.toArray(children).filter(isValidElement) as ReactElement[];
   const realCount = items.length;
   let slides = items;
-  while (slides.length > 0 && slides.length < 8) slides = [...slides, ...items];
+  while (loop && slides.length > 0 && slides.length < 8) slides = [...slides, ...items];
   slides = slides.map((el, i) => cloneElement(el, { key: `${String(el.key)}-${i}` }));
 
   useEffect(() => {
     if (!api) return;
-    const onSelect = () => setSelected(api.selectedScrollSnap());
+    const onSelect = () => {
+      setSelected(api.selectedScrollSnap());
+      setCanPrev(api.canScrollPrev());
+      setCanNext(api.canScrollNext());
+    };
     onSelect();
-    api.on("select", onSelect).on("reInit", onSelect);
+    api.on("select", onSelect).on("reInit", onSelect).on("resize", onSelect);
     return () => {
-      api.off("select", onSelect).off("reInit", onSelect);
+      api.off("select", onSelect).off("reInit", onSelect).off("resize", onSelect);
     };
   }, [api]);
 
@@ -102,7 +118,7 @@ export function LoopCarousel({
   };
 
   const arrow =
-    "inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card text-foreground transition-colors hover:border-primary hover:bg-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring";
+    "inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card text-foreground transition-colors hover:border-primary hover:bg-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring disabled:pointer-events-none disabled:opacity-35";
 
   return (
     <div
@@ -118,7 +134,8 @@ export function LoopCarousel({
       <div className="overflow-hidden" ref={viewportRef}>
         <div className="flex touch-pan-y">
           {slides.map((slide, i) => {
-            const active = i === selected;
+            // Without looping every visible card is usable, so none is "side".
+            const active = !loop || i === selected;
             const copy = i >= realCount;
             return (
               <div
@@ -127,7 +144,13 @@ export function LoopCarousel({
                 aria-roledescription="slide"
                 aria-hidden={copy || undefined}
                 aria-current={active || undefined}
-                className={`min-w-0 shrink-0 grow-0 px-2 md:px-3 ${wide ? "basis-[85%] sm:basis-[70%] lg:basis-1/2" : "basis-[72%] sm:basis-[60%] lg:basis-1/4"}`}
+                className={`min-w-0 shrink-0 grow-0 px-2 md:px-3 ${
+                  !loop
+                    ? "basis-full md:basis-1/2"
+                    : wide
+                      ? "basis-[85%] sm:basis-[70%] lg:basis-1/2"
+                      : "basis-[72%] sm:basis-[60%] lg:basis-1/4"
+                }`}
                 onClickCapture={(e) => {
                   if (!active) {
                     // First tap on a side card brings it to the centre.
@@ -137,7 +160,16 @@ export function LoopCarousel({
                   }
                 }}
               >
-                <div className="h-full" inert={!active}>
+                <div
+                  className={`h-full ${
+                    emphasizeCenter
+                      ? `transition-[scale,opacity] duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none ${
+                          active ? "scale-100 opacity-100" : "scale-[0.9] opacity-70"
+                        }`
+                      : ""
+                  }`}
+                  inert={!active}
+                >
                   {slide}
                 </div>
               </div>
@@ -149,10 +181,22 @@ export function LoopCarousel({
       <div className="mt-6 flex items-center justify-between gap-4">
         <div className="text-sm">{footer}</div>
         <div className="flex gap-2">
-          <button type="button" onClick={prev} aria-label={t("carouselPrev")} className={arrow}>
+          <button
+            type="button"
+            onClick={prev}
+            disabled={!canPrev}
+            aria-label={t("carouselPrev")}
+            className={arrow}
+          >
             <ChevronLeft className="h-4 w-4 rtl:rotate-180" aria-hidden />
           </button>
-          <button type="button" onClick={next} aria-label={t("carouselNext")} className={arrow}>
+          <button
+            type="button"
+            onClick={next}
+            disabled={!canNext}
+            aria-label={t("carouselNext")}
+            className={arrow}
+          >
             <ChevronRight className="h-4 w-4 rtl:rotate-180" aria-hidden />
           </button>
         </div>

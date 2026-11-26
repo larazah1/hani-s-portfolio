@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Menu, Mail, Phone, Languages } from "lucide-react";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import portrait from "@/assets/hani.jpeg";
 import { useLanguage } from "@/lib/language";
 
 export type NavPage = {
@@ -43,12 +44,21 @@ export function SiteHeader({ profile, navPages }: { profile: SiteProfile; navPag
   return (
     <header className="sticky top-0 z-50 border-b border-border/70 bg-background/85 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-4">
-        <Link to="/" className="min-w-0">
-          <span className="block truncate font-[family-name:var(--font-display)] text-lg font-semibold leading-tight">
-            {pick(profile.name, profile.nameAr)}
-          </span>
-          <span className="eyebrow block truncate">
-            {pick(profile.credentials, profile.credentialsAr)} | {t("geophysicistSeismologist")}
+        <Link to="/" className="flex min-w-0 items-center gap-3">
+          <img
+            src={portrait}
+            alt=""
+            width={44}
+            height={44}
+            className="size-11 shrink-0 rounded-full bg-white object-cover object-top ring-1 ring-border"
+          />
+          <span className="min-w-0">
+            <span className="block truncate font-[family-name:var(--font-display)] text-lg font-semibold leading-tight">
+              {pick(profile.name, profile.nameAr)}
+            </span>
+            <span className="eyebrow block truncate">
+              {pick(profile.credentials, profile.credentialsAr)} | {t("geophysicistSeismologist")}
+            </span>
           </span>
         </Link>
 
