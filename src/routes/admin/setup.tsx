@@ -16,16 +16,15 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { acceptInvite } from "@/server-fns/auth";
-import { newPassword, PASSWORD_MAX } from "@/lib/text-validation";
 
 export const Route = createFileRoute("/admin/setup")({
-  validateSearch: z.object({ token: z.string().max(200).optional().catch(undefined) }),
+  validateSearch: z.object({ token: z.string().optional() }),
   component: AdminSetupPage,
 });
 
 const setupFormSchema = z
   .object({
-    password: newPassword(),
+    password: z.string().min(10, "يجب أن تتكون كلمة المرور من 10 أحرف على الأقل."),
     confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
@@ -92,7 +91,6 @@ function AdminSetupPage() {
                     <Input
                       type={showPassword ? "text" : "password"}
                       autoComplete="new-password"
-                      maxLength={PASSWORD_MAX}
                       className="pe-10"
                       {...field}
                     />
@@ -121,7 +119,6 @@ function AdminSetupPage() {
                   <Input
                     type={showPassword ? "text" : "password"}
                     autoComplete="new-password"
-                    maxLength={PASSWORD_MAX}
                     {...field}
                   />
                 </FormControl>

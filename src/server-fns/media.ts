@@ -3,7 +3,7 @@ import { asc, eq, sql } from "drizzle-orm";
 import { z } from "zod";
 import { db } from "@/db/client";
 import { mediaItems, sections } from "@/db/schema";
-import { safeString, safeUrl, validateWith } from "@/lib/text-validation";
+import { safeString, safeUrl } from "@/lib/text-validation";
 import { requireAdmin } from "./require-admin";
 import { logActivity } from "./collection-helpers";
 
@@ -46,7 +46,7 @@ export const listMedia = createServerFn({ method: "GET" }).handler(async ({ cont
 });
 
 export const getMediaItem = createServerFn({ method: "GET" })
-  .validator(validateWith(idSchema))
+  .validator(idSchema)
   .handler(async ({ data, context }) => {
     requireAdmin(context);
     const [row] = await db.select().from(mediaItems).where(eq(mediaItems.id, data.id)).limit(1);
@@ -54,7 +54,7 @@ export const getMediaItem = createServerFn({ method: "GET" })
   });
 
 export const createMediaItem = createServerFn({ method: "POST" })
-  .validator(validateWith(insertSchema))
+  .validator(insertSchema)
   .handler(async ({ data, context }) => {
     const admin = requireAdmin(context);
     const [row0] = await db
@@ -70,7 +70,7 @@ export const createMediaItem = createServerFn({ method: "POST" })
   });
 
 export const updateMediaItem = createServerFn({ method: "POST" })
-  .validator(validateWith(updateSchema))
+  .validator(updateSchema)
   .handler(async ({ data, context }) => {
     const admin = requireAdmin(context);
     const { id, ...fields } = data;
@@ -85,7 +85,7 @@ export const updateMediaItem = createServerFn({ method: "POST" })
   });
 
 export const deleteMediaItem = createServerFn({ method: "POST" })
-  .validator(validateWith(idSchema))
+  .validator(idSchema)
   .handler(async ({ data, context }) => {
     const admin = requireAdmin(context);
     const [row] = await db.delete(mediaItems).where(eq(mediaItems.id, data.id)).returning();

@@ -6,7 +6,6 @@ import { PreviewCard } from "./PreviewCard";
 import type { PreviewItem } from "./LinkPreview";
 import { SourceBadge, SourceCover } from "./SourceLogo";
 import { sourceName } from "@/lib/media-sources";
-import { safeMediaSrc } from "@/lib/safe-url";
 
 export type MediaItem = {
   id: string;
@@ -86,7 +85,7 @@ function Thumb({ item, playSize = "md" }: { item: MediaItem; playSize?: "md" | "
   return (
     <div className="relative aspect-video w-full overflow-hidden bg-muted">
       <img
-        src={safeMediaSrc(image)}
+        src={image}
         alt=""
         loading="lazy"
         onError={() => setBroken(true)}

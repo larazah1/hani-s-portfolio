@@ -3,7 +3,7 @@ import { asc, eq, sql } from "drizzle-orm";
 import { z } from "zod";
 import { db } from "@/db/client";
 import { publications, sections } from "@/db/schema";
-import { safeDoi, safeString, safeUrl, validateWith } from "@/lib/text-validation";
+import { safeDoi, safeString, safeUrl } from "@/lib/text-validation";
 import { requireAdmin } from "./require-admin";
 import { logActivity } from "./collection-helpers";
 
@@ -54,7 +54,7 @@ export const listPublications = createServerFn({ method: "GET" }).handler(async 
 });
 
 export const getPublication = createServerFn({ method: "GET" })
-  .validator(validateWith(idSchema))
+  .validator(idSchema)
   .handler(async ({ data, context }) => {
     requireAdmin(context);
     const [row] = await db.select().from(publications).where(eq(publications.id, data.id)).limit(1);
@@ -62,7 +62,7 @@ export const getPublication = createServerFn({ method: "GET" })
   });
 
 export const createPublication = createServerFn({ method: "POST" })
-  .validator(validateWith(insertSchema))
+  .validator(insertSchema)
   .handler(async ({ data, context }) => {
     const admin = requireAdmin(context);
     const [row0] = await db
@@ -78,7 +78,7 @@ export const createPublication = createServerFn({ method: "POST" })
   });
 
 export const updatePublication = createServerFn({ method: "POST" })
-  .validator(validateWith(updateSchema))
+  .validator(updateSchema)
   .handler(async ({ data, context }) => {
     const admin = requireAdmin(context);
     const { id, ...fields } = data;
@@ -93,7 +93,7 @@ export const updatePublication = createServerFn({ method: "POST" })
   });
 
 export const deletePublication = createServerFn({ method: "POST" })
-  .validator(validateWith(idSchema))
+  .validator(idSchema)
   .handler(async ({ data, context }) => {
     const admin = requireAdmin(context);
     const [row] = await db.delete(publications).where(eq(publications.id, data.id)).returning();

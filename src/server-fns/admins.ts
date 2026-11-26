@@ -4,7 +4,6 @@ import { z } from "zod";
 import { db } from "@/db/client";
 import { admins } from "@/db/schema";
 import { generateToken, sha256Hex } from "@/lib/security";
-import { safeEmail, validateWith } from "@/lib/text-validation";
 import { requireAdmin } from "./require-admin";
 
 const SETUP_TOKEN_TTL_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
@@ -26,13 +25,13 @@ export const listAdmins = createServerFn({ method: "GET" }).handler(async ({ con
 
 type InviteResult = { ok: true; setupPath: string } | { ok: false; error: string };
 
-const inviteAdminSchema = z.object({ email: safeEmail() });
+const inviteAdminSchema = z.object({ email: z.string().trim().email() });
 
 export const inviteAdmin = createServerFn({ method: "POST" })
-  .validator(validateWith(inviteAdminSchema))
+  .validator(inviteAdminSchema)
   .handler(async ({ data, context }): Promise<InviteResult> => {
     const current = requireAdmin(context);
-    const email = data.email;
+    const email = data.email.toLowerCase();
 
     const [existing] = await db.select().from(admins).where(eq(admins.email, email)).limit(1);
     if (existing && existing.status !== "pending") {
@@ -69,7 +68,7 @@ const setAdminStatusSchema = z.object({
 });
 
 export const setAdminStatus = createServerFn({ method: "POST" })
-  .validator(validateWith(setAdminStatusSchema))
+  .validator(setAdminStatusSchema)
   .handler(async ({ data, context }): Promise<Result> => {
     const current = requireAdmin(context);
 
@@ -101,7 +100,7 @@ export const setAdminStatus = createServerFn({ method: "POST" })
 const resetAdminPasswordSchema = z.object({ adminId: z.string().uuid() });
 
 export const resetAdminPassword = createServerFn({ method: "POST" })
-  .validator(validateWith(resetAdminPasswordSchema))
+  .validator(resetAdminPasswordSchema)
   .handler(async ({ data, context }): Promise<InviteResult> => {
     requireAdmin(context);
 

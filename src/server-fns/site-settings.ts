@@ -3,7 +3,7 @@ import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { db } from "@/db/client";
 import { siteSettings } from "@/db/schema";
-import { safeString, safeUrl, validateWith } from "@/lib/text-validation";
+import { safeString, safeUrl } from "@/lib/text-validation";
 import { requireAdmin } from "./require-admin";
 import { logActivity } from "./collection-helpers";
 
@@ -27,7 +27,7 @@ export const getSiteSettings = createServerFn({ method: "GET" }).handler(async (
 });
 
 export const updateSiteSettings = createServerFn({ method: "POST" })
-  .validator(validateWith(updateSchema))
+  .validator(updateSchema)
   .handler(async ({ data, context }) => {
     const admin = requireAdmin(context);
     const [row] = await db

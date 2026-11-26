@@ -7,43 +7,6 @@ type ServerEntry = {
   fetch: (request: Request, env: unknown, ctx: unknown) => Promise<Response> | Response;
 };
 
-// Sent with every response (pages, server functions, error pages).
-// - CSP: no plugins (<object>/<embed>), no <base> hijacking, forms may only
-//   post to this site, and only this site may frame its pages (stops
-//   clickjacking). script-src isn't restricted because the framework's
-//   hydration uses inline scripts; React's escaping is what prevents XSS.
-// - nosniff: browsers won't run an uploaded/served file as a different type.
-const isProduction = process.env["NODE_ENV"] === "production";
-const SECURITY_HEADERS: Record<string, string> = {
-  "Content-Security-Policy": [
-    "base-uri 'self'",
-    "object-src 'none'",
-    "form-action 'self'",
-    "frame-ancestors 'self'",
-    ...(isProduction ? ["upgrade-insecure-requests"] : []),
-  ].join("; "),
-  "X-Content-Type-Options": "nosniff",
-  "X-Frame-Options": "SAMEORIGIN",
-  "Referrer-Policy": "strict-origin-when-cross-origin",
-  "Permissions-Policy": "camera=(), microphone=(), geolocation=(), payment=(), usb=()",
-  "Cross-Origin-Opener-Policy": "same-origin",
-  ...(isProduction ? { "Strict-Transport-Security": "max-age=31536000" } : {}),
-};
-
-function withSecurityHeaders(request: Request, response: Response): Response {
-  // Rebuild the response: headers on some responses are immutable.
-  const out = new Response(response.body, response);
-  for (const [name, value] of Object.entries(SECURITY_HEADERS)) {
-    if (!out.headers.has(name)) out.headers.set(name, value);
-  }
-  if (new URL(request.url).pathname.startsWith("/admin")) {
-    // Admin pages hold private data: don't cache them or index them.
-    out.headers.set("Cache-Control", "no-store");
-    out.headers.set("X-Robots-Tag", "noindex, nofollow");
-  }
-  return out;
-}
-
 let serverEntryPromise: Promise<ServerEntry> | undefined;
 
 async function getServerEntry(): Promise<ServerEntry> {
@@ -86,16 +49,13 @@ export default {
     try {
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
-      return withSecurityHeaders(request, await normalizeCatastrophicSsrResponse(response));
+      return await normalizeCatastrophicSsrResponse(response);
     } catch (error) {
       console.error(error);
-      return withSecurityHeaders(
-        request,
-        new Response(renderErrorPage(), {
-          status: 500,
-          headers: { "content-type": "text/html; charset=utf-8" },
-        }),
-      );
+      return new Response(renderErrorPage(), {
+        status: 500,
+        headers: { "content-type": "text/html; charset=utf-8" },
+      });
     }
   },
 };

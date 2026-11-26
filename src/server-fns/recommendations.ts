@@ -3,8 +3,7 @@ import { and, asc, eq, ne, sql } from "drizzle-orm";
 import { z } from "zod";
 import { db } from "@/db/client";
 import { recommendations, sections } from "@/db/schema";
-import { safeLine, safeString, uuidList, validateWith } from "@/lib/text-validation";
-import { clientIp, hitRateLimit, type RateLimitRule } from "@/lib/rate-limit.server";
+import { safeString } from "@/lib/text-validation";
 import { requireAdmin } from "./require-admin";
 import { logActivity } from "./collection-helpers";
 
@@ -20,17 +19,10 @@ const insertSchema = z.object({
 const updateSchema = insertSchema.partial().and(z.object({ id: z.string().uuid() }));
 const idSchema = z.object({ id: z.string().uuid() });
 
-/** Public form: each visitor can send a few recommendations per hour. */
-const RECOMMENDATION_IP: RateLimitRule = {
-  scope: "recommendation-ip",
-  limit: 3,
-  windowSeconds: 60 * 60,
-};
-
 const submitSchema = z.object({
-  name: safeLine(200, 1),
-  position: safeLine(200, 1),
-  organization: safeLine(200).optional().default(""),
+  name: safeString(200, 1),
+  position: safeString(200, 1),
+  organization: safeString(200).optional().default(""),
   body: safeString(5000, 1),
 });
 
@@ -71,7 +63,7 @@ export const getPendingRecommendationCount = createServerFn({ method: "GET" }).h
 );
 
 export const getRecommendation = createServerFn({ method: "GET" })
-  .validator(validateWith(idSchema))
+  .validator(idSchema)
   .handler(async ({ data, context }) => {
     requireAdmin(context);
     const [row] = await db
@@ -83,7 +75,7 @@ export const getRecommendation = createServerFn({ method: "GET" })
   });
 
 export const createRecommendation = createServerFn({ method: "POST" })
-  .validator(validateWith(insertSchema))
+  .validator(insertSchema)
   .handler(async ({ data, context }) => {
     const admin = requireAdmin(context);
     const [row0] = await db
@@ -99,7 +91,7 @@ export const createRecommendation = createServerFn({ method: "POST" })
   });
 
 export const updateRecommendation = createServerFn({ method: "POST" })
-  .validator(validateWith(updateSchema))
+  .validator(updateSchema)
   .handler(async ({ data, context }) => {
     const admin = requireAdmin(context);
     const { id, ...fields } = data;
@@ -114,7 +106,7 @@ export const updateRecommendation = createServerFn({ method: "POST" })
   });
 
 export const deleteRecommendation = createServerFn({ method: "POST" })
-  .validator(validateWith(idSchema))
+  .validator(idSchema)
   .handler(async ({ data, context }) => {
     const admin = requireAdmin(context);
     const [row] = await db
@@ -134,10 +126,8 @@ export const deleteRecommendation = createServerFn({ method: "POST" })
  * so it never appears live until an admin reviews and publishes it.
  */
 export const submitRecommendation = createServerFn({ method: "POST" })
-  .validator(validateWith(submitSchema))
+  .validator(submitSchema)
   .handler(async ({ data }) => {
-    const limit = await hitRateLimit(RECOMMENDATION_IP, clientIp());
-    if (!limit.allowed) throw new Error("Too many submissions. Please try again later.");
     const [row0] = await db
       .select({ maxOrder: sql<number>`coalesce(max(${recommendations.sortOrder}), -1)` })
       .from(recommendations);
@@ -152,7 +142,7 @@ export const submitRecommendation = createServerFn({ method: "POST" })
   });
 
 export const reorderRecommendations = createServerFn({ method: "POST" })
-  .validator(validateWith(z.object({ orderedIds: uuidList() })))
+  .validator(z.object({ orderedIds: z.array(z.string().uuid()) }))
   .handler(async ({ data, context }) => {
     requireAdmin(context);
     const updates = data.orderedIds.map((id, index) =>

@@ -18,7 +18,6 @@ import {
 } from "@/components/ui/alert-dialog";
 import type { CollectionCrudApi } from "@/server-fns/collection-helpers";
 import { onRowClick, rowClickClass } from "@/components/admin/row-click";
-import { isSafeText, unsafeFieldMessage } from "@/lib/text-validation";
 
 export type CrudRow = { id: string; sortOrder: number; [key: string]: unknown };
 
@@ -114,13 +113,6 @@ export function CollectionCrudScreen({
     );
     if (missing) {
       setFormError(`حقل «${missing.label}» مطلوب.`);
-      return;
-    }
-    const unsafe = fields.find(
-      (f) => f.type !== "switch" && !isSafeText((formValues[f.name] ?? "").trim()),
-    );
-    if (unsafe) {
-      setFormError(unsafeFieldMessage(unsafe.label));
       return;
     }
     const payload: Record<string, string | boolean | undefined> = {};

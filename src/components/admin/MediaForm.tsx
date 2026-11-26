@@ -11,7 +11,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { mediaTypeAr } from "@/lib/media-i18n";
-import { findUnsafeField, unsafeFieldMessage } from "@/lib/text-validation";
 
 const MEDIA_TYPES = ["Interview", "Article", "Video", "News Feature", "Other"] as const;
 
@@ -55,8 +54,6 @@ export function MediaForm({
   error: string | null;
 }) {
   const [form, setForm] = useState(initial);
-  const [clientError, setClientError] = useState<string | null>(null);
-  const shownError = clientError ?? error;
 
   function set<K extends keyof MediaFormValues>(key: K, value: MediaFormValues[K]) {
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -66,9 +63,7 @@ export function MediaForm({
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        const unsafe = findUnsafeField(form);
-        setClientError(unsafe ? unsafeFieldMessage(unsafe) : null);
-        if (!unsafe) onSubmit(form);
+        onSubmit(form);
       }}
       className="max-w-3xl space-y-6"
     >
@@ -156,9 +151,9 @@ export function MediaForm({
         </label>
       </div>
 
-      {shownError && (
+      {error && (
         <p className="rounded-md border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive">
-          {shownError}
+          {error}
         </p>
       )}
 

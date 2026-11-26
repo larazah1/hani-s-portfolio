@@ -4,90 +4,40 @@ import { z } from "zod";
 import { db } from "@/db/client";
 import { admins } from "@/db/schema";
 import { hashPassword, sha256Hex, verifyPassword } from "@/lib/security";
-import {
-  loginPassword,
-  newPassword,
-  safeEmail,
-  safeToken,
-  validateWith,
-} from "@/lib/text-validation";
+import { safeToken } from "@/lib/text-validation";
 import { createAdminSession, destroyAdminSession } from "@/lib/session.server";
-import {
-  checkRateLimit,
-  clientIp,
-  hitRateLimit,
-  resetRateLimit,
-  type RateLimitRule,
-} from "@/lib/rate-limit.server";
 
 const FAILED_ATTEMPT_LIMIT = 5;
 const LOCKOUT_MS = 15 * 60 * 1000;
 const GENERIC_LOGIN_ERROR = "البريد الإلكتروني أو كلمة المرور غير صحيحة.";
 const GENERIC_INVITE_ERROR = "رابط الإعداد هذا غير صالح أو منتهي الصلاحية.";
 
-// Three layers against password guessing, each covering a gap in the others:
-// - LOGIN_IP: every login attempt from one IP, whatever the email. Stops one
-//   client from trying many accounts.
-// - LOGIN_EMAIL: failed attempts for one email, from any IP, including emails
-//   that don't exist (so the "too many attempts" reply can't reveal which
-//   emails are real). Stops guessing one account from many IPs.
-// - The account lockout columns on `admins` (failedAttempts / lockedUntil).
-const LOGIN_IP: RateLimitRule = { scope: "login-ip", limit: 20, windowSeconds: 15 * 60 };
-const LOGIN_EMAIL: RateLimitRule = {
-  scope: "login-email",
-  limit: FAILED_ATTEMPT_LIMIT,
-  windowSeconds: LOCKOUT_MS / 1000,
-};
-const INVITE_IP: RateLimitRule = { scope: "invite-ip", limit: 10, windowSeconds: 15 * 60 };
-
 type Result = { ok: true } | { ok: false; error: string };
 
-function tooManyAttempts(retryAfterSeconds: number): Result {
-  const minutes = Math.max(1, Math.ceil(retryAfterSeconds / 60));
-  return {
-    ok: false,
-    error: `محاولات كثيرة جدًا. الرجاء المحاولة مرة أخرى بعد ${minutes} دقيقة.`,
-  };
-}
-
-// Checked against when the email has no usable account, so a wrong email
-// takes as long as a wrong password and response time doesn't reveal which
-// emails belong to admins. Made once per server instance.
-let dummyHash: Promise<string> | undefined;
-const getDummyHash = () => (dummyHash ??= hashPassword("timing-equaliser-not-a-real-password"));
-
 const loginSchema = z.object({
-  email: safeEmail(),
-  password: loginPassword(),
+  email: z.string().trim().email(),
+  password: z.string().min(1),
   rememberMe: z.boolean().optional().default(false),
 });
 
 export const login = createServerFn({ method: "POST" })
-  .validator(validateWith(loginSchema))
+  .validator(loginSchema)
   .handler(async ({ data }): Promise<Result> => {
-    const email = data.email;
-
-    const ipLimit = await hitRateLimit(LOGIN_IP, clientIp());
-    if (!ipLimit.allowed) return tooManyAttempts(ipLimit.retryAfterSeconds);
-
-    const emailLimit = await checkRateLimit(LOGIN_EMAIL, email);
-    if (!emailLimit.allowed) return tooManyAttempts(emailLimit.retryAfterSeconds);
-
+    const email = data.email.toLowerCase();
     const [admin] = await db.select().from(admins).where(eq(admins.email, email)).limit(1);
 
     // Same generic error for "doesn't exist", "not active yet", "wrong
     // password" — never reveal which case it was (no user enumeration).
-    if (!admin || admin.status !== "active" || admin.passwordHash == null) {
-      await verifyPassword(data.password, await getDummyHash());
-      await hitRateLimit(LOGIN_EMAIL, email);
+    if (!admin || admin.status !== "active") {
       return { ok: false, error: GENERIC_LOGIN_ERROR };
     }
 
     if (admin.lockedUntil && admin.lockedUntil.getTime() > Date.now()) {
-      return tooManyAttempts((admin.lockedUntil.getTime() - Date.now()) / 1000);
+      return { ok: false, error: "محاولات فاشلة كثيرة جدًا. الرجاء المحاولة مرة أخرى بعد دقائق." };
     }
 
-    const passwordOk = await verifyPassword(data.password, admin.passwordHash);
+    const passwordOk =
+      admin.passwordHash != null && (await verifyPassword(data.password, admin.passwordHash));
 
     if (!passwordOk) {
       const failedAttempts = admin.failedAttempts + 1;
@@ -97,7 +47,6 @@ export const login = createServerFn({ method: "POST" })
         .update(admins)
         .set({ failedAttempts, lockedUntil, updatedAt: new Date() })
         .where(eq(admins.id, admin.id));
-      await hitRateLimit(LOGIN_EMAIL, email);
       return { ok: false, error: GENERIC_LOGIN_ERROR };
     }
 
@@ -105,7 +54,6 @@ export const login = createServerFn({ method: "POST" })
       .update(admins)
       .set({ failedAttempts: 0, lockedUntil: null, lastLoginAt: new Date(), updatedAt: new Date() })
       .where(eq(admins.id, admin.id));
-    await resetRateLimit(LOGIN_EMAIL, email);
     await createAdminSession(admin.id, data.rememberMe);
 
     return { ok: true };
@@ -122,16 +70,13 @@ export const getCurrentAdmin = createServerFn({ method: "GET" }).handler(async (
 
 const acceptInviteSchema = z.object({
   token: safeToken(),
-  password: newPassword(),
+  password: z.string().min(10, "يجب أن تتكون كلمة المرور من 10 أحرف على الأقل."),
 });
 
 /** Used both for first-time account setup and for peer-assisted password resets. */
 export const acceptInvite = createServerFn({ method: "POST" })
-  .validator(validateWith(acceptInviteSchema))
+  .validator(acceptInviteSchema)
   .handler(async ({ data }): Promise<Result> => {
-    const ipLimit = await hitRateLimit(INVITE_IP, clientIp());
-    if (!ipLimit.allowed) return tooManyAttempts(ipLimit.retryAfterSeconds);
-
     const tokenHash = await sha256Hex(data.token);
     const [admin] = await db
       .select()
