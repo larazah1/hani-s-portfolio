@@ -178,6 +178,9 @@ export const researchSpecialties = pgTable("research_specialties", {
   ...orderedCollection,
   en: text("en").notNull(),
   ar: text("ar").notNull(),
+  // Optional; shown when the specialty is opened in the About page accordion.
+  description: text("description"),
+  descriptionAr: text("description_ar"),
 });
 
 export const memberships = pgTable("memberships", {

@@ -15,6 +15,13 @@ function ResearchSpecialtiesPage() {
       fields={[
         { name: "en", label: "الإنجليزية" },
         { name: "ar", label: "العربية" },
+        { name: "description", label: "الوصف", type: "textarea", required: false },
+        {
+          name: "descriptionAr",
+          label: "الوصف (بالعربية)",
+          type: "textarea",
+          required: false,
+        },
       ]}
       api={researchSpecialtiesCrud}
       getRowTitle={(row: CrudRow) => String(row["en"])}
