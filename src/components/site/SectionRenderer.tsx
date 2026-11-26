@@ -20,7 +20,12 @@ import { Quote } from "lucide-react";
 import heroImage from "@/assets/hero-seismic.jpg";
 import portrait from "@/assets/hani.jpeg";
 import { Section, EmptyNote } from "@/components/site/Section";
-import { PublicationCard, type Publication } from "@/components/site/PublicationCard";
+import {
+  PublicationCard,
+  publicationHref,
+  type Publication,
+} from "@/components/site/PublicationCard";
+import { usePreview } from "@/components/site/LinkPreview";
 import { ArticleRow, MediaCard, VideoTile, type MediaItem } from "@/components/site/MediaCard";
 import { CareerSteps, type CareerStep } from "@/components/site/CareerSteps";
 import { ContactIcons } from "@/components/site/ContactIcons";
@@ -44,6 +49,8 @@ import { useLanguage, type DictionaryKey } from "@/lib/language";
 import type { SectionType } from "@/lib/section-types";
 import { submitContactMessage } from "@/server-fns/contact";
 import { submitRecommendation } from "@/server-fns/recommendations";
+import { safeHref } from "@/lib/safe-url";
+import { EMAIL_MAX, isSafeText } from "@/lib/text-validation";
 
 export type ResolvedSection = {
   id: string;
@@ -178,7 +185,7 @@ function HeroSection({
             </Link>
             {profile.cvUrl && (
               <a
-                href={profile.cvUrl}
+                href={safeHref(profile.cvUrl)}
                 target="_blank"
                 rel="noreferrer noopener"
                 download
@@ -426,8 +433,34 @@ function EducationGridSection({ section }: { section: ResolvedSection }) {
 function MembershipsListSection({ section }: { section: ResolvedSection }) {
   const { pick } = useLanguage();
   const heading = useHeading(section, "membershipsCommittees");
+  const isHome = useLocation({ select: (l) => l.pathname === "/" });
   const rows = (section.data as Record<string, unknown>[] | null) ?? [];
   if (rows.length === 0) return null;
+
+  // Home page: plain divided rows (name, then period at the end).
+  if (isHome) {
+    return (
+      <Section title={heading.title} className="!pt-0">
+        <ul className="border-b border-border">
+          {rows.map((m) => (
+            <li
+              key={String(m["id"])}
+              className="grid gap-1 border-t border-border py-5 md:grid-cols-[minmax(0,1fr)_auto] md:items-baseline md:gap-10"
+            >
+              <p className="text-lg leading-snug">
+                {pick(String(m["title"]), String(m["titleAr"]))}
+              </p>
+              {Boolean(m["period"]) && (
+                <p className="text-sm whitespace-nowrap text-muted-foreground tabular-nums">
+                  <bdi>{String(m["period"])}</bdi>
+                </p>
+              )}
+            </li>
+          ))}
+        </ul>
+      </Section>
+    );
+  }
 
   return (
     <Section title={heading.title} className="!pt-0">
@@ -582,19 +615,7 @@ function RecommendationsGridSection({ section }: { section: ResolvedSection }) {
   const rows = (section.data as Record<string, unknown>[] | null) ?? [];
 
   return (
-    <Section
-      title={heading.title}
-      className="!pt-0 !pb-6 md:!pb-8"
-      action={
-        <Link
-          to="/about"
-          hash="recommendation-form"
-          className="shrink-0 rounded-sm bg-accent px-4 py-2 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90"
-        >
-          {t("leaveARecommendation")}
-        </Link>
-      }
-    >
+    <Section title={heading.title} className="!pt-0 !pb-6 md:!pb-8">
       {rows.length === 0 ? (
         <EmptyNote>{t("emptyRecommendations")}</EmptyNote>
       ) : (
@@ -622,12 +643,27 @@ function RecommendationsGridSection({ section }: { section: ResolvedSection }) {
   );
 }
 
+// Same limits and character rules as the server (submitRecommendation).
+const UNSAFE_MESSAGE = "Please remove these characters: < > ` \\ |";
+const oneLine = (max: number) =>
+  z
+    .string()
+    .trim()
+    .max(max, `Please keep this under ${max} characters.`)
+    .refine(isSafeText, UNSAFE_MESSAGE)
+    .refine((v) => !/[\r\n]/.test(v), "Please keep this on one line.");
 const recommendationFormSchema = z.object({
-  name: z.string().trim().min(2, "Please enter your full name."),
-  position: z.string().trim().min(2, "Please enter your position."),
-  organization: z.string().trim(),
-  body: z.string().trim().min(20, "Please write at least a few sentences."),
+  name: oneLine(200).refine((v) => v.length >= 2, "Please enter your full name."),
+  position: oneLine(200).refine((v) => v.length >= 2, "Please enter your position."),
+  organization: oneLine(200),
+  body: z
+    .string()
+    .trim()
+    .min(20, "Please write at least a few sentences.")
+    .max(5000, "Please keep this under 5000 characters.")
+    .refine(isSafeText, UNSAFE_MESSAGE),
 });
+const RECOMMENDATION_LIMITS = { name: 200, position: 200, organization: 200, body: 5000 };
 type RecommendationFormValues = z.infer<typeof recommendationFormSchema>;
 
 function RecommendationFormSection({ section }: { section: ResolvedSection }) {
@@ -670,7 +706,11 @@ function RecommendationFormSection({ section }: { section: ResolvedSection }) {
                 <FormItem>
                   <FormLabel>{t("fullName")}</FormLabel>
                   <FormControl>
-                    <Input placeholder={t("fullNamePlaceholder")} {...field} />
+                    <Input
+                      placeholder={t("fullNamePlaceholder")}
+                      maxLength={RECOMMENDATION_LIMITS.name}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -683,7 +723,11 @@ function RecommendationFormSection({ section }: { section: ResolvedSection }) {
                 <FormItem>
                   <FormLabel>{t("recommendationPosition")}</FormLabel>
                   <FormControl>
-                    <Input placeholder={t("recommendationPositionPlaceholder")} {...field} />
+                    <Input
+                      placeholder={t("recommendationPositionPlaceholder")}
+                      maxLength={RECOMMENDATION_LIMITS.position}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -698,7 +742,11 @@ function RecommendationFormSection({ section }: { section: ResolvedSection }) {
               <FormItem>
                 <FormLabel>{t("recommendationOrganization")}</FormLabel>
                 <FormControl>
-                  <Input placeholder={t("recommendationOrganizationPlaceholder")} {...field} />
+                  <Input
+                    placeholder={t("recommendationOrganizationPlaceholder")}
+                    maxLength={RECOMMENDATION_LIMITS.organization}
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -712,7 +760,12 @@ function RecommendationFormSection({ section }: { section: ResolvedSection }) {
               <FormItem>
                 <FormLabel>{t("recommendationBody")}</FormLabel>
                 <FormControl>
-                  <Textarea rows={6} placeholder={t("recommendationBodyPlaceholder")} {...field} />
+                  <Textarea
+                    rows={6}
+                    placeholder={t("recommendationBodyPlaceholder")}
+                    maxLength={RECOMMENDATION_LIMITS.body}
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -745,6 +798,7 @@ function RecommendationFormSection({ section }: { section: ResolvedSection }) {
 
 function PublicationsFullListSection({ section }: { section: ResolvedSection }) {
   const { t, pick } = useLanguage();
+  const openPreview = usePreview();
   const heading = useHeading(section, "publicationsHeadline");
   const data = section.data as { items: Publication[]; stats: Record<string, unknown>[] } | null;
   const allItems = useMemo(() => data?.items ?? [], [data]);
@@ -753,17 +807,12 @@ function PublicationsFullListSection({ section }: { section: ResolvedSection }) 
   );
 
   const [query, setQuery] = useState("");
-  const [year, setYear] = useState("All");
   const [type, setType] = useState("All");
   const [area, setArea] = useState("All");
 
-  const selectClass =
+  const field =
     "rounded-sm border border-input bg-card px-4 py-2.5 text-sm outline-none focus:border-accent";
 
-  const years = useMemo(
-    () => ["All", ...Array.from(new Set(allItems.map((p) => p.year))).sort((a, b) => b - a)],
-    [allItems],
-  );
   const types = useMemo(
     () => ["All", ...Array.from(new Set(allItems.map((p) => p.type)))],
     [allItems],
@@ -778,55 +827,42 @@ function PublicationsFullListSection({ section }: { section: ResolvedSection }) 
   );
 
   const filtered = allItems.filter((p) => {
-    const matchesQuery = `${p.title} ${p.titleAr} ${p.authors} ${p.journal}`
+    const matchesQuery = `${p.title} ${p.titleAr ?? ""} ${p.authors ?? ""} ${p.journal ?? ""}`
       .toLowerCase()
       .includes(query.toLowerCase());
-    const matchesYear = year === "All" || p.year === Number(year);
-    const matchesType = type === "All" || p.type === type;
-    const matchesArea = area === "All" || p.area === area;
-    return matchesQuery && matchesYear && matchesType && matchesArea;
+    return (
+      matchesQuery && (type === "All" || p.type === type) && (area === "All" || p.area === area)
+    );
   });
-
-  const groups: { headingKey: DictionaryKey; types: string[] }[] = [
-    { headingKey: "journalArticles", types: ["Journal Article"] },
-    { headingKey: "scientificBooks", types: ["Scientific Book"] },
-    { headingKey: "reportsOther", types: ["Report", "Conference Paper", "Other"] },
-  ];
 
   return (
     <Section title={heading.title}>
-      <p className="-mt-4 mb-8 max-w-2xl text-sm text-muted-foreground">
-        {t("publicationsPageIntro")}
-      </p>
-
       {stats.length > 0 && (
         <div className="mb-14 -mx-5 md:mx-0">
           <StatsMarquee stats={stats} label={heading.title} />
         </div>
       )}
 
-      <div className="mb-4 grid gap-3 sm:grid-cols-[minmax(0,1fr)_auto_auto_auto]">
+      <div className="mb-8 grid gap-3 sm:grid-cols-[minmax(0,1fr)_auto_auto]">
         <input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder={t("searchPublications")}
-          className={selectClass}
+          className={`w-full ${field}`}
         />
-        <select value={year} onChange={(e) => setYear(e.target.value)} className={selectClass}>
-          {years.map((y) => (
-            <option key={y} value={y}>
-              {y === "All" ? t("allYears") : y}
-            </option>
-          ))}
-        </select>
-        <select value={type} onChange={(e) => setType(e.target.value)} className={selectClass}>
+        <select value={type} onChange={(e) => setType(e.target.value)} className={field}>
           {types.map((ty) => (
             <option key={ty} value={ty}>
               {ty === "All" ? t("allTypes") : pick(ty, publicationTypeAr[ty] ?? ty)}
             </option>
           ))}
         </select>
-        <select value={area} onChange={(e) => setArea(e.target.value)} className={selectClass}>
+        <select
+          value={area}
+          onChange={(e) => setArea(e.target.value)}
+          aria-label={t("allAreas")}
+          className={field}
+        >
           {areas.map((a) => (
             <option key={a} value={a}>
               {a === "All" ? t("allAreas") : pick(a, areaAr.get(a) ?? a)}
@@ -834,31 +870,59 @@ function PublicationsFullListSection({ section }: { section: ResolvedSection }) 
           ))}
         </select>
       </div>
-      <p className="mb-10 text-sm text-muted-foreground" aria-live="polite">
+      <p className="mb-4 text-sm text-muted-foreground" aria-live="polite">
         {filtered.length} / {allItems.length}
       </p>
 
       {filtered.length === 0 ? (
         <EmptyNote>{t("noPublicationsMatch")}</EmptyNote>
       ) : (
-        <div className="space-y-14">
-          {groups.map((group) => {
-            const items = filtered.filter((p) => group.types.includes(p.type));
-            if (items.length === 0) return null;
+        <ul className="divide-y divide-border rounded-md border border-border bg-card">
+          {filtered.map((p) => {
+            const href = publicationHref(p);
             return (
-              <div key={group.headingKey}>
-                <h3 className="mb-5 font-[family-name:var(--font-display)] text-2xl font-bold">
-                  {t(group.headingKey)}
+              <li key={p.id} className="px-6 py-5">
+                <p className="eyebrow">
+                  {[
+                    p.year,
+                    pick(p.type, publicationTypeAr[p.type] ?? p.type),
+                    p.area && pick(p.area, p.areaAr ?? p.area),
+                  ]
+                    .filter(Boolean)
+                    .join(" · ")}
+                </p>
+                <h3 lang="en" dir="auto" className="mt-1.5 text-lg leading-snug">
+                  {pick(p.title, p.titleAr ?? p.title)}
                 </h3>
-                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                  {items.map((p) => (
-                    <PublicationCard key={p.id} publication={p} />
-                  ))}
-                </div>
-              </div>
+                {p.authors && (
+                  <p lang="en" dir="auto" className="mt-1 text-sm text-muted-foreground">
+                    {p.authors}
+                  </p>
+                )}
+                {p.journal && (
+                  <p lang="en" dir="auto" className="text-sm text-muted-foreground">
+                    {p.journal}
+                  </p>
+                )}
+                {href && (
+                  <button
+                    type="button"
+                    onClick={() =>
+                      openPreview({
+                        url: href,
+                        title: p.title,
+                        meta: [p.journal, p.year].filter(Boolean).join(" · "),
+                      })
+                    }
+                    className="mt-2 inline-block cursor-pointer text-sm underline underline-offset-4"
+                  >
+                    {t("goToPublication")}
+                  </button>
+                )}
+              </li>
             );
           })}
-        </div>
+        </ul>
       )}
     </Section>
   );
@@ -895,9 +959,6 @@ function MediaFullGridSection({ section }: { section: ResolvedSection }) {
   return (
     <>
       <Section title={heading.title}>
-        <p className="-mt-4 mb-8 max-w-2xl text-sm text-muted-foreground">
-          {t("interviewsArticlesIntro")}
-        </p>
         {items.length > 0 && (
           <div className="mb-14 -mx-5 md:mx-0">
             <StatsMarquee stats={stats} label={heading.title} />
@@ -941,18 +1002,24 @@ function RichTextSection({
   profile: PublicProfile | null;
   socialLinks: { label: string; url: string }[];
 }) {
-  const { t, pick } = useLanguage();
+  const { t, pick, language } = useLanguage();
   const heading = useHeading(section, "biography");
-  const config = section.config as { contentEn?: string[]; showPortrait?: boolean };
-  const paragraphs = config.contentEn ?? [];
+  const config = section.config as {
+    contentEn?: string[];
+    contentAr?: string[];
+    showPortrait?: boolean;
+  };
+  // Arabic visitors get the Arabic text when there is one, else the English.
+  const arabic = language === "ar" && (config.contentAr?.length ?? 0) > 0;
+  const paragraphs = (arabic ? config.contentAr : config.contentEn) ?? [];
 
   const text = (
     <div
       className="max-w-3xl space-y-4 text-[0.98rem] leading-relaxed text-muted-foreground"
-      dir="ltr"
+      dir={arabic ? "rtl" : "ltr"}
     >
       {paragraphs.map((p) => (
-        <p key={p.slice(0, 24)} className="text-left">
+        <p key={p.slice(0, 24)} className="text-start">
           {p}
         </p>
       ))}
@@ -1040,7 +1107,7 @@ const CONTACT_FIELDS: ContactField[] = ["name", "email", "subject", "message"];
 const CONTACT_EMPTY = { name: "", email: "", subject: "", message: "", website: "" };
 const CONTACT_LIMITS: Record<ContactField, number> = {
   name: 200,
-  email: 200,
+  email: EMAIL_MAX,
   subject: 300,
   message: 5000,
 };
@@ -1066,8 +1133,12 @@ function ContactBlockSection({
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
 
   const check = (k: ContactField, v: string) => {
-    if (!v.trim()) return t("fieldRequired");
-    if (k === "email" && !EMAIL_RE.test(v.trim())) return t("invalidEmail");
+    const value = v.trim();
+    if (!value) return t("fieldRequired");
+    if (value.length > CONTACT_LIMITS[k]) return t("tooLong");
+    if (k === "email") return EMAIL_RE.test(value) ? undefined : t("invalidEmail");
+    if (!isSafeText(value)) return t("invalidCharacters");
+    if (k !== "message" && /[\r\n]/.test(value)) return t("singleLine");
     return undefined;
   };
   const set =
@@ -1320,7 +1391,7 @@ function ContactBlockSection({
                   <li key={ch.label}>
                     {ch.href ? (
                       <a
-                        href={ch.href}
+                        href={safeHref(ch.href)}
                         {...(ch.external ? { target: "_blank", rel: "noreferrer noopener" } : {})}
                         className="group flex items-center gap-4 rounded-md p-3 transition-colors duration-300 hover:bg-muted/60"
                       >

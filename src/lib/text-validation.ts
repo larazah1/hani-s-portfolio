@@ -31,7 +31,16 @@ const DOI_PATTERN = /^10\.\d{4,9}\/[A-Za-z0-9.\-_:;()/]+$/;
 const TOKEN_PATTERN = /^[A-Za-z0-9_-]+$/;
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
-const UNSAFE_CHARS_MESSAGE = "Contains characters that aren't allowed.";
+const UNSAFE_CHARS_MESSAGE =
+  "Contains characters that aren't allowed (< > ` \\ |). / يحتوي على أحرف غير مسموح بها.";
+
+/** Max lengths shared by the forms (client) and the validators (server). */
+export const EMAIL_MAX = 320;
+export const PASSWORD_MIN = 10;
+/** Caps the work PBKDF2 does per request; long passphrases still fit. */
+export const PASSWORD_MAX = 256;
+/** Caps list inputs like "reorder these ids" so one request can't be huge. */
+export const ID_LIST_MAX = 1000;
 
 /**
  * Free text (names, titles, bios, messages) — English or Arabic, any length
@@ -89,6 +98,76 @@ export function safePath(maxLength = 200) {
     .trim()
     .max(maxLength)
     .regex(PATH_PATTERN, "Path must start with / and use lowercase letters, numbers, and dashes.");
+}
+
+/**
+ * One line of text (names, subjects, labels): same rules as `safeString`,
+ * plus no line breaks, so it can't add lines to an email header or log.
+ */
+export function safeLine(maxLength: number, minLength = 0) {
+  return safeString(maxLength, minLength).refine((v) => !/[\r\n]/.test(v), {
+    message: "Must be a single line.",
+  });
+}
+
+/** An email address: trimmed, lowercased, at most EMAIL_MAX characters. */
+export function safeEmail() {
+  return z
+    .string()
+    .trim()
+    .max(EMAIL_MAX, `Must be ${EMAIL_MAX} characters or fewer.`)
+    .email("Must be a valid email address.")
+    .transform((v) => v.toLowerCase());
+}
+
+/** A password to check at login (no minimum: old passwords must still work). */
+export function loginPassword() {
+  return z.string().min(1).max(PASSWORD_MAX, `Must be ${PASSWORD_MAX} characters or fewer.`);
+}
+
+/** A new password being set. */
+export function newPassword() {
+  return z
+    .string()
+    .min(PASSWORD_MIN, `يجب أن تتكون كلمة المرور من ${PASSWORD_MIN} أحرف على الأقل.`)
+    .max(PASSWORD_MAX, `يجب ألا تزيد كلمة المرور عن ${PASSWORD_MAX} حرفًا.`);
+}
+
+/** A list of row ids, e.g. the new order after drag-and-drop. */
+export function uuidList() {
+  return z.array(z.string().uuid()).max(ID_LIST_MAX);
+}
+
+/**
+ * Client-side pre-check for a whole form: the first key whose string value
+ * isn't safe text, or null. Mirrors the server rule so people see which field
+ * is wrong before sending.
+ */
+export function findUnsafeField(values: Record<string, unknown>): string | null {
+  for (const [key, value] of Object.entries(values)) {
+    if (typeof value === "string" && value !== "" && !isSafeText(value)) return key;
+  }
+  return null;
+}
+
+/** Arabic message for the admin forms when `findUnsafeField` finds a field. */
+export function unsafeFieldMessage(field: string): string {
+  return `الحقل «${field}» يحتوي على أحرف غير مسموح بها (< > \` \\ |).`;
+}
+
+/**
+ * Wraps a Zod schema as a server-function validator whose error message is
+ * readable ("field: reason") instead of a JSON dump of every Zod issue. The
+ * admin forms show this message as-is.
+ */
+export function validateWith<T extends z.ZodTypeAny>(schema: T) {
+  return (input: z.input<T>): z.output<T> => {
+    const result = schema.safeParse(input);
+    if (result.success) return result.data;
+    const issue = result.error.issues[0];
+    const field = issue?.path.join(".");
+    throw new Error(field ? `«${field}»: ${issue?.message}` : (issue?.message ?? "Invalid input."));
+  };
 }
 
 /** A phone number: digits, spaces, parentheses, dashes, optional leading +. */

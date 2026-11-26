@@ -1,5 +1,6 @@
 import { Linkedin, Mail, Phone } from "lucide-react";
 import { useLanguage } from "@/lib/language";
+import { safeHref } from "@/lib/safe-url";
 
 /**
  * Icon-only contact links: LinkedIn (from the social links), email (mailto:)
@@ -46,7 +47,7 @@ export function ContactIcons({
       {links.map(({ href, label, Icon, external }) => (
         <li key={href}>
           <a
-            href={href}
+            href={safeHref(href)}
             aria-label={label}
             title={label}
             {...(external ? { target: "_blank", rel: "noreferrer noopener" } : {})}

@@ -17,6 +17,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { login } from "@/server-fns/auth";
+import { EMAIL_MAX, PASSWORD_MAX } from "@/lib/text-validation";
 
 export const Route = createFileRoute("/admin/login")({
   component: AdminLoginPage,
@@ -27,8 +28,9 @@ const loginFormSchema = z.object({
     .string()
     .trim()
     .min(1, "البريد الإلكتروني مطلوب.")
+    .max(EMAIL_MAX, "البريد الإلكتروني طويل جدًا.")
     .email("أدخل بريدًا إلكترونيًا صالحًا."),
-  password: z.string().min(1, "كلمة المرور مطلوبة."),
+  password: z.string().min(1, "كلمة المرور مطلوبة.").max(PASSWORD_MAX, "كلمة المرور طويلة جدًا."),
   rememberMe: z.boolean(),
 });
 type LoginFormValues = z.infer<typeof loginFormSchema>;
@@ -65,7 +67,7 @@ function AdminLoginPage() {
               <FormItem>
                 <FormLabel>البريد الإلكتروني</FormLabel>
                 <FormControl>
-                  <Input type="email" autoComplete="username" {...field} />
+                  <Input type="email" autoComplete="username" maxLength={EMAIL_MAX} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -83,6 +85,7 @@ function AdminLoginPage() {
                     <Input
                       type={showPassword ? "text" : "password"}
                       autoComplete="current-password"
+                      maxLength={PASSWORD_MAX}
                       className="pe-10"
                       {...field}
                     />

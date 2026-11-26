@@ -174,11 +174,21 @@ const dictionary = {
     en: "Please enter a valid email address.",
     ar: "يُرجى إدخال بريد إلكتروني صحيح.",
   },
+  invalidCharacters: {
+    en: "Please remove these characters: < > ` \\ |",
+    ar: "يُرجى حذف هذه الأحرف: < > ` \\ |",
+  },
+  singleLine: { en: "Please keep this on one line.", ar: "يُرجى كتابة هذا الحقل في سطر واحد." },
+  tooLong: { en: "This is too long.", ar: "النص طويل جدًا." },
   subjectExample: { en: "e.g. Research collaboration", ar: "مثال: تعاون بحثي" },
   messageExample: { en: "How can Dr. Zahran help?", ar: "كيف يمكن للدكتور زهران مساعدتك؟" },
 
   quickLinks: { en: "Quick Links", ar: "روابط سريعة" },
   geophysicistSeismologist: { en: "Geophysicist & Seismologist", ar: "جيوفيزيائي وعالم زلازل" },
+  headerSubtitle: {
+    en: "Applied Geophysics & Seismology",
+    ar: "الجيوفيزياء التطبيقية وعلم الزلازل",
+  },
   allRightsReserved: { en: "All rights reserved.", ar: "جميع الحقوق محفوظة." },
 
   pageNotFound: { en: "Page not found", ar: "الصفحة غير موجودة" },

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { getSiteSettings, updateSiteSettings } from "@/server-fns/site-settings";
+import { findUnsafeField, unsafeFieldMessage } from "@/lib/text-validation";
 
 export const Route = createFileRoute("/admin/_authed/settings")({
   component: SettingsPage,
@@ -31,6 +32,7 @@ function SettingsPage() {
   });
   const [form, setForm] = useState<FormState | null>(null);
   const [saved, setSaved] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
 
   useEffect(() => {
     if (data && !form) {
@@ -56,6 +58,7 @@ function SettingsPage() {
       setSaved(true);
       setTimeout(() => setSaved(false), 2500);
     },
+    onError: (e: Error) => setFormError(e.message || "حدث خطأ ما."),
   });
 
   if (isLoading || !form) {
@@ -75,7 +78,10 @@ function SettingsPage() {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          if (form) saveMutation.mutate(form);
+          if (!form) return;
+          const unsafe = findUnsafeField(form);
+          setFormError(unsafe ? unsafeFieldMessage(unsafe) : null);
+          if (!unsafe) saveMutation.mutate(form);
         }}
         className="mt-8 space-y-10"
       >
@@ -151,6 +157,7 @@ function SettingsPage() {
           </Button>
           {saved && <span className="text-sm text-muted-foreground">تم الحفظ.</span>}
         </div>
+        {formError && <p className="text-sm text-destructive">{formError}</p>}
       </form>
     </div>
   );

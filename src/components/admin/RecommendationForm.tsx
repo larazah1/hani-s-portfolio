@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
+import { findUnsafeField, unsafeFieldMessage } from "@/lib/text-validation";
 
 export type RecommendationFormValues = {
   name: string;
@@ -38,6 +39,8 @@ export function RecommendationForm({
   error: string | null;
 }) {
   const [form, setForm] = useState(initial);
+  const [clientError, setClientError] = useState<string | null>(null);
+  const shownError = clientError ?? error;
 
   function set<K extends keyof RecommendationFormValues>(
     key: K,
@@ -50,7 +53,9 @@ export function RecommendationForm({
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        onSubmit(form);
+        const unsafe = findUnsafeField(form);
+        setClientError(unsafe ? unsafeFieldMessage(unsafe) : null);
+        if (!unsafe) onSubmit(form);
       }}
       className="max-w-2xl space-y-6"
     >
@@ -96,9 +101,9 @@ export function RecommendationForm({
         </label>
       </div>
 
-      {error && (
+      {shownError && (
         <p className="rounded-md border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive">
-          {error}
+          {shownError}
         </p>
       )}
 

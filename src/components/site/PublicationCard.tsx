@@ -20,7 +20,7 @@ export type Publication = {
   featured?: boolean | null;
 };
 
-function publicationHref(p: Publication) {
+export function publicationHref(p: Publication) {
   return p.url ?? (p.doi ? `https://doi.org/${p.doi}` : undefined);
 }
 

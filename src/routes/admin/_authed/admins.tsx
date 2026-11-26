@@ -18,6 +18,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { inviteAdmin, listAdmins, resetAdminPassword, setAdminStatus } from "@/server-fns/admins";
+import { EMAIL_MAX } from "@/lib/text-validation";
 
 export const Route = createFileRoute("/admin/_authed/admins")({
   component: AdminsPage,
@@ -118,6 +119,7 @@ function AdminsPage() {
           <Input
             type="email"
             required
+            maxLength={EMAIL_MAX}
             placeholder="name@example.com"
             value={inviteEmail}
             onChange={(e) => setInviteEmail(e.target.value)}

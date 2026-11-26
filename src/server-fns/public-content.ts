@@ -3,6 +3,7 @@ import { getRequestUrl } from "@tanstack/react-start/server";
 import { and, asc, eq, inArray, sql } from "drizzle-orm";
 import { z } from "zod";
 import { db } from "@/db/client";
+import { safePath, validateWith } from "@/lib/text-validation";
 import {
   activities,
   careerEntries,
@@ -199,7 +200,7 @@ async function resolveSectionData(section: typeof sections.$inferSelect) {
 }
 
 export const getPageByPath = createServerFn({ method: "GET" })
-  .validator(z.object({ path: z.string() }))
+  .validator(validateWith(z.object({ path: safePath() })))
   .handler(async ({ data }) => {
     const [page] = await db
       .select()

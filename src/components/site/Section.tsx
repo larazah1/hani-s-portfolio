@@ -17,7 +17,7 @@ export function Section({
   className?: string;
 }) {
   return (
-    <section id={id} className={`mx-auto max-w-6xl px-5 py-10 md:py-14 ${className}`}>
+    <section id={id} className={`mx-auto max-w-6xl px-5 py-16 md:py-20 ${className}`}>
       {(title || action) && (
         <header className="mb-8 flex flex-wrap items-end justify-between gap-4">
           <div className="max-w-2xl">
