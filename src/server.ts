@@ -81,9 +81,43 @@ function isH3SwallowedErrorBody(body: string): boolean {
   }
 }
 
+// The public website is a separate app (zahran-portal); this app is only the
+// admin panel. When PUBLIC_SITE_URL is set (e.g. https://example.com), page
+// requests outside /admin are sent there, so this app's own copy of the
+// public pages is never served or indexed. Server functions, built assets
+// and files (anything with an extension) are left alone. Unset (local dev):
+// no redirect.
+function publicSiteRedirect(request: Request): Response | null {
+  const target = process.env["PUBLIC_SITE_URL"];
+  if (!target || (request.method !== "GET" && request.method !== "HEAD")) return null;
+  const url = new URL(request.url);
+  const path = url.pathname;
+  if (
+    path === "/admin" ||
+    path.startsWith("/admin/") ||
+    path.startsWith("/_serverFn") ||
+    path.startsWith("/assets/") ||
+    /\.[a-z0-9]+$/i.test(path)
+  ) {
+    return null;
+  }
+  let site: URL;
+  try {
+    site = new URL(target);
+  } catch {
+    console.error("PUBLIC_SITE_URL is not a valid URL; not redirecting.");
+    return null;
+  }
+  if (site.host === url.host) return null; // never redirect to itself
+  // Temporary (307), so browsers don't cache it if the setup changes.
+  return Response.redirect(new URL(path + url.search, site).toString(), 307);
+}
+
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     try {
+      const redirect = publicSiteRedirect(request);
+      if (redirect) return withSecurityHeaders(request, redirect);
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
       return withSecurityHeaders(request, await normalizeCatastrophicSsrResponse(response));
