@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { ExternalLink, Plus, Trash2 } from "lucide-react";
@@ -31,6 +31,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { publicationTypeAr } from "@/lib/publication-i18n";
 import { deletePublication, listPublications } from "@/server-fns/publications";
+import { onRowClick, rowClickClass } from "@/components/admin/row-click";
 
 export const Route = createFileRoute("/admin/_authed/publications/")({
   component: PublicationsListPage,
@@ -38,6 +39,7 @@ export const Route = createFileRoute("/admin/_authed/publications/")({
 
 function PublicationsListPage() {
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const { data, isLoading } = useQuery({
     queryKey: ["publications"],
     queryFn: () => listPublications(),
@@ -122,7 +124,17 @@ function PublicationsListPage() {
             </TableHeader>
             <TableBody>
               {filtered.map((p) => (
-                <TableRow key={p.id}>
+                <TableRow
+                  key={p.id}
+                  onClick={onRowClick(
+                    () =>
+                      void navigate({
+                        to: "/admin/publications/$publicationId",
+                        params: { publicationId: p.id },
+                      }),
+                  )}
+                  className={rowClickClass}
+                >
                   <TableCell className="max-w-sm">
                     <p className="truncate font-medium">{p.title}</p>
                     <p className="truncate text-xs text-muted-foreground">{p.journal}</p>

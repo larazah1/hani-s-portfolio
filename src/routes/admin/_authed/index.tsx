@@ -8,7 +8,6 @@ import {
   BookMarked,
   Eye,
   Inbox,
-  LayoutTemplate,
   Newspaper,
   Quote,
   ShieldCheck,
@@ -123,20 +122,6 @@ function AdminDashboard() {
             <p className="text-sm font-medium">إجراءات سريعة</p>
             <div className="mt-3 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               <Link
-                to="/admin/pages"
-                className="group flex items-center gap-4 rounded-lg border border-border bg-card p-5 transition-colors hover:border-accent-foreground/40 hover:bg-secondary/40"
-              >
-                <LayoutTemplate className="h-6 w-6 shrink-0 text-muted-foreground" />
-                <div className="min-w-0 flex-1">
-                  <p className="font-medium">تعديل أقسام الصفحات</p>
-                  <p className="text-xs text-muted-foreground">
-                    تصفح كل صفحات الموقع وعدّل أقسامها أو أضفها أو أعد ترتيبها.
-                  </p>
-                </div>
-                <ArrowLeft className="h-4 w-4 shrink-0 text-muted-foreground transition-transform group-hover:-translate-x-0.5" />
-              </Link>
-
-              <Link
                 to="/admin/stats"
                 className="group flex items-center gap-4 rounded-lg border border-border bg-card p-5 transition-colors hover:border-accent-foreground/40 hover:bg-secondary/40"
               >
@@ -195,13 +180,6 @@ function AdminDashboard() {
                 to="/admin/messages"
               >
                 رسائل التواصل
-              </Link>
-              <span className="text-muted-foreground">·</span>
-              <Link
-                className="underline underline-offset-4 hover:text-accent-foreground"
-                to="/admin/pages"
-              >
-                الصفحات
               </Link>
               <span className="text-muted-foreground">·</span>
               <Link

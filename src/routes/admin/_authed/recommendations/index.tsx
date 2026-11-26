@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { Check, ChevronDown, ChevronUp, Plus, Trash2 } from "lucide-react";
@@ -20,6 +20,7 @@ import {
   reorderRecommendations,
   updateRecommendation,
 } from "@/server-fns/recommendations";
+import { onRowClick, rowClickClass } from "@/components/admin/row-click";
 
 export const Route = createFileRoute("/admin/_authed/recommendations/")({
   component: RecommendationsListPage,
@@ -27,6 +28,7 @@ export const Route = createFileRoute("/admin/_authed/recommendations/")({
 
 function RecommendationsListPage() {
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const { data, isLoading } = useQuery({
     queryKey: ["recommendations"],
     queryFn: () => listRecommendations(),
@@ -99,7 +101,17 @@ function RecommendationsListPage() {
             {rows.map((r, index) => {
               const isPending = r.submittedByPublic && r.status !== "published";
               return (
-                <li key={r.id} className="flex items-start gap-3 px-5 py-4">
+                <li
+                  key={r.id}
+                  onClick={onRowClick(
+                    () =>
+                      void navigate({
+                        to: "/admin/recommendations/$recommendationId",
+                        params: { recommendationId: r.id },
+                      }),
+                  )}
+                  className={`flex items-start gap-3 px-5 py-4 ${rowClickClass}`}
+                >
                   <div className="flex flex-col pt-1">
                     <button
                       type="button"

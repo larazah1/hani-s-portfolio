@@ -70,6 +70,7 @@ async function resolveSectionData(section: typeof sections.$inferSelect) {
 
   switch (section.type) {
     case "hero":
+    case "quote":
     case "contact-block":
     case "recommendation-form":
       return null;
@@ -167,19 +168,30 @@ async function resolveSectionData(section: typeof sections.$inferSelect) {
         .orderBy(asc(recommendations.sortOrder));
     }
 
-    case "publications-full-list":
-      return db
-        .select()
-        .from(publications)
-        .where(eq(publications.status, "published"))
-        .orderBy(asc(publications.sortOrder));
+    // The full-list pages also show the profile's key figures above the list.
+    case "publications-full-list": {
+      const [items, statRows] = await Promise.all([
+        db
+          .select()
+          .from(publications)
+          .where(eq(publications.status, "published"))
+          .orderBy(asc(publications.sortOrder)),
+        db.select().from(stats).orderBy(asc(stats.sortOrder)),
+      ]);
+      return { items, stats: statRows };
+    }
 
-    case "media-full-grid":
-      return db
-        .select()
-        .from(mediaItems)
-        .where(eq(mediaItems.status, "published"))
-        .orderBy(asc(mediaItems.sortOrder));
+    case "media-full-grid": {
+      const [items, statRows] = await Promise.all([
+        db
+          .select()
+          .from(mediaItems)
+          .where(eq(mediaItems.status, "published"))
+          .orderBy(asc(mediaItems.sortOrder)),
+        db.select().from(stats).orderBy(asc(stats.sortOrder)),
+      ]);
+      return { items, stats: statRows };
+    }
 
     default:
       return null;

@@ -3,7 +3,6 @@ import { useQuery } from "@tanstack/react-query";
 import type { ReactNode } from "react";
 import {
   LayoutDashboard,
-  FileText,
   BookMarked,
   Newspaper,
   Quote,
@@ -48,7 +47,6 @@ type NavGroup = { label: string; items: NavItem[] };
 
 const NAV_GROUPS: NavGroup[] = [
   { label: "نظرة عامة", items: [{ to: "/admin", label: "لوحة التحكم", icon: LayoutDashboard }] },
-  { label: "هيكل الموقع", items: [{ to: "/admin/pages", label: "الصفحات", icon: FileText }] },
   {
     label: "المحتوى",
     items: [

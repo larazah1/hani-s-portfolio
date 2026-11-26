@@ -19,14 +19,16 @@ import { getSiteChrome } from "../server-fns/public-content";
 import { PreviewProvider } from "../components/site/LinkPreview";
 
 // Runs before hydration so a stored Arabic preference applies immediately,
-// avoiding a flash of LTR content on repeat visits. Skipped for /admin/* —
-// the admin panel is always English/LTR, independent of the public site's
-// language toggle.
+// avoiding a flash of LTR content on repeat visits. /admin/* is always
+// Arabic/RTL, independent of the public site's language toggle.
 const noFlashLanguageScript = `
 (function () {
   try {
-    if (window.location.pathname.indexOf("/admin") === 0) return;
-    var lang = window.localStorage.getItem("site-lang");
+    // The admin panel is always Arabic/RTL (Thmanyah font) — set it before
+    // first paint so it doesn't flash in English/IBM Plex.
+    var lang = window.location.pathname.indexOf("/admin") === 0
+      ? "ar"
+      : window.localStorage.getItem("site-lang");
     if (lang === "ar") {
       document.documentElement.lang = "ar";
       document.documentElement.dir = "rtl";
@@ -140,7 +142,9 @@ function RootShell({ children }: { children: ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        {children}
+        {/* Provider lives in the shell so the root error/404 components
+            (rendered outside RootComponent) can use useLanguage too. */}
+        <LanguageProvider>{children}</LanguageProvider>
         <Scripts />
       </body>
     </html>
@@ -156,7 +160,7 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <LanguageProvider>
+      <>
         {isAdminRoute ? (
           // The admin panel is a separate experience from the public
           // portfolio — no public header/footer/nav here. Each admin route
@@ -179,7 +183,7 @@ function RootComponent() {
           </PreviewProvider>
         )}
         <Toaster />
-      </LanguageProvider>
+      </>
     </QueryClientProvider>
   );
 }

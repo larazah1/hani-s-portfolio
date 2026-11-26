@@ -20,7 +20,9 @@ export function ContactIcons({
   className?: string;
 }) {
   const { t } = useLanguage();
-  const linkedin = socialLinks.find((s) => /linkedin/i.test(s.label) || /linkedin\.com/i.test(s.url));
+  const linkedin = socialLinks.find(
+    (s) => /linkedin/i.test(s.label) || /linkedin\.com/i.test(s.url),
+  );
 
   const links = [
     linkedin && { href: linkedin.url, label: "LinkedIn", Icon: Linkedin, external: true },

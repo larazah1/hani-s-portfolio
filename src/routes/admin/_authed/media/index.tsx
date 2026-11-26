@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { ExternalLink, Plus, Trash2 } from "lucide-react";
@@ -31,6 +31,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { mediaTypeAr } from "@/lib/media-i18n";
 import { deleteMediaItem, listMedia } from "@/server-fns/media";
+import { onRowClick, rowClickClass } from "@/components/admin/row-click";
 
 export const Route = createFileRoute("/admin/_authed/media/")({
   component: MediaListPage,
@@ -38,6 +39,7 @@ export const Route = createFileRoute("/admin/_authed/media/")({
 
 function MediaListPage() {
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const { data, isLoading } = useQuery({ queryKey: ["media"], queryFn: () => listMedia() });
   const rows = data ?? [];
 
@@ -120,7 +122,14 @@ function MediaListPage() {
               {filtered.map((m) => {
                 const primaryUrl = m.videoUrl ?? m.articleUrl;
                 return (
-                  <TableRow key={m.id}>
+                  <TableRow
+                    key={m.id}
+                    onClick={onRowClick(
+                      () =>
+                        void navigate({ to: "/admin/media/$mediaId", params: { mediaId: m.id } }),
+                    )}
+                    className={rowClickClass}
+                  >
                     <TableCell className="max-w-sm truncate font-medium">{m.title}</TableCell>
                     <TableCell>{m.source}</TableCell>
                     <TableCell>{m.dateLabel}</TableCell>

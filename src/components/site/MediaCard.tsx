@@ -1,16 +1,9 @@
 import { useState } from "react";
-import { ExternalLink, Eye, Newspaper, Play, Video as VideoIcon, Mic } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import {
-  Dialog,
-  DialogTrigger,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/ui/dialog";
+import { ArrowUpRight, Play } from "lucide-react";
 import { useLanguage, type DictionaryKey } from "@/lib/language";
+import { MetaLine } from "./Section";
+import { PreviewCard } from "./PreviewCard";
+import type { PreviewItem } from "./LinkPreview";
 
 export type MediaItem = {
   id: string;
@@ -28,151 +21,149 @@ export type MediaItem = {
 
 function youTubeVideoId(url?: string | null) {
   if (!url) return null;
-  const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]{6,})/);
+  const match = url.match(
+    /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([\w-]{11})/,
+  );
   return match ? match[1] : null;
 }
 
-function youTubeEmbedUrl(url?: string | null) {
-  const id = youTubeVideoId(url);
-  return id ? `https://www.youtube.com/embed/${id}` : null;
-}
-
-function youTubeThumbnailUrl(url?: string | null) {
-  const id = youTubeVideoId(url);
+/** The admin-set thumbnail, else the YouTube one for YouTube videos. */
+export function mediaImage(item: MediaItem) {
+  if (item.thumbnail) return item.thumbnail;
+  const id = youTubeVideoId(item.videoUrl);
   return id ? `https://img.youtube.com/vi/${id}/hqdefault.jpg` : null;
 }
 
-function typeMeta(type: MediaItem["type"]): {
-  icon: typeof VideoIcon;
-  labelKey: DictionaryKey;
-  actionKey: DictionaryKey;
-} {
-  switch (type) {
-    case "Video":
-      return { icon: VideoIcon, labelKey: "video", actionKey: "watchVideo" };
-    case "Interview":
-      return { icon: Mic, labelKey: "interview", actionKey: "readArticle" };
-    default:
-      return { icon: Newspaper, labelKey: "article", actionKey: "readArticle" };
-  }
+const typeLabelKey: Record<string, DictionaryKey> = {
+  Video: "video",
+  Interview: "interview",
+  Article: "article",
+};
+
+function useMediaText(item: MediaItem) {
+  const { t, pick } = useLanguage();
+  const key = typeLabelKey[item.type];
+  return {
+    title: pick(item.title, item.titleAr ?? item.title),
+    typeLabel: key ? t(key) : item.type,
+  };
 }
 
-function MediaThumb({ item }: { item: MediaItem }) {
-  const { icon: Icon } = typeMeta(item.type);
-  const [broken, setBroken] = useState(false);
-  const isVideo = Boolean(youTubeThumbnailUrl(item.videoUrl));
-  const thumbnail = youTubeThumbnailUrl(item.videoUrl) ?? item.thumbnail;
+function previewOf(item: MediaItem, url: string | null | undefined): PreviewItem | null {
+  if (!url) return null;
+  return {
+    url,
+    title: item.title,
+    meta: [item.source, item.date].filter(Boolean).join(" · "),
+    image: mediaImage(item),
+  };
+}
 
-  if (thumbnail && !broken) {
+function Thumb({ item, playSize = "md" }: { item: MediaItem; playSize?: "md" | "lg" }) {
+  const [broken, setBroken] = useState(false);
+  const image = mediaImage(item);
+  const play: readonly [string, string] =
+    playSize === "lg" ? ["h-14 w-14", "h-6 w-6"] : ["h-12 w-12", "h-5 w-5"];
+
+  if (!image || broken) {
     return (
-      <div className="relative aspect-[16/9] overflow-hidden rounded-md border border-border bg-secondary/60">
-        <img
-          src={thumbnail}
-          alt=""
-          loading="lazy"
-          onError={() => setBroken(true)}
-          className="h-full w-full object-cover"
-        />
-        {isVideo && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/15 transition-colors group-hover:bg-black/25">
-            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white/90 shadow-soft">
-              <Play className="h-4 w-4 translate-x-[1px] text-surface-deep" fill="currentColor" />
-            </span>
-          </div>
-        )}
+      <div className="relative flex aspect-video w-full items-end bg-surface-deep p-6 text-surface-deep-foreground">
+        <span dir="auto" className="text-2xl font-medium opacity-90">
+          {item.source}
+        </span>
+        {item.videoUrl && <PlayBadge sizes={play} />}
       </div>
     );
   }
-
   return (
-    <div className="flex aspect-[16/9] items-center justify-center rounded-md border border-border bg-secondary/60">
-      <Icon className="h-8 w-8 text-muted-foreground/60" strokeWidth={1.25} />
+    <div className="relative aspect-video w-full overflow-hidden bg-muted">
+      <img
+        src={image}
+        alt=""
+        loading="lazy"
+        onError={() => setBroken(true)}
+        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+      />
+      {item.videoUrl && <PlayBadge sizes={play} />}
     </div>
   );
 }
 
-export function MediaCard({ item }: { item: MediaItem }) {
-  const { t, pick } = useLanguage();
-  const meta = typeMeta(item.type);
-  const primaryUrl = item.videoUrl ?? item.articleUrl;
-  const embed = youTubeEmbedUrl(item.videoUrl);
-  const displayTitle = pick(item.title, item.titleAr ?? item.title);
-
+function PlayBadge({ sizes }: { sizes: readonly [string, string] }) {
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-lg border border-border bg-card shadow-soft transition-all hover:-translate-y-0.5 hover:border-accent/50 hover:shadow-md">
-      <div className="p-4 pb-0">
-        <MediaThumb item={item} />
-      </div>
-      <div className="flex flex-1 flex-col p-6">
-        <div className="flex items-center justify-between gap-2">
-          <p className="eyebrow">
-            {item.date} · {item.type}
-          </p>
-          <Badge variant="secondary" className="font-normal">
-            {t(meta.labelKey)}
-          </Badge>
-        </div>
-        <h3 className="mt-2 text-lg leading-snug font-semibold">{displayTitle}</h3>
-        <p className="mt-1 text-sm text-muted-foreground">{item.source}</p>
-        {item.description && (
-          <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{item.description}</p>
-        )}
+    <span className="absolute inset-0 flex items-center justify-center">
+      <span
+        className={`flex items-center justify-center rounded-full bg-black/60 text-white ${sizes[0]}`}
+      >
+        <Play className={`fill-current ${sizes[1]}`} aria-hidden />
+      </span>
+    </span>
+  );
+}
 
-        <div className="mt-5 flex flex-wrap gap-2 pt-1">
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button variant="secondary" size="sm">
-                <Eye />
-                {t("view")}
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-h-[85vh] overflow-y-auto sm:max-w-xl">
-              <DialogHeader>
-                <p className="eyebrow">
-                  {item.date} · {item.type}
-                </p>
-                <DialogTitle className="font-[family-name:var(--font-display)] text-xl font-normal leading-snug">
-                  {displayTitle}
-                </DialogTitle>
-                <DialogDescription className="pt-1">{item.source}</DialogDescription>
-              </DialogHeader>
-              {item.description && (
-                <p className="text-sm leading-relaxed text-muted-foreground">{item.description}</p>
-              )}
-              {embed && (
-                <div className="aspect-video overflow-hidden rounded-md border border-border">
-                  <iframe
-                    src={embed}
-                    title={displayTitle}
-                    className="h-full w-full"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  />
-                </div>
-              )}
-              {primaryUrl && (
-                <div className="pt-2">
-                  <Button variant="outline" size="sm" asChild>
-                    <a href={primaryUrl} target="_blank" rel="noreferrer noopener">
-                      {t(meta.actionKey)}
-                      <ExternalLink />
-                    </a>
-                  </Button>
-                </div>
-              )}
-            </DialogContent>
-          </Dialog>
-
-          {primaryUrl && (
-            <Button variant="outline" size="sm" asChild>
-              <a href={primaryUrl} target="_blank" rel="noreferrer noopener">
-                {t(meta.actionKey)}
-                <ExternalLink />
-              </a>
-            </Button>
-          )}
-        </div>
+/** Home page carousel card: the whole card opens the preview overlay. */
+export function MediaCard({ item }: { item: MediaItem }) {
+  const { title, typeLabel } = useMediaText(item);
+  return (
+    <PreviewCard
+      item={previewOf(item, item.videoUrl ?? item.articleUrl)}
+      className="group flex h-full w-full flex-col overflow-hidden rounded-md border border-border bg-card text-start transition-colors hover:border-primary"
+    >
+      <Thumb item={item} playSize="lg" />
+      <div className="flex flex-1 flex-col p-5 md:p-6">
+        <p className="eyebrow">{typeLabel}</p>
+        <h3 dir="auto" className="mt-2 line-clamp-3 text-lg leading-snug">
+          {title}
+        </h3>
+        <MetaLine
+          parts={[item.source, item.date]}
+          className="mt-auto pt-3 text-sm text-muted-foreground"
+        />
       </div>
-    </article>
+    </PreviewCard>
+  );
+}
+
+/** Interviews page: a video tile. */
+export function VideoTile({ item }: { item: MediaItem }) {
+  const { title } = useMediaText(item);
+  return (
+    <PreviewCard
+      item={previewOf(item, item.videoUrl)}
+      className="group flex flex-col overflow-hidden rounded-md border border-border bg-card text-start transition-colors hover:border-accent"
+    >
+      <Thumb item={item} />
+      <div className="p-5">
+        <MetaLine className="eyebrow" parts={[item.source, item.date]} />
+        <h4 dir="auto" className="mt-2 text-base leading-snug">
+          {title}
+        </h4>
+      </div>
+    </PreviewCard>
+  );
+}
+
+/** Interviews page: one row in the press-articles list. */
+export function ArticleRow({ item }: { item: MediaItem }) {
+  const { t } = useLanguage();
+  const { title } = useMediaText(item);
+  return (
+    <PreviewCard
+      item={previewOf(item, item.articleUrl)}
+      className="group grid w-full gap-1 px-6 py-5 text-start transition-colors hover:bg-muted/60 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center sm:gap-6"
+    >
+      <div className="min-w-0">
+        <MetaLine className="eyebrow" parts={[item.source, item.date]} />
+        <h4 dir="auto" className="mt-1.5 text-base leading-snug">
+          {title}
+        </h4>
+      </div>
+      {item.articleUrl && (
+        <span className="inline-flex items-center gap-1 text-sm text-muted-foreground group-hover:text-foreground">
+          {t("readArticle")}
+          <ArrowUpRight className="h-4 w-4 rtl:-scale-x-100" aria-hidden />
+        </span>
+      )}
+    </PreviewCard>
   );
 }

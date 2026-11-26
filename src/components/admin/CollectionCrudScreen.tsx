@@ -17,6 +17,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import type { CollectionCrudApi } from "@/server-fns/collection-helpers";
+import { onRowClick, rowClickClass } from "@/components/admin/row-click";
 
 export type CrudRow = { id: string; sortOrder: number; [key: string]: unknown };
 
@@ -146,9 +147,7 @@ export function CollectionCrudScreen({
     <div>
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="font-[family-name:var(--font-display)] text-2xl font-semibold">
-            {title}
-          </h1>
+          <h1 className="font-[family-name:var(--font-display)] text-2xl font-semibold">{title}</h1>
           {description && <p className="mt-1 text-sm text-muted-foreground">{description}</p>}
         </div>
         <Button onClick={openAddDialog}>
@@ -167,7 +166,11 @@ export function CollectionCrudScreen({
         ) : (
           <ul className="divide-y divide-border">
             {rows.map((row, index) => (
-              <li key={row.id} className="flex items-center gap-3 px-5 py-4">
+              <li
+                key={row.id}
+                onClick={onRowClick(() => openEditDialog(row))}
+                className={`flex items-center gap-3 px-5 py-4 ${rowClickClass}`}
+              >
                 <div className="flex flex-col">
                   <button
                     type="button"
@@ -227,22 +230,22 @@ export function CollectionCrudScreen({
                   {f.hint && <p className="text-xs text-muted-foreground">{f.hint}</p>}
                 </div>
               ) : (
-              <div key={f.name} className="space-y-1.5">
-                <label className="text-sm font-medium">{f.label}</label>
-                {f.type === "textarea" ? (
-                  <Textarea
-                    value={formValues[f.name] ?? ""}
-                    onChange={(e) => setFormValues((v) => ({ ...v, [f.name]: e.target.value }))}
-                    rows={3}
-                  />
-                ) : (
-                  <Input
-                    value={formValues[f.name] ?? ""}
-                    onChange={(e) => setFormValues((v) => ({ ...v, [f.name]: e.target.value }))}
-                  />
-                )}
-                {f.hint && <p className="text-xs text-muted-foreground">{f.hint}</p>}
-              </div>
+                <div key={f.name} className="space-y-1.5">
+                  <label className="text-sm font-medium">{f.label}</label>
+                  {f.type === "textarea" ? (
+                    <Textarea
+                      value={formValues[f.name] ?? ""}
+                      onChange={(e) => setFormValues((v) => ({ ...v, [f.name]: e.target.value }))}
+                      rows={3}
+                    />
+                  ) : (
+                    <Input
+                      value={formValues[f.name] ?? ""}
+                      onChange={(e) => setFormValues((v) => ({ ...v, [f.name]: e.target.value }))}
+                    />
+                  )}
+                  {f.hint && <p className="text-xs text-muted-foreground">{f.hint}</p>}
+                </div>
               ),
             )}
             {formError && <p className="text-sm text-destructive">{formError}</p>}

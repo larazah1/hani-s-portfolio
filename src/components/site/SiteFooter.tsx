@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useLanguage } from "@/lib/language";
 import type { NavPage } from "@/components/site/SiteHeader";
+import { ContactIcons } from "./ContactIcons";
 
 type FooterProfile = {
   name: string;
@@ -56,17 +57,13 @@ export function SiteFooter({
             {profile.phone && <li dir="ltr">{profile.phone}</li>}
             {profile.location && <li>{pick(profile.location, profile.locationAr)}</li>}
           </ul>
-          {socialLinks.length > 0 && (
-            <ul className="mt-4 flex flex-wrap gap-4 text-sm opacity-80">
-              {socialLinks.map((s) => (
-                <li key={s.url}>
-                  <a href={s.url} target="_blank" rel="noreferrer noopener">
-                    {s.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          )}
+          <ContactIcons
+            email={profile.email}
+            phone={profile.phone}
+            socialLinks={socialLinks}
+            tone="dark"
+            className="mt-5"
+          />
         </div>
       </div>
       <div className="border-t border-white/10 px-5 py-5 text-center text-xs opacity-60">

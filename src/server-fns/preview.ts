@@ -42,7 +42,9 @@ export const checkEmbeddable = createServerFn({ method: "GET" })
           .where(
             and(
               eq(publications.status, "published"),
-              doi ? or(eq(publications.url, url), eq(publications.doi, doi)) : eq(publications.url, url),
+              doi
+                ? or(eq(publications.url, url), eq(publications.doi, doi))
+                : eq(publications.url, url),
             ),
           )
           .limit(1);

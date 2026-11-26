@@ -26,10 +26,16 @@ import {
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { Quote } from "lucide-react";
 import heroImage from "@/assets/hero-seismic.jpg";
+import portrait from "@/assets/hani.jpeg";
 import { Section, EmptyNote } from "@/components/site/Section";
 import { PublicationCard, type Publication } from "@/components/site/PublicationCard";
-import { MediaCard, type MediaItem } from "@/components/site/MediaCard";
+import { ArticleRow, MediaCard, VideoTile, type MediaItem } from "@/components/site/MediaCard";
+import { CareerSteps, type CareerStep } from "@/components/site/CareerSteps";
+import { ContactIcons } from "@/components/site/ContactIcons";
+import { LoopCarousel } from "@/components/site/LoopCarousel";
+import { StatsMarquee, type MarqueeStat } from "@/components/site/StatsMarquee";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -41,13 +47,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselPrevious,
-  CarouselNext,
-} from "@/components/ui/carousel";
 import { publicationTypeAr } from "@/lib/publication-i18n";
 import { useLanguage, type DictionaryKey } from "@/lib/language";
 import type { SectionType } from "@/lib/section-types";
@@ -117,7 +116,9 @@ export function SectionRenderer({
 }) {
   switch (section.type) {
     case "hero":
-      return profile ? <HeroSection profile={profile} /> : null;
+      return profile ? <HeroSection profile={profile} socialLinks={socialLinks} /> : null;
+    case "quote":
+      return <QuoteSection section={section} />;
     case "summary":
       return <SummarySection section={section} profile={profile} />;
     case "stats-row":
@@ -145,7 +146,7 @@ export function SectionRenderer({
     case "media-full-grid":
       return <MediaFullGridSection section={section} />;
     case "rich-text":
-      return <RichTextSection section={section} />;
+      return <RichTextSection section={section} profile={profile} socialLinks={socialLinks} />;
     case "contact-block":
       return profile ? <ContactBlockSection profile={profile} socialLinks={socialLinks} /> : null;
     case "recommendation-form":
@@ -155,8 +156,16 @@ export function SectionRenderer({
   }
 }
 
-function HeroSection({ profile }: { profile: PublicProfile }) {
+function HeroSection({
+  profile,
+  socialLinks,
+}: {
+  profile: PublicProfile;
+  socialLinks: { label: string; url: string }[];
+}) {
   const { t, pick } = useLanguage();
+  const name = pick(profile.name, profile.nameAr);
+  const location = pick(profile.location, profile.locationAr);
   return (
     <section className="relative overflow-hidden bg-surface-deep text-surface-deep-foreground">
       <img
@@ -164,46 +173,74 @@ function HeroSection({ profile }: { profile: PublicProfile }) {
         alt=""
         width={1920}
         height={1088}
-        className="absolute inset-0 h-full w-full object-cover opacity-45"
+        className="absolute inset-0 h-full w-full object-cover opacity-35"
       />
-      <div className="relative mx-auto max-w-6xl px-5 py-24 md:py-32">
-        <p className="eyebrow !text-current opacity-70">
-          {pick(profile.location, profile.locationAr)}
-        </p>
-        <h1 className="mt-4 max-w-3xl text-4xl font-bold leading-tight md:text-6xl">
-          {pick(profile.name, profile.nameAr)}
-        </h1>
-        <p className="mt-4 max-w-2xl text-lg opacity-85 md:text-xl">
-          {pick(profile.title, profile.titleAr)}
-        </p>
-        <p className="mt-6 max-w-2xl text-sm leading-relaxed opacity-75 md:text-base">
-          {pick(profile.tagline, profile.taglineAr)}
-        </p>
-        <div className="mt-9 flex flex-wrap gap-3">
-          <Link
-            to={profile.primaryCtaTo}
-            className="rounded-sm bg-accent px-6 py-3 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90"
-          >
-            {pick(profile.primaryCtaLabel, profile.primaryCtaLabelAr)}
-          </Link>
-          <Link
-            to={profile.secondaryCtaTo}
-            className="rounded-sm border border-white/30 px-6 py-3 text-sm font-medium transition-colors hover:bg-white/10"
-          >
-            {pick(profile.secondaryCtaLabel, profile.secondaryCtaLabelAr)}
-          </Link>
-          {profile.cvUrl && (
-            <a
-              href={profile.cvUrl}
-              target="_blank"
-              rel="noreferrer noopener"
-              download
-              className="inline-flex items-center gap-2 rounded-sm border border-white/30 px-6 py-3 text-sm font-medium transition-colors hover:bg-white/10"
+      <div className="relative mx-auto grid max-w-6xl items-center gap-12 px-5 py-16 md:grid-cols-[minmax(0,1fr)_320px] md:py-28">
+        <div>
+          {/* Phones: a small round portrait with the location under it instead of the large photo. */}
+          <div className="mb-6 flex flex-col items-start gap-3 md:hidden">
+            <img
+              src={portrait}
+              alt={name}
+              width={80}
+              height={80}
+              className="h-20 w-20 shrink-0 rounded-full bg-white object-cover object-top ring-2 ring-white/25"
+            />
+            <p className="eyebrow !text-current opacity-80">{location}</p>
+          </div>
+          <p className="eyebrow hidden !text-current opacity-70 md:block">{location}</p>
+          <h1 className="mt-4 max-w-3xl text-4xl leading-tight md:text-6xl">{name}</h1>
+          <p className="mt-4 max-w-2xl text-lg opacity-85 md:text-xl">
+            {pick(profile.title, profile.titleAr)}
+          </p>
+          <p className="mt-6 max-w-2xl text-sm leading-relaxed opacity-75 md:text-base">
+            {pick(profile.tagline, profile.taglineAr)}
+          </p>
+          <div className="mt-9 flex flex-wrap gap-3">
+            <Link
+              to={profile.primaryCtaTo}
+              className="rounded-sm bg-accent px-6 py-3 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90"
             >
-              <Download className="h-4 w-4" />
-              {t("downloadCv")}
-            </a>
-          )}
+              {pick(profile.primaryCtaLabel, profile.primaryCtaLabelAr)}
+            </Link>
+            <Link
+              to={profile.secondaryCtaTo}
+              className="rounded-sm border border-white/30 px-6 py-3 text-sm font-medium transition-colors hover:bg-white/10"
+            >
+              {pick(profile.secondaryCtaLabel, profile.secondaryCtaLabelAr)}
+            </Link>
+            {profile.cvUrl && (
+              <a
+                href={profile.cvUrl}
+                target="_blank"
+                rel="noreferrer noopener"
+                download
+                className="inline-flex items-center gap-2 rounded-sm border border-white/30 px-6 py-3 text-sm font-medium transition-colors hover:bg-white/10"
+              >
+                <Download className="h-4 w-4" />
+                {t("downloadCv")}
+              </a>
+            )}
+          </div>
+          <ContactIcons
+            email={profile.email}
+            phone={profile.phone}
+            socialLinks={socialLinks}
+            tone="dark"
+            className="mt-6"
+          />
+        </div>
+
+        <div className="hidden md:block">
+          <div className="overflow-hidden rounded-md bg-white shadow-2xl ring-1 ring-white/15">
+            <img
+              src={portrait}
+              alt={name}
+              width={502}
+              height={610}
+              className="aspect-[4/5] w-full object-cover object-top"
+            />
+          </div>
         </div>
       </div>
     </section>
@@ -259,28 +296,40 @@ function SummarySection({
   );
 }
 
-function StatsRowSection({ section }: { section: ResolvedSection }) {
+/** Stats rows from the DB, in the visitor's language, for the marquee. */
+function useMarqueeStats(rows: Record<string, unknown>[]): MarqueeStat[] {
   const { pick } = useLanguage();
-  const rows = (section.data as Record<string, unknown>[] | null) ?? [];
-  // Rendered twice back-to-back so `animate-marquee`'s -50% translation
-  // loops seamlessly, regardless of how many stats there are.
-  const looped = [...rows, ...rows];
+  return rows.map((s) => ({
+    id: String(s["id"]),
+    value: String(s["value"]),
+    label: pick(String(s["label"]), String(s["labelAr"] ?? s["label"])),
+  }));
+}
 
-  return (
-    <section className="overflow-hidden border-y border-border bg-card py-8">
-      <div className="flex w-max animate-marquee hover:[animation-play-state:paused] motion-reduce:animate-none">
-        {looped.map((s, index) => (
-          <div
-            key={`${String(s["id"])}-${index}`}
-            className="me-10 min-w-36 shrink-0 px-4 text-center"
-          >
-            <p className="font-[family-name:var(--font-display)] text-3xl">{String(s["value"])}</p>
-            <p className="eyebrow mt-1">{pick(String(s["label"]), String(s["labelAr"]))}</p>
-          </div>
-        ))}
-      </div>
-    </section>
-  );
+/** Picks stats whose English label matches, e.g. /citation/i — so the admin
+ * can rename the Arabic labels or reorder them freely. */
+function matchStats(rows: Record<string, unknown>[], patterns: RegExp[]) {
+  return patterns
+    .map((re) => rows.find((r) => re.test(String(r["label"]))))
+    .filter((r): r is Record<string, unknown> => r !== undefined);
+}
+
+function StatsRowSection({ section }: { section: ResolvedSection }) {
+  const { t } = useLanguage();
+  const stats = useMarqueeStats((section.data as Record<string, unknown>[] | null) ?? []);
+  return <StatsMarquee stats={stats} label={t("keyFigures")} />;
+}
+
+/** Career rows from the DB → steps in the visitor's language. */
+function useCareerSteps(rows: Record<string, unknown>[]): CareerStep[] {
+  const { t, pick } = useLanguage();
+  return rows.map((c) => ({
+    id: String(c["id"]),
+    position: pick(String(c["position"]), String(c["positionAr"])),
+    organization: pick(String(c["organization"]), String(c["organizationAr"])),
+    start: String(c["startLabel"]),
+    end: c["endLabel"] === "Present" ? t("present") : String(c["endLabel"]),
+  }));
 }
 
 function CareerTimelineSection({ section }: { section: ResolvedSection }) {
@@ -290,184 +339,167 @@ function CareerTimelineSection({ section }: { section: ResolvedSection }) {
     career: Record<string, unknown>[];
     collaborations: Record<string, unknown>[];
   } | null;
-  const career = data?.career ?? [];
+  const all = data?.career ?? [];
   const collaborations = data?.collaborations ?? [];
+  // Only the positions marked "highlight" in the admin (all of them if none
+  // are marked), oldest first so the steps read as a progression.
+  const highlighted = all.filter((c) => c["highlight"] === true);
+  const steps = useCareerSteps([...(highlighted.length > 0 ? highlighted : all)].reverse());
+
+  if (all.length === 0) {
+    return (
+      <Section title={heading.title}>
+        <EmptyNote>{t("emptyCareer")}</EmptyNote>
+      </Section>
+    );
+  }
 
   return (
-    <Section title={heading.title}>
-      {career.length === 0 ? (
-        <EmptyNote>{t("emptyCareer")}</EmptyNote>
-      ) : (
-        <ol className="border-s border-border">
-          {career.map((c) => (
-            <li key={String(c["id"])} className="group relative pb-2 ps-8">
-              <span className="absolute -start-[5px] top-2 h-2.5 w-2.5 rounded-full bg-accent transition-transform group-hover:scale-150" />
-              <div className="-ms-3 rounded-md px-3 py-4 transition-colors group-hover:bg-secondary/50">
-                <p className="eyebrow">
-                  {String(c["startLabel"])} —{" "}
-                  {c["endLabel"] === "Present" ? t("present") : String(c["endLabel"])}
-                </p>
-                <h3 className="mt-1 text-xl font-semibold">
-                  {pick(String(c["position"]), String(c["positionAr"]))}
-                </h3>
-                <p className="text-sm text-muted-foreground">
-                  {pick(String(c["organization"]), String(c["organizationAr"]))}
-                </p>
-                {Boolean(c["description"]) && (
-                  <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-                    {pick(String(c["description"]), String(c["descriptionAr"] ?? c["description"]))}
-                  </p>
-                )}
-              </div>
-            </li>
-          ))}
-        </ol>
-      )}
+    <>
+      <CareerSteps
+        title={heading.title}
+        steps={steps}
+        footer={
+          <Link to="/about" className="underline underline-offset-4">
+            {t("viewCareer")}
+          </Link>
+        }
+      />
 
       {collaborations.length > 0 && (
-        <div className="mt-8 flex items-start gap-4 rounded-lg border border-accent/30 bg-accent/5 p-6">
-          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-accent/15 text-accent-foreground">
-            <Users className="h-5 w-5" strokeWidth={1.5} />
-          </span>
-          <div>
-            <p className="eyebrow">{t("researchCollaboration")}</p>
-            {collaborations.map((c) => (
-              <div key={String(c["id"])} className="mt-1">
-                <h3 className="text-lg font-semibold leading-snug">
-                  {pick(String(c["position"]), String(c["positionAr"]))}
-                </h3>
-                <p className="text-sm text-muted-foreground">
-                  {pick(String(c["organization"]), String(c["organizationAr"]))} ·{" "}
-                  {String(c["startLabel"])} —{" "}
-                  {c["endLabel"] === "Present" ? t("present") : String(c["endLabel"])}
-                </p>
-              </div>
-            ))}
+        <div className="mx-auto max-w-6xl px-5 pb-10">
+          <div className="flex items-start gap-4 rounded-lg border border-accent/30 bg-accent/5 p-6">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-accent/15 text-accent-foreground">
+              <Users className="h-5 w-5" strokeWidth={1.5} />
+            </span>
+            <div>
+              <p className="eyebrow">{t("researchCollaboration")}</p>
+              {collaborations.map((c) => (
+                <div key={String(c["id"])} className="mt-1">
+                  <h3 className="text-lg font-semibold leading-snug">
+                    {pick(String(c["position"]), String(c["positionAr"]))}
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    {pick(String(c["organization"]), String(c["organizationAr"]))} ·{" "}
+                    {String(c["startLabel"])} —{" "}
+                    {c["endLabel"] === "Present" ? t("present") : String(c["endLabel"])}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       )}
-    </Section>
+    </>
   );
 }
 
 function ExperienceTimelineSection({ section }: { section: ResolvedSection }) {
-  const { t, pick } = useLanguage();
   const heading = useHeading(section, "professionalExperience");
   const rows = (section.data as Record<string, unknown>[] | null) ?? [];
-
-  return (
-    <Section title={heading.title}>
-      {rows.length === 0 ? (
-        <EmptyNote>{t("emptyExperience")}</EmptyNote>
-      ) : (
-        <ol className="border-s border-border">
-          {rows.map((c) => (
-            <li key={String(c["id"])} className="relative pb-10 ps-8">
-              <span className="absolute -start-[5px] top-2 h-2.5 w-2.5 rounded-full bg-accent" />
-              <p className="eyebrow">
-                {String(c["startLabel"])} —{" "}
-                {c["endLabel"] === "Present" ? t("present") : String(c["endLabel"])}
-              </p>
-              <h3 className="mt-1 text-xl font-semibold">
-                {pick(String(c["position"]), String(c["positionAr"]))}
-              </h3>
-              <p className="text-sm text-muted-foreground">
-                {pick(String(c["organization"]), String(c["organizationAr"]))}
-              </p>
-            </li>
-          ))}
-        </ol>
-      )}
-    </Section>
-  );
+  // Full career, oldest first, as one column of steps beside the heading.
+  const steps = useCareerSteps([...rows].reverse());
+  if (rows.length === 0) return null;
+  return <CareerSteps layout="side" title={heading.title} steps={steps} />;
 }
 
 function ExpertiseGridSection({ section }: { section: ResolvedSection }) {
   const { pick } = useLanguage();
   const heading = useHeading(section, "keyExpertise");
   const rows = (section.data as Record<string, unknown>[] | null) ?? [];
+  if (rows.length === 0) return null;
+
+  // About page: a compact list of chips.
+  if (section.config["layout"] === "chips") {
+    return (
+      <Section title={heading.title} className="!pt-0">
+        <ul className="flex flex-wrap gap-2">
+          {rows.map((e) => (
+            <li
+              key={String(e["id"])}
+              className="rounded-sm border border-border bg-card px-4 py-2 text-sm"
+            >
+              {pick(String(e["en"]), String(e["ar"]))}
+            </li>
+          ))}
+        </ul>
+      </Section>
+    );
+  }
 
   return (
-    <Section title={heading.title}>
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+    <Section title={heading.title} className="!pt-0">
+      <LoopCarousel label={heading.title}>
         {rows.map((e) => {
           const en = String(e["en"]);
           const Icon = expertiseIcons[en] ?? Compass;
           return (
             <div
               key={String(e["id"])}
-              className="flex items-center gap-2 rounded-lg border border-border bg-card p-3 transition-all hover:-translate-y-0.5 hover:border-accent/50 hover:shadow-md"
+              className="flex h-full min-h-44 flex-col justify-between gap-8 rounded-md border border-border bg-card p-6 md:p-8"
             >
-              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-accent/10 text-accent-foreground">
-                <Icon className="h-4 w-4" strokeWidth={1.5} />
+              <span className="flex h-12 w-12 items-center justify-center rounded-md bg-primary/10 text-primary">
+                <Icon className="h-6 w-6" strokeWidth={1.6} aria-hidden />
               </span>
-              <span className="text-xs font-medium sm:text-sm">{pick(en, String(e["ar"]))}</span>
+              <p className="text-xl leading-snug font-medium md:text-2xl">
+                {pick(en, String(e["ar"]))}
+              </p>
             </div>
           );
         })}
+      </LoopCarousel>
+    </Section>
+  );
+}
+
+// About-page sections below are hidden entirely when they have no items.
+
+function EducationGridSection({ section }: { section: ResolvedSection }) {
+  const { pick } = useLanguage();
+  const heading = useHeading(section, "academicBackground");
+  const rows = (section.data as Record<string, unknown>[] | null) ?? [];
+  if (rows.length === 0) return null;
+
+  return (
+    <Section title={heading.title} className="!pt-0">
+      <div className="grid gap-4 md:grid-cols-2">
+        {rows.map((e) => (
+          <article key={String(e["id"])} className="rounded-md border border-border bg-card p-6">
+            <p className="eyebrow">{String(e["year"])}</p>
+            <h3 className="mt-2 text-lg">{pick(String(e["degree"]), String(e["degreeAr"]))}</h3>
+            <p className="text-sm text-muted-foreground">
+              {pick(String(e["university"]), String(e["universityAr"]))}
+            </p>
+            {Boolean(e["description"]) && (
+              <p className="mt-2 text-sm text-muted-foreground">
+                {pick(String(e["description"]), String(e["descriptionAr"] ?? e["description"]))}
+              </p>
+            )}
+          </article>
+        ))}
       </div>
     </Section>
   );
 }
 
-function EducationGridSection({ section }: { section: ResolvedSection }) {
-  const { t, pick } = useLanguage();
-  const heading = useHeading(section, "academicBackground");
-  const rows = (section.data as Record<string, unknown>[] | null) ?? [];
-
-  return (
-    <Section title={heading.title}>
-      {rows.length === 0 ? (
-        <EmptyNote>{t("emptyEducation")}</EmptyNote>
-      ) : (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {rows.map((e) => (
-            <article key={String(e["id"])} className="rounded-md border border-border bg-card p-6">
-              <p className="eyebrow">{String(e["year"])}</p>
-              <h3 className="mt-2 text-lg font-semibold">
-                {pick(String(e["degree"]), String(e["degreeAr"]))} ·{" "}
-                {pick(String(e["field"]), String(e["fieldAr"]))}
-              </h3>
-              <p className="text-sm text-muted-foreground">
-                {pick(String(e["university"]), String(e["universityAr"]))},{" "}
-                {pick(String(e["location"]), String(e["locationAr"]))}
-              </p>
-              {Boolean(e["description"]) && (
-                <p className="mt-2 text-sm text-muted-foreground">
-                  {pick(String(e["description"]), String(e["descriptionAr"] ?? e["description"]))}
-                </p>
-              )}
-            </article>
-          ))}
-        </div>
-      )}
-    </Section>
-  );
-}
-
 function MembershipsListSection({ section }: { section: ResolvedSection }) {
-  const { t, pick } = useLanguage();
+  const { pick } = useLanguage();
   const heading = useHeading(section, "membershipsCommittees");
   const rows = (section.data as Record<string, unknown>[] | null) ?? [];
+  if (rows.length === 0) return null;
 
   return (
-    <Section title={heading.title}>
-      {rows.length === 0 ? (
-        <EmptyNote>{t("emptyMemberships")}</EmptyNote>
-      ) : (
-        <ul className="divide-y divide-border rounded-md border border-border bg-card">
-          {rows.map((m) => (
-            <li key={String(m["id"])} className="px-6 py-4">
-              <p className="text-base font-semibold">
-                {pick(String(m["title"]), String(m["titleAr"]))}
-              </p>
-              {Boolean(m["period"]) && (
-                <p className="text-sm text-muted-foreground">{String(m["period"])}</p>
-              )}
-            </li>
-          ))}
-        </ul>
-      )}
+    <Section title={heading.title} className="!pt-0">
+      <ul className="divide-y divide-border rounded-md border border-border bg-card">
+        {rows.map((m) => (
+          <li key={String(m["id"])} className="px-6 py-4">
+            <p className="text-base">{pick(String(m["title"]), String(m["titleAr"]))}</p>
+            {Boolean(m["period"]) && (
+              <p className="text-sm text-muted-foreground">{String(m["period"])}</p>
+            )}
+          </li>
+        ))}
+      </ul>
     </Section>
   );
 }
@@ -480,29 +512,44 @@ const LIST_BLOCK_HEADINGS: Record<string, [DictionaryKey, DictionaryKey, Diction
 };
 
 function ListBlockSection({ section }: { section: ResolvedSection }) {
-  const { t, pick } = useLanguage();
+  const { pick } = useLanguage();
   const collection = (section.config["collection"] as string) ?? "researchSpecialties";
-  const [, titleKey, emptyKey] =
+  const [, titleKey] =
     LIST_BLOCK_HEADINGS[collection] ?? LIST_BLOCK_HEADINGS["researchSpecialties"]!;
   const heading = useHeading(section, titleKey);
   const rows = (section.data as Record<string, unknown>[] | null) ?? [];
+  if (rows.length === 0) return null;
 
-  return (
-    <Section title={heading.title}>
-      {rows.length === 0 ? (
-        <EmptyNote>{t(emptyKey)}</EmptyNote>
-      ) : (
-        <ul className="flex flex-wrap gap-2">
+  // Activities are full sentences: a two-column list of cards. Others: chips.
+  if (collection === "activities") {
+    return (
+      <Section title={heading.title} className="!pt-0">
+        <ul className="grid gap-3 md:grid-cols-2">
           {rows.map((i) => (
             <li
               key={String(i["id"])}
-              className="rounded-sm border border-border bg-card px-4 py-2 text-sm"
+              className="rounded-md border border-border bg-card px-5 py-4 text-sm"
             >
               {pick(String(i["en"]), String(i["ar"]))}
             </li>
           ))}
         </ul>
-      )}
+      </Section>
+    );
+  }
+
+  return (
+    <Section title={heading.title} className="!pt-0">
+      <ul className="flex flex-wrap gap-2">
+        {rows.map((i) => (
+          <li
+            key={String(i["id"])}
+            className="rounded-sm border border-border bg-card px-4 py-2 text-sm"
+          >
+            {pick(String(i["en"]), String(i["ar"]))}
+          </li>
+        ))}
+      </ul>
     </Section>
   );
 }
@@ -513,36 +560,27 @@ function PublicationsCarouselSection({ section }: { section: ResolvedSection }) 
   const items = (section.data as Publication[] | null) ?? [];
 
   return (
-    <Section
-      title={heading.title}
-      action={
-        <Button asChild variant="outline" className="shrink-0">
-          <Link to="/publications">
-            {t("exploreAllPublications")}
-            <ArrowRight className="rtl:rotate-180" />
-          </Link>
-        </Button>
-      }
-    >
-      <p className="-mt-2 mb-8 max-w-2xl text-sm text-muted-foreground">{t("publicationsIntro")}</p>
+    <Section title={heading.title} className="!pt-0">
       {items.length === 0 ? (
         <EmptyNote>{t("emptyFeaturedPublications")}</EmptyNote>
       ) : (
-        <Carousel opts={{ align: "start" }} className="w-full">
-          <CarouselContent>
-            {items.map((p) => (
-              <CarouselItem key={p.id} className="sm:basis-1/2 lg:basis-1/3">
-                <PublicationCard publication={p} compact />
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <div className="mt-6 flex justify-end gap-2">
-            <CarouselPrevious className="static h-9 w-9 translate-y-0" />
-            <CarouselNext className="static h-9 w-9 translate-y-0" />
-          </div>
-        </Carousel>
+        <LoopCarousel label={heading.title} footer={<ExploreLink to="/publications" />}>
+          {items.map((p) => (
+            <PublicationCard key={p.id} publication={p} compact />
+          ))}
+        </LoopCarousel>
       )}
     </Section>
+  );
+}
+
+function ExploreLink({ to }: { to: "/publications" | "/interviews" }) {
+  const { t } = useLanguage();
+  return (
+    <Link to={to} className="inline-flex items-center gap-1 underline underline-offset-4">
+      {t(to === "/publications" ? "exploreAllPublications" : "exploreInterviewsArticles")}
+      <ArrowRight className="h-4 w-4 rtl:rotate-180" aria-hidden />
+    </Link>
   );
 }
 
@@ -556,33 +594,15 @@ function MediaCarouselSection({ section }: { section: ResolvedSection }) {
   }));
 
   return (
-    <Section
-      title={heading.title}
-      action={
-        <Button asChild variant="outline" className="shrink-0">
-          <Link to="/interviews">
-            {t("exploreInterviewsArticles")}
-            <ArrowRight className="rtl:rotate-180" />
-          </Link>
-        </Button>
-      }
-    >
+    <Section title={heading.title} className="!pt-0">
       {items.length === 0 ? (
         <EmptyNote>{t("emptyFeaturedMedia")}</EmptyNote>
       ) : (
-        <Carousel opts={{ align: "start" }} className="w-full">
-          <CarouselContent>
-            {items.map((m) => (
-              <CarouselItem key={m.id} className="sm:basis-1/2 lg:basis-1/3">
-                <MediaCard item={m} />
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <div className="mt-6 flex justify-end gap-2">
-            <CarouselPrevious className="static h-9 w-9 translate-y-0" />
-            <CarouselNext className="static h-9 w-9 translate-y-0" />
-          </div>
-        </Carousel>
+        <LoopCarousel label={heading.title} footer={<ExploreLink to="/interviews" />}>
+          {items.map((m) => (
+            <MediaCard key={m.id} item={m} />
+          ))}
+        </LoopCarousel>
       )}
     </Section>
   );
@@ -596,6 +616,7 @@ function RecommendationsGridSection({ section }: { section: ResolvedSection }) {
   return (
     <Section
       title={heading.title}
+      className="!pt-0"
       action={
         <Link
           to="/about"
@@ -609,31 +630,25 @@ function RecommendationsGridSection({ section }: { section: ResolvedSection }) {
       {rows.length === 0 ? (
         <EmptyNote>{t("emptyRecommendations")}</EmptyNote>
       ) : (
-        <Carousel opts={{ align: "start" }} className="w-full">
-          <CarouselContent>
-            {rows.map((r) => (
-              <CarouselItem key={String(r["id"])} className="sm:basis-1/2 lg:basis-1/3">
-                <blockquote
-                  dir="ltr"
-                  className="h-full rounded-md border border-border bg-card p-6 text-left"
-                >
-                  <p className="text-sm leading-relaxed">{String(r["body"])}</p>
-                  <footer className="mt-4 text-sm">
-                    <span className="font-medium">{String(r["name"])}</span>
-                    <span className="block text-muted-foreground">
-                      {String(r["position"])}
-                      {r["organization"] ? `, ${String(r["organization"])}` : ""}
-                    </span>
-                  </footer>
-                </blockquote>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <div className="mt-6 flex justify-end gap-2">
-            <CarouselPrevious className="static h-9 w-9 translate-y-0" />
-            <CarouselNext className="static h-9 w-9 translate-y-0" />
-          </div>
-        </Carousel>
+        <LoopCarousel label={heading.title} wide autoplay>
+          {rows.map((r) => (
+            <blockquote
+              key={String(r["id"])}
+              dir="auto"
+              className="h-full rounded-md border border-border bg-card p-6 text-start md:p-8"
+            >
+              <Quote className="h-6 w-6 text-accent rtl:-scale-x-100" aria-hidden />
+              <p className="mt-4 text-base leading-relaxed">{String(r["body"])}</p>
+              <footer className="mt-6 text-sm">
+                <span className="font-medium">{String(r["name"])}</span>
+                <span className="block text-muted-foreground">
+                  {String(r["position"])}
+                  {r["organization"] ? `, ${String(r["organization"])}` : ""}
+                </span>
+              </footer>
+            </blockquote>
+          ))}
+        </LoopCarousel>
       )}
     </Section>
   );
@@ -763,7 +778,11 @@ function RecommendationFormSection({ section }: { section: ResolvedSection }) {
 function PublicationsFullListSection({ section }: { section: ResolvedSection }) {
   const { t, pick } = useLanguage();
   const heading = useHeading(section, "publicationsHeadline");
-  const allItems = (section.data as Publication[] | null) ?? [];
+  const data = section.data as { items: Publication[]; stats: Record<string, unknown>[] } | null;
+  const allItems = useMemo(() => data?.items ?? [], [data]);
+  const stats = useMarqueeStats(
+    matchStats(data?.stats ?? [], [/publication/i, /citation/i, /h-?index/i, /book/i]),
+  );
 
   const [query, setQuery] = useState("");
   const [year, setYear] = useState("All");
@@ -782,7 +801,11 @@ function PublicationsFullListSection({ section }: { section: ResolvedSection }) 
     [allItems],
   );
   const areas = useMemo(
-    () => ["All", ...Array.from(new Set(allItems.map((p) => p.area))).sort()],
+    () => ["All", ...Array.from(new Set(allItems.map((p) => p.area).filter(Boolean))).sort()],
+    [allItems],
+  );
+  const areaAr = useMemo(
+    () => new Map(allItems.filter((p) => p.areaAr).map((p) => [p.area, p.areaAr!])),
     [allItems],
   );
 
@@ -808,7 +831,13 @@ function PublicationsFullListSection({ section }: { section: ResolvedSection }) 
         {t("publicationsPageIntro")}
       </p>
 
-      <div className="mb-10 grid gap-3 sm:grid-cols-[minmax(0,1fr)_auto_auto_auto]">
+      {stats.length > 0 && (
+        <div className="mb-14 -mx-5 md:mx-0">
+          <StatsMarquee stats={stats} label={heading.title} />
+        </div>
+      )}
+
+      <div className="mb-4 grid gap-3 sm:grid-cols-[minmax(0,1fr)_auto_auto_auto]">
         <input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
@@ -832,11 +861,14 @@ function PublicationsFullListSection({ section }: { section: ResolvedSection }) 
         <select value={area} onChange={(e) => setArea(e.target.value)} className={selectClass}>
           {areas.map((a) => (
             <option key={a} value={a}>
-              {a === "All" ? t("allAreas") : a}
+              {a === "All" ? t("allAreas") : pick(a, areaAr.get(a) ?? a)}
             </option>
           ))}
         </select>
       </div>
+      <p className="mb-10 text-sm text-muted-foreground" aria-live="polite">
+        {filtered.length} / {allItems.length}
+      </p>
 
       {filtered.length === 0 ? (
         <EmptyNote>{t("noPublicationsMatch")}</EmptyNote>
@@ -867,48 +899,161 @@ function PublicationsFullListSection({ section }: { section: ResolvedSection }) 
 function MediaFullGridSection({ section }: { section: ResolvedSection }) {
   const { t } = useLanguage();
   const heading = useHeading(section, "interviewsArticlesHeadline");
-  const rows = (section.data as Record<string, unknown>[] | null) ?? [];
-  const items: MediaItem[] = rows.map((m) => ({
+  const data = section.data as {
+    items: Record<string, unknown>[];
+    stats: Record<string, unknown>[];
+  } | null;
+  const items: MediaItem[] = (data?.items ?? []).map((m) => ({
     ...(m as unknown as MediaItem),
-    date: String(m["dateLabel"]),
+    date: String(m["dateLabel"] ?? ""),
   }));
+  // Videos as tiles, everything else as a list of press articles.
+  const videos = items.filter((m) => m.videoUrl);
+  const articles = items.filter((m) => !m.videoUrl);
+
+  // Profile figures plus live counts from the database.
+  const statRows = data?.stats ?? [];
+  const profileStats = useMarqueeStats([
+    ...matchStats(statRows, [/interview|article|media/i]),
+    ...matchStats(statRows, [/year/i]),
+  ]);
+  const stats: MarqueeStat[] = [
+    ...profileStats.slice(0, 1),
+    { id: "videos", value: String(videos.length), label: t("videoInterviews") },
+    { id: "articles", value: String(articles.length), label: t("pressArticles") },
+    ...profileStats.slice(1),
+  ].filter((s) => s.value !== "0");
 
   return (
-    <Section title={heading.title}>
-      <p className="-mt-4 mb-8 max-w-2xl text-sm text-muted-foreground">
-        {t("interviewsArticlesIntro")}
-      </p>
-      {items.length === 0 ? (
-        <EmptyNote>{t("emptyInterviews")}</EmptyNote>
-      ) : (
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {items.map((m) => (
-            <MediaCard key={m.id} item={m} />
-          ))}
-        </div>
+    <>
+      <Section title={heading.title}>
+        <p className="-mt-4 mb-8 max-w-2xl text-sm text-muted-foreground">
+          {t("interviewsArticlesIntro")}
+        </p>
+        {items.length > 0 && (
+          <div className="mb-14 -mx-5 md:mx-0">
+            <StatsMarquee stats={stats} label={heading.title} />
+          </div>
+        )}
+        {items.length === 0 && <EmptyNote>{t("emptyInterviews")}</EmptyNote>}
+
+        {videos.length > 0 && (
+          <>
+            <h3 className="mb-6 text-2xl">{t("videoInterviews")}</h3>
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {videos.map((m) => (
+                <VideoTile key={m.id} item={m} />
+              ))}
+            </div>
+          </>
+        )}
+      </Section>
+
+      {articles.length > 0 && (
+        <Section title={t("pressArticles")} className="!pt-0">
+          <ul className="divide-y divide-border rounded-md border border-border bg-card">
+            {articles.map((m) => (
+              <li key={m.id}>
+                <ArticleRow item={m} />
+              </li>
+            ))}
+          </ul>
+        </Section>
       )}
+    </>
+  );
+}
+
+function RichTextSection({
+  section,
+  profile,
+  socialLinks,
+}: {
+  section: ResolvedSection;
+  profile: PublicProfile | null;
+  socialLinks: { label: string; url: string }[];
+}) {
+  const { t, pick } = useLanguage();
+  const heading = useHeading(section, "biography");
+  const config = section.config as { contentEn?: string[]; showPortrait?: boolean };
+  const paragraphs = config.contentEn ?? [];
+
+  const text = (
+    <div
+      className="max-w-3xl space-y-4 text-[0.98rem] leading-relaxed text-muted-foreground"
+      dir="ltr"
+    >
+      {paragraphs.map((p) => (
+        <p key={p.slice(0, 24)} className="text-left">
+          {p}
+        </p>
+      ))}
+    </div>
+  );
+
+  if (!config.showPortrait) {
+    return <Section title={heading.title}>{text}</Section>;
+  }
+
+  // About page biography: text with a contact button and icons, portrait beside it.
+  return (
+    <Section title={heading.title}>
+      <div className="grid gap-12 md:grid-cols-[minmax(0,1fr)_300px]">
+        <div>
+          {text}
+          <div className="flex flex-wrap items-center gap-4 pt-8">
+            <Link
+              to="/contact"
+              className="inline-block rounded-sm bg-primary px-6 py-3 text-sm font-medium text-primary-foreground"
+            >
+              {t("contact")}
+            </Link>
+            {profile && (
+              <ContactIcons email={profile.email} phone={profile.phone} socialLinks={socialLinks} />
+            )}
+          </div>
+        </div>
+        <div className="order-first md:order-none">
+          <div className="mx-auto max-w-[280px] overflow-hidden rounded-md border border-border bg-white md:max-w-none">
+            <img
+              src={portrait}
+              alt={profile ? pick(profile.name, profile.nameAr) : ""}
+              width={502}
+              height={610}
+              className="aspect-[4/5] w-full object-cover object-top"
+            />
+          </div>
+        </div>
+      </div>
     </Section>
   );
 }
 
-function RichTextSection({ section }: { section: ResolvedSection }) {
-  const heading = useHeading(section, "biography");
-  const config = section.config as { contentEn?: string[] };
-  const paragraphs = config.contentEn ?? [];
+/** A highlighted quote on a dark band (About page). */
+function QuoteSection({ section }: { section: ResolvedSection }) {
+  const { language, pick } = useLanguage();
+  const c = section.config as {
+    textEn?: string;
+    textAr?: string;
+    attributionEn?: string;
+    attributionAr?: string;
+  };
+  const text = pick(c.textEn ?? "", c.textAr || c.textEn);
+  if (!text) return null;
+  const attribution = pick(c.attributionEn ?? "", c.attributionAr || c.attributionEn);
 
   return (
-    <Section title={heading.title}>
-      <div
-        className="max-w-3xl space-y-4 text-[0.98rem] leading-relaxed text-muted-foreground"
-        dir="ltr"
-      >
-        {paragraphs.map((p) => (
-          <p key={p.slice(0, 24)} className="text-left">
-            {p}
-          </p>
-        ))}
-      </div>
-    </Section>
+    <section className="bg-surface-deep text-surface-deep-foreground">
+      <figure className="mx-auto max-w-4xl px-5 py-16 text-center md:py-20">
+        <Quote className="mx-auto h-8 w-8 text-accent rtl:-scale-x-100" aria-hidden />
+        <blockquote className="mt-6 font-[family-name:var(--font-display)] text-xl leading-relaxed md:text-2xl">
+          {language === "ar" ? `«${text}»` : `“${text}”`}
+        </blockquote>
+        {attribution && (
+          <figcaption className="mt-6 text-sm opacity-70">— {attribution}</figcaption>
+        )}
+      </figure>
+    </section>
   );
 }
 
@@ -950,8 +1095,7 @@ function ContactBlockSection({
     <>
       <section className="border-b border-border bg-card">
         <div className="mx-auto max-w-6xl px-5 py-16 md:py-20">
-          <p className="eyebrow">{t("contact")}</p>
-          <h1 className="mt-3 text-3xl font-bold md:text-4xl">{t("letsConnect")}</h1>
+          <h1 className="text-3xl md:text-4xl">{t("letsConnect")}</h1>
           <p className="mt-4 max-w-2xl text-sm leading-relaxed text-muted-foreground md:text-base">
             {t("contactIntro")}
           </p>
