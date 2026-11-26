@@ -354,3 +354,22 @@ export const pageViewCounts = pgTable("page_view_counts", {
   count: integer("count").notNull().default(0),
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
 });
+
+// ---------------------------------------------------------------------------
+// Rate limiting (login, invite links, public forms)
+// ---------------------------------------------------------------------------
+
+/**
+ * One fixed-window counter per key, e.g. "login-ip:<sha256 of the IP>".
+ * Keys hold hashes, never raw IPs or emails. Rows older than a day are
+ * cleaned up by the limiter itself (see src/lib/rate-limit.server.ts).
+ */
+export const rateLimits = pgTable(
+  "rate_limits",
+  {
+    key: text("key").primaryKey(),
+    count: integer("count").notNull().default(0),
+    windowStart: timestamp("window_start", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [index("rate_limits_window_start_idx").on(t.windowStart)],
+);

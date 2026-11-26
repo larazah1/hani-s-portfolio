@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { Check, ChevronDown, ChevronUp, Plus, Trash2 } from "lucide-react";
+import { Check, ChevronDown, ChevronUp, Plus, Trash2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -47,6 +47,7 @@ function RecommendationsListPage() {
     mutationFn: (id: string) => deleteRecommendation({ data: { id } }),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ["recommendations"] });
+      void queryClient.invalidateQueries({ queryKey: ["pending-recommendation-count"] });
       setDeleteTarget(null);
     },
   });
@@ -61,6 +62,9 @@ function RecommendationsListPage() {
       void queryClient.invalidateQueries({ queryKey: ["pending-recommendation-count"] });
     },
   });
+
+  const rejecting =
+    !!deleteTarget && deleteTarget.submittedByPublic && deleteTarget.status !== "published";
 
   function moveRow(index: number, direction: -1 | 1) {
     const newIndex = index + direction;
@@ -152,16 +156,28 @@ function RecommendationsListPage() {
                     <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">{r.body}</p>
                   </div>
                   <div className="flex shrink-0 gap-2">
+                    {/* Left by a visitor on the public site: accept to show it
+                        on the website, or reject to delete it. */}
                     {isPending && (
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => approveMutation.mutate(r.id)}
-                        disabled={approveMutation.isPending}
-                      >
-                        <Check className="h-3.5 w-3.5" />
-                        نشر
-                      </Button>
+                      <>
+                        <Button
+                          size="sm"
+                          onClick={() => approveMutation.mutate(r.id)}
+                          disabled={approveMutation.isPending}
+                        >
+                          <Check className="h-3.5 w-3.5" />
+                          قبول
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setDeleteTarget(r)}
+                          className="text-destructive hover:text-destructive"
+                        >
+                          <X className="h-3.5 w-3.5" />
+                          رفض
+                        </Button>
+                      </>
                     )}
                     <Button variant="outline" size="sm" asChild>
                       <Link
@@ -171,9 +187,16 @@ function RecommendationsListPage() {
                         تعديل
                       </Link>
                     </Button>
-                    <Button variant="outline" size="sm" onClick={() => setDeleteTarget(r)}>
-                      <Trash2 className="h-3.5 w-3.5" />
-                    </Button>
+                    {!isPending && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setDeleteTarget(r)}
+                        aria-label="حذف"
+                      >
+                        <Trash2 className="h-3.5 w-3.5" />
+                      </Button>
+                    )}
                   </div>
                 </li>
               );
@@ -185,9 +208,14 @@ function RecommendationsListPage() {
       <AlertDialog open={!!deleteTarget} onOpenChange={(open) => !open && setDeleteTarget(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>هل تريد حذف هذه التوصية؟</AlertDialogTitle>
+            <AlertDialogTitle>
+              {rejecting ? "هل تريد رفض هذه التوصية؟" : "هل تريد حذف هذه التوصية؟"}
+            </AlertDialogTitle>
             <AlertDialogDescription>
-              {deleteTarget?.name} — لا يمكن التراجع عن هذا الإجراء.
+              {deleteTarget?.name} —{" "}
+              {rejecting
+                ? "سيتم حذفها ولن تظهر في الموقع. لا يمكن التراجع عن هذا الإجراء."
+                : "لا يمكن التراجع عن هذا الإجراء."}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -195,7 +223,7 @@ function RecommendationsListPage() {
             <AlertDialogAction
               onClick={() => deleteTarget && deleteMutation.mutate(deleteTarget.id)}
             >
-              حذف
+              {rejecting ? "رفض" : "حذف"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

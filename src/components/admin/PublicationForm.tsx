@@ -11,6 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { publicationTypeAr } from "@/lib/publication-i18n";
+import { findUnsafeField, unsafeFieldMessage } from "@/lib/text-validation";
 
 const PUBLICATION_TYPES = [
   "Journal Article",
@@ -64,6 +65,8 @@ export function PublicationForm({
   error: string | null;
 }) {
   const [form, setForm] = useState(initial);
+  const [clientError, setClientError] = useState<string | null>(null);
+  const shownError = clientError ?? error;
 
   function set<K extends keyof PublicationFormValues>(key: K, value: PublicationFormValues[K]) {
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -73,7 +76,9 @@ export function PublicationForm({
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        onSubmit(form);
+        const unsafe = findUnsafeField(form);
+        setClientError(unsafe ? unsafeFieldMessage(unsafe) : null);
+        if (!unsafe) onSubmit(form);
       }}
       className="max-w-3xl space-y-6"
     >
@@ -159,9 +164,9 @@ export function PublicationForm({
         </label>
       </div>
 
-      {error && (
+      {shownError && (
         <p className="rounded-md border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive">
-          {error}
+          {shownError}
         </p>
       )}
 

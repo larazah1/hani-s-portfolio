@@ -3,6 +3,7 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { ArrowUpRight, Compass, Loader2, X } from "lucide-react";
 import { useLanguage } from "@/lib/language";
 import { checkEmbeddable } from "@/server-fns/preview";
+import { safeFrameSrc, safeHref, safeMediaSrc } from "@/lib/safe-url";
 
 export type PreviewItem = {
   url: string;
@@ -87,7 +88,7 @@ function PreviewDialog({ item, onClose }: { item: PreviewItem | null; onClose: (
                   </Dialog.Description>
                 </div>
                 <a
-                  href={item.url}
+                  href={safeHref(item.url)}
                   target="_blank"
                   rel="noreferrer noopener"
                   aria-label={t("previewOpen")}
@@ -120,9 +121,9 @@ function PreviewDialog({ item, onClose }: { item: PreviewItem | null; onClose: (
                   <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
                   {t("previewLoading")}
                 </div>
-              ) : embeddable ? (
+              ) : embeddable && safeFrameSrc(item.url) ? (
                 <iframe
-                  src={item.url}
+                  src={safeFrameSrc(item.url)}
                   title={item.title}
                   referrerPolicy="no-referrer"
                   sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
@@ -130,9 +131,9 @@ function PreviewDialog({ item, onClose }: { item: PreviewItem | null; onClose: (
                 />
               ) : (
                 <div className="flex flex-col gap-5 overflow-auto p-5 sm:p-6">
-                  {item.image && (
+                  {safeMediaSrc(item.image) && (
                     <img
-                      src={item.image}
+                      src={safeMediaSrc(item.image)}
                       alt=""
                       className="aspect-video w-full rounded-2xl object-cover"
                     />
@@ -141,7 +142,7 @@ function PreviewDialog({ item, onClose }: { item: PreviewItem | null; onClose: (
                     {item.title}
                   </p>
                   <a
-                    href={item.url}
+                    href={safeHref(item.url)}
                     target="_blank"
                     rel="noreferrer noopener"
                     className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"

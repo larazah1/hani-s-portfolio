@@ -32,6 +32,7 @@ import {
 import { publicationTypeAr } from "@/lib/publication-i18n";
 import { deletePublication, listPublications } from "@/server-fns/publications";
 import { onRowClick, rowClickClass } from "@/components/admin/row-click";
+import { safeHref } from "@/lib/safe-url";
 
 export const Route = createFileRoute("/admin/_authed/publications/")({
   component: PublicationsListPage,
@@ -146,7 +147,7 @@ function PublicationsListPage() {
                     <div className="flex justify-end gap-2">
                       {p.url && (
                         <Button variant="outline" size="sm" asChild>
-                          <a href={p.url} target="_blank" rel="noreferrer noopener">
+                          <a href={safeHref(p.url)} target="_blank" rel="noreferrer noopener">
                             <ExternalLink className="h-3.5 w-3.5" />
                           </a>
                         </Button>

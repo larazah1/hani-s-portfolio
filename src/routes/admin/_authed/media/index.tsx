@@ -32,6 +32,7 @@ import {
 import { mediaTypeAr } from "@/lib/media-i18n";
 import { deleteMediaItem, listMedia } from "@/server-fns/media";
 import { onRowClick, rowClickClass } from "@/components/admin/row-click";
+import { safeHref } from "@/lib/safe-url";
 
 export const Route = createFileRoute("/admin/_authed/media/")({
   component: MediaListPage,
@@ -139,7 +140,11 @@ function MediaListPage() {
                       <div className="flex justify-end gap-2">
                         {primaryUrl && (
                           <Button variant="outline" size="sm" asChild>
-                            <a href={primaryUrl} target="_blank" rel="noreferrer noopener">
+                            <a
+                              href={safeHref(primaryUrl)}
+                              target="_blank"
+                              rel="noreferrer noopener"
+                            >
                               <ExternalLink className="h-3.5 w-3.5" />
                             </a>
                           </Button>

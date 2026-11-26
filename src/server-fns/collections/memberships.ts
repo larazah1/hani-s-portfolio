@@ -1,7 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { memberships } from "@/db/schema";
-import { safeString } from "@/lib/text-validation";
+import { safeString, uuidList, validateWith } from "@/lib/text-validation";
 import { requireAdmin } from "../require-admin";
 import {
   genericCreate,
@@ -24,7 +24,7 @@ const insertSchema = z.object({
 });
 const updateSchema = insertSchema.partial().and(z.object({ id: z.string().uuid() }));
 const idSchema = z.object({ id: z.string().uuid() });
-const reorderSchema = z.object({ orderedIds: z.array(z.string().uuid()) });
+const reorderSchema = z.object({ orderedIds: uuidList() });
 
 const list = createServerFn({ method: "GET" }).handler(async ({ context }) => {
   requireAdmin(context);
@@ -32,28 +32,28 @@ const list = createServerFn({ method: "GET" }).handler(async ({ context }) => {
 });
 
 const create = createServerFn({ method: "POST" })
-  .validator(insertSchema)
+  .validator(validateWith(insertSchema))
   .handler(async ({ data, context }) => {
     const admin = requireAdmin(context);
     return genericCreate(memberships, data, ENTITY_TYPE, admin.id, summarize);
   });
 
 const update = createServerFn({ method: "POST" })
-  .validator(updateSchema)
+  .validator(validateWith(updateSchema))
   .handler(async ({ data, context }) => {
     const admin = requireAdmin(context);
     return genericUpdate(memberships, data, ENTITY_TYPE, admin.id, summarize);
   });
 
 const remove = createServerFn({ method: "POST" })
-  .validator(idSchema)
+  .validator(validateWith(idSchema))
   .handler(async ({ data, context }) => {
     const admin = requireAdmin(context);
     return genericRemove(memberships, data.id, ENTITY_TYPE, admin.id, summarize);
   });
 
 const reorder = createServerFn({ method: "POST" })
-  .validator(reorderSchema)
+  .validator(validateWith(reorderSchema))
   .handler(async ({ data, context }) => {
     requireAdmin(context);
     return genericReorder(memberships, data.orderedIds);

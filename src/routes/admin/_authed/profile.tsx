@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { getProfile, updateProfile } from "@/server-fns/profile";
+import { findUnsafeField, unsafeFieldMessage } from "@/lib/text-validation";
 
 export const Route = createFileRoute("/admin/_authed/profile")({
   component: ProfilePage,
@@ -81,6 +82,7 @@ function ProfilePage() {
   const { data, isLoading } = useQuery({ queryKey: ["profile"], queryFn: () => getProfile() });
   const [form, setForm] = useState<FormState | null>(null);
   const [saved, setSaved] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
 
   useEffect(() => {
     if (data && !form) {
@@ -115,6 +117,7 @@ function ProfilePage() {
       setSaved(true);
       setTimeout(() => setSaved(false), 2500);
     },
+    onError: (e: Error) => setFormError(e.message || "حدث خطأ ما."),
   });
 
   if (isLoading || !form) {
@@ -138,7 +141,10 @@ function ProfilePage() {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          if (form) saveMutation.mutate(form);
+          if (!form) return;
+          const unsafe = findUnsafeField(form);
+          setFormError(unsafe ? unsafeFieldMessage(unsafe) : null);
+          if (!unsafe) saveMutation.mutate(form);
         }}
         className="mt-8 space-y-10"
       >
@@ -162,6 +168,7 @@ function ProfilePage() {
           </Button>
           {saved && <span className="text-sm text-muted-foreground">تم الحفظ.</span>}
         </div>
+        {formError && <p className="text-sm text-destructive">{formError}</p>}
       </form>
     </div>
   );
