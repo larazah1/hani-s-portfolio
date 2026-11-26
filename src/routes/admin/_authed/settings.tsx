@@ -68,8 +68,7 @@ function SettingsPage() {
 
   return (
     <div className="max-w-3xl">
-      <p className="eyebrow">إعدادات الموقع</p>
-      <h1 className="mt-2 font-[family-name:var(--font-display)] text-2xl font-semibold">
+      <h1 className="font-[family-name:var(--font-display)] text-2xl font-semibold">
         إعدادات الموقع
       </h1>
 

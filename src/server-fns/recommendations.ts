@@ -145,13 +145,11 @@ export const reorderRecommendations = createServerFn({ method: "POST" })
   .validator(z.object({ orderedIds: z.array(z.string().uuid()) }))
   .handler(async ({ data, context }) => {
     requireAdmin(context);
-    await db.transaction(async (tx) => {
-      for (const [index, id] of data.orderedIds.entries()) {
-        await tx
-          .update(recommendations)
-          .set({ sortOrder: index })
-          .where(eq(recommendations.id, id));
-      }
-    });
+    const updates = data.orderedIds.map((id, index) =>
+      db.update(recommendations).set({ sortOrder: index }).where(eq(recommendations.id, id)),
+    );
+    if (updates.length > 0) {
+      await db.batch(updates as [(typeof updates)[number], ...typeof updates]);
+    }
     return { ok: true } as const;
   });

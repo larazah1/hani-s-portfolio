@@ -160,10 +160,11 @@ export const reorderSections = createServerFn({ method: "POST" })
   .validator(reorderSectionsSchema)
   .handler(async ({ data, context }) => {
     requireAdmin(context);
-    await db.transaction(async (tx) => {
-      for (const [index, id] of data.orderedIds.entries()) {
-        await tx.update(sections).set({ sortOrder: index }).where(eq(sections.id, id));
-      }
-    });
+    const updates = data.orderedIds.map((id, index) =>
+      db.update(sections).set({ sortOrder: index }).where(eq(sections.id, id)),
+    );
+    if (updates.length > 0) {
+      await db.batch(updates as [(typeof updates)[number], ...typeof updates]);
+    }
     return { ok: true } as const;
   });

@@ -136,8 +136,7 @@ export function CollectionCrudScreen({
     <div>
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <p className="eyebrow">{title}</p>
-          <h1 className="mt-2 font-[family-name:var(--font-display)] text-2xl font-semibold">
+          <h1 className="font-[family-name:var(--font-display)] text-2xl font-semibold">
             {title}
           </h1>
           {description && <p className="mt-1 text-sm text-muted-foreground">{description}</p>}

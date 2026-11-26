@@ -29,6 +29,7 @@ import {
   summary,
   biography,
 } from "../src/content/site";
+import { importedMedia, importedPublications } from "./public-content-data";
 
 async function main() {
   const [existingPage] = await db.select({ id: schema.pages.id }).from(schema.pages).limit(1);
@@ -227,6 +228,29 @@ async function main() {
     )
     .returning({ id: schema.mediaItems.id });
   const mediaIdMap = new Map(media.map((m, i) => [m.id, insertedMedia[i]?.id]));
+
+  // Extra items from the public site repo that site.ts doesn't have.
+  console.log(
+    `Seeding ${importedPublications.length} publications + ${importedMedia.length} media from the public site...`,
+  );
+  if (importedPublications.length > 0) {
+    await db.insert(schema.publications).values(
+      importedPublications.map((p, i) => ({
+        ...p,
+        status: "published" as const,
+        sortOrder: publications.length + i,
+      })),
+    );
+  }
+  if (importedMedia.length > 0) {
+    await db.insert(schema.mediaItems).values(
+      importedMedia.map((m, i) => ({
+        ...m,
+        status: "published" as const,
+        sortOrder: media.length + i,
+      })),
+    );
+  }
 
   console.log(`Seeding ${recommendations.length} recommendations...`);
   const insertedRecommendations = await db

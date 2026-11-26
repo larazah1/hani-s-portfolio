@@ -635,6 +635,7 @@ export const media: MediaItem[] = [
     date: "n.d.",
     type: "Video",
     videoUrl: "https://www.youtube.com/watch?v=DMFNhK_j7xo",
+    thumbnail: "/media/interview-1.jpg",
     featured: true,
   },
   {
@@ -644,6 +645,7 @@ export const media: MediaItem[] = [
     date: "Jul 2024",
     type: "Video",
     videoUrl: "https://www.alekhbariya.net/ar/Video-Library/CORE9E3E0844F9F74A4BA464AA130BE6CBAE",
+    thumbnail: "/media/interview-5.jpg",
   },
   {
     id: "media-3",
@@ -652,6 +654,7 @@ export const media: MediaItem[] = [
     date: "Sep 12, 2023",
     type: "Interview",
     videoUrl: "https://slaati.com/2023/09/12/p2369452.html",
+    thumbnail: "/media/interview-6.jpg",
     articleUrl: "https://slaati.com/2023/09/12/p2369452.html",
     featured: true,
   },
@@ -662,6 +665,7 @@ export const media: MediaItem[] = [
     date: "n.d.",
     type: "Video",
     videoUrl: "https://www.youtube.com/watch?v=TubyV5nMH04",
+    thumbnail: "/media/interview-7.jpg",
   },
   {
     id: "media-5",
@@ -670,6 +674,7 @@ export const media: MediaItem[] = [
     date: "n.d.",
     type: "Video",
     videoUrl: "https://www.youtube.com/watch?v=RdKlU7qpFY8",
+    thumbnail: "/media/interview-3.jpg",
   },
   {
     id: "media-6",
@@ -678,6 +683,7 @@ export const media: MediaItem[] = [
     date: "n.d.",
     type: "Video",
     videoUrl: "https://www.youtube.com/watch?v=4zECbRTH_oE",
+    thumbnail: "/media/interview-4.jpg",
   },
   {
     id: "media-7",
@@ -686,6 +692,7 @@ export const media: MediaItem[] = [
     date: "n.d.",
     type: "Video",
     videoUrl: "https://www.youtube.com/watch?v=G6e2arbq_BU",
+    thumbnail: "/media/interview-2.jpg",
   },
   {
     id: "media-8",

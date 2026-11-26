@@ -52,10 +52,12 @@ export async function genericCreate(
     .select({ maxOrder: sql<number>`coalesce(max(${table.sortOrder}), -1)` })
     .from(table);
   const nextOrder = (row0?.maxOrder ?? -1) + 1;
-  const [row] = await db
+  // neon-http's types widen .returning() on a union table type; the runtime
+  // value is still the inserted-rows array.
+  const [row] = (await db
     .insert(table)
     .values({ ...data, sortOrder: nextOrder })
-    .returning();
+    .returning()) as Record<string, any>[];
   const savedRow = row as Record<string, any>;
   await logActivity(adminId, "created", entityType, String(savedRow["id"]), summarize(savedRow));
   return savedRow;
@@ -87,7 +89,10 @@ export async function genericRemove(
   adminId: string,
   summarize: (row: Record<string, any>) => string,
 ): Promise<{ ok: true }> {
-  const [row] = await db.delete(table).where(eq(table.id, id)).returning();
+  const [row] = (await db.delete(table).where(eq(table.id, id)).returning()) as Record<
+    string,
+    any
+  >[];
   if (row) {
     await logActivity(adminId, "deleted", entityType, id, summarize(row));
   }
@@ -98,10 +103,12 @@ export async function genericReorder(
   table: AnyOrderedTable,
   orderedIds: string[],
 ): Promise<{ ok: true }> {
-  await db.transaction(async (tx) => {
-    for (const [index, id] of orderedIds.entries()) {
-      await tx.update(table).set({ sortOrder: index }).where(eq(table.id, id));
-    }
-  });
+  // neon-http has no interactive transactions; db.batch runs atomically.
+  const updates = orderedIds.map((id, index) =>
+    db.update(table).set({ sortOrder: index }).where(eq(table.id, id)),
+  );
+  if (updates.length > 0) {
+    await db.batch(updates as [(typeof updates)[number], ...typeof updates]);
+  }
   return { ok: true };
 }

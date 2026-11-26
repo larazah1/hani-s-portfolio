@@ -85,13 +85,10 @@ export type PublicProfile = {
   cvUrl?: string | null;
 };
 
-function useHeading(section: ResolvedSection, eyebrowKey: DictionaryKey, titleKey: DictionaryKey) {
+function useHeading(section: ResolvedSection, titleKey: DictionaryKey) {
   const { t, pick } = useLanguage();
-  const eyebrow = section.eyebrow
-    ? pick(section.eyebrow, section.eyebrowAr ?? section.eyebrow)
-    : t(eyebrowKey);
   const title = section.title ? pick(section.title, section.titleAr ?? section.title) : t(titleKey);
-  return { eyebrow, title };
+  return { title };
 }
 
 const expertiseIcons: Record<string, LucideIcon> = {
@@ -221,14 +218,14 @@ function SummarySection({
   profile: PublicProfile | null;
 }) {
   const { t, pick } = useLanguage();
-  const heading = useHeading(section, "professionalSummary", "anOverview");
+  const heading = useHeading(section, "anOverview");
   const data = section.data as { currentRole: Record<string, unknown> | null } | null;
   const config = section.config as { contentEn?: string[] };
   const paragraphs = config.contentEn ?? [];
   const currentRole = data?.currentRole;
 
   return (
-    <Section eyebrow={heading.eyebrow} title={heading.title}>
+    <Section title={heading.title}>
       <div className="grid gap-10 lg:grid-cols-[1fr_300px]">
         <div
           className="max-w-3xl space-y-4 text-[0.98rem] leading-relaxed text-muted-foreground"
@@ -288,7 +285,7 @@ function StatsRowSection({ section }: { section: ResolvedSection }) {
 
 function CareerTimelineSection({ section }: { section: ResolvedSection }) {
   const { t, pick } = useLanguage();
-  const heading = useHeading(section, "career", "careerHighlights");
+  const heading = useHeading(section, "careerHighlights");
   const data = section.data as {
     career: Record<string, unknown>[];
     collaborations: Record<string, unknown>[];
@@ -297,7 +294,7 @@ function CareerTimelineSection({ section }: { section: ResolvedSection }) {
   const collaborations = data?.collaborations ?? [];
 
   return (
-    <Section eyebrow={heading.eyebrow} title={heading.title}>
+    <Section title={heading.title}>
       {career.length === 0 ? (
         <EmptyNote>{t("emptyCareer")}</EmptyNote>
       ) : (
@@ -355,11 +352,11 @@ function CareerTimelineSection({ section }: { section: ResolvedSection }) {
 
 function ExperienceTimelineSection({ section }: { section: ResolvedSection }) {
   const { t, pick } = useLanguage();
-  const heading = useHeading(section, "experience", "professionalExperience");
+  const heading = useHeading(section, "professionalExperience");
   const rows = (section.data as Record<string, unknown>[] | null) ?? [];
 
   return (
-    <Section eyebrow={heading.eyebrow} title={heading.title}>
+    <Section title={heading.title}>
       {rows.length === 0 ? (
         <EmptyNote>{t("emptyExperience")}</EmptyNote>
       ) : (
@@ -387,11 +384,11 @@ function ExperienceTimelineSection({ section }: { section: ResolvedSection }) {
 
 function ExpertiseGridSection({ section }: { section: ResolvedSection }) {
   const { pick } = useLanguage();
-  const heading = useHeading(section, "expertise", "keyExpertise");
+  const heading = useHeading(section, "keyExpertise");
   const rows = (section.data as Record<string, unknown>[] | null) ?? [];
 
   return (
-    <Section eyebrow={heading.eyebrow} title={heading.title}>
+    <Section title={heading.title}>
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
         {rows.map((e) => {
           const en = String(e["en"]);
@@ -415,11 +412,11 @@ function ExpertiseGridSection({ section }: { section: ResolvedSection }) {
 
 function EducationGridSection({ section }: { section: ResolvedSection }) {
   const { t, pick } = useLanguage();
-  const heading = useHeading(section, "education", "academicBackground");
+  const heading = useHeading(section, "academicBackground");
   const rows = (section.data as Record<string, unknown>[] | null) ?? [];
 
   return (
-    <Section eyebrow={heading.eyebrow} title={heading.title}>
+    <Section title={heading.title}>
       {rows.length === 0 ? (
         <EmptyNote>{t("emptyEducation")}</EmptyNote>
       ) : (
@@ -450,11 +447,11 @@ function EducationGridSection({ section }: { section: ResolvedSection }) {
 
 function MembershipsListSection({ section }: { section: ResolvedSection }) {
   const { t, pick } = useLanguage();
-  const heading = useHeading(section, "affiliations", "membershipsCommittees");
+  const heading = useHeading(section, "membershipsCommittees");
   const rows = (section.data as Record<string, unknown>[] | null) ?? [];
 
   return (
-    <Section eyebrow={heading.eyebrow} title={heading.title}>
+    <Section title={heading.title}>
       {rows.length === 0 ? (
         <EmptyNote>{t("emptyMemberships")}</EmptyNote>
       ) : (
@@ -485,13 +482,13 @@ const LIST_BLOCK_HEADINGS: Record<string, [DictionaryKey, DictionaryKey, Diction
 function ListBlockSection({ section }: { section: ResolvedSection }) {
   const { t, pick } = useLanguage();
   const collection = (section.config["collection"] as string) ?? "researchSpecialties";
-  const [eyebrowKey, titleKey, emptyKey] =
+  const [, titleKey, emptyKey] =
     LIST_BLOCK_HEADINGS[collection] ?? LIST_BLOCK_HEADINGS["researchSpecialties"]!;
-  const heading = useHeading(section, eyebrowKey, titleKey);
+  const heading = useHeading(section, titleKey);
   const rows = (section.data as Record<string, unknown>[] | null) ?? [];
 
   return (
-    <Section eyebrow={heading.eyebrow} title={heading.title}>
+    <Section title={heading.title}>
       {rows.length === 0 ? (
         <EmptyNote>{t(emptyKey)}</EmptyNote>
       ) : (
@@ -512,12 +509,11 @@ function ListBlockSection({ section }: { section: ResolvedSection }) {
 
 function PublicationsCarouselSection({ section }: { section: ResolvedSection }) {
   const { t } = useLanguage();
-  const heading = useHeading(section, "selectedResearch", "myPublications");
+  const heading = useHeading(section, "myPublications");
   const items = (section.data as Publication[] | null) ?? [];
 
   return (
     <Section
-      eyebrow={heading.eyebrow}
       title={heading.title}
       action={
         <Button asChild variant="outline" className="shrink-0">
@@ -552,7 +548,7 @@ function PublicationsCarouselSection({ section }: { section: ResolvedSection }) 
 
 function MediaCarouselSection({ section }: { section: ResolvedSection }) {
   const { t } = useLanguage();
-  const heading = useHeading(section, "media", "interviewsArticlesHeadline");
+  const heading = useHeading(section, "interviewsArticlesHeadline");
   const rows = (section.data as Record<string, unknown>[] | null) ?? [];
   const items: MediaItem[] = rows.map((m) => ({
     ...(m as unknown as MediaItem),
@@ -561,7 +557,6 @@ function MediaCarouselSection({ section }: { section: ResolvedSection }) {
 
   return (
     <Section
-      eyebrow={heading.eyebrow}
       title={heading.title}
       action={
         <Button asChild variant="outline" className="shrink-0">
@@ -595,12 +590,11 @@ function MediaCarouselSection({ section }: { section: ResolvedSection }) {
 
 function RecommendationsGridSection({ section }: { section: ResolvedSection }) {
   const { t } = useLanguage();
-  const heading = useHeading(section, "recommendations", "recommendationsHeadline");
+  const heading = useHeading(section, "recommendationsHeadline");
   const rows = (section.data as Record<string, unknown>[] | null) ?? [];
 
   return (
     <Section
-      eyebrow={heading.eyebrow}
       title={heading.title}
       action={
         <Link
@@ -655,7 +649,7 @@ type RecommendationFormValues = z.infer<typeof recommendationFormSchema>;
 
 function RecommendationFormSection({ section }: { section: ResolvedSection }) {
   const { t } = useLanguage();
-  const heading = useHeading(section, "recommendations", "shareYourExperience");
+  const heading = useHeading(section, "shareYourExperience");
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
 
   const form = useForm<RecommendationFormValues>({
@@ -675,7 +669,7 @@ function RecommendationFormSection({ section }: { section: ResolvedSection }) {
   }
 
   return (
-    <Section id="recommendation-form" eyebrow={heading.eyebrow} title={heading.title}>
+    <Section id="recommendation-form" title={heading.title}>
       <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground md:text-base">
         {t("recommendationFormIntro")}
       </p>
@@ -768,7 +762,7 @@ function RecommendationFormSection({ section }: { section: ResolvedSection }) {
 
 function PublicationsFullListSection({ section }: { section: ResolvedSection }) {
   const { t, pick } = useLanguage();
-  const heading = useHeading(section, "researchOutput", "publicationsHeadline");
+  const heading = useHeading(section, "publicationsHeadline");
   const allItems = (section.data as Publication[] | null) ?? [];
 
   const [query, setQuery] = useState("");
@@ -809,7 +803,7 @@ function PublicationsFullListSection({ section }: { section: ResolvedSection }) 
   ];
 
   return (
-    <Section eyebrow={heading.eyebrow} title={heading.title}>
+    <Section title={heading.title}>
       <p className="-mt-4 mb-8 max-w-2xl text-sm text-muted-foreground">
         {t("publicationsPageIntro")}
       </p>
@@ -872,7 +866,7 @@ function PublicationsFullListSection({ section }: { section: ResolvedSection }) 
 
 function MediaFullGridSection({ section }: { section: ResolvedSection }) {
   const { t } = useLanguage();
-  const heading = useHeading(section, "media", "interviewsArticlesHeadline");
+  const heading = useHeading(section, "interviewsArticlesHeadline");
   const rows = (section.data as Record<string, unknown>[] | null) ?? [];
   const items: MediaItem[] = rows.map((m) => ({
     ...(m as unknown as MediaItem),
@@ -880,7 +874,7 @@ function MediaFullGridSection({ section }: { section: ResolvedSection }) {
   }));
 
   return (
-    <Section eyebrow={heading.eyebrow} title={heading.title}>
+    <Section title={heading.title}>
       <p className="-mt-4 mb-8 max-w-2xl text-sm text-muted-foreground">
         {t("interviewsArticlesIntro")}
       </p>
@@ -898,12 +892,12 @@ function MediaFullGridSection({ section }: { section: ResolvedSection }) {
 }
 
 function RichTextSection({ section }: { section: ResolvedSection }) {
-  const heading = useHeading(section, "about", "biography");
+  const heading = useHeading(section, "biography");
   const config = section.config as { contentEn?: string[] };
   const paragraphs = config.contentEn ?? [];
 
   return (
-    <Section eyebrow={heading.eyebrow} title={heading.title}>
+    <Section title={heading.title}>
       <div
         className="max-w-3xl space-y-4 text-[0.98rem] leading-relaxed text-muted-foreground"
         dir="ltr"

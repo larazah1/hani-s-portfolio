@@ -16,8 +16,6 @@ import { listMedia } from "@/server-fns/media";
 import { listRecommendations } from "@/server-fns/recommendations";
 
 export type SectionEditorValues = {
-  eyebrow: string;
-  eyebrowAr: string;
   title: string;
   titleAr: string;
   config: Record<string, unknown>;
@@ -49,18 +47,6 @@ export function SectionEditor({
   return (
     <div className="space-y-5">
       <div className="grid gap-4 sm:grid-cols-2">
-        <div className="space-y-1.5">
-          <label className="text-sm font-medium">تجاوز النص التمهيدي</label>
-          <Input
-            value={values.eyebrow}
-            onChange={(e) => setField("eyebrow", e.target.value)}
-            placeholder="اتركه فارغًا لاستخدام القيمة الافتراضية"
-          />
-        </div>
-        <div className="space-y-1.5">
-          <label className="text-sm font-medium">تجاوز النص التمهيدي (بالعربية)</label>
-          <Input value={values.eyebrowAr} onChange={(e) => setField("eyebrowAr", e.target.value)} />
-        </div>
         <div className="space-y-1.5">
           <label className="text-sm font-medium">تجاوز العنوان</label>
           <Input

@@ -209,9 +209,8 @@ function PageSectionBuilder() {
                   <p className="text-sm font-medium">{SECTION_TYPE_LABELS[section.type]}</p>
                   {!section.visible && <Badge variant="outline">مخفي</Badge>}
                 </div>
-                {(section.title || section.eyebrow) && (
+                {section.title && (
                   <p className="truncate text-xs text-muted-foreground">
-                    {section.eyebrow ? `${section.eyebrow} — ` : ""}
                     {section.title}
                   </p>
                 )}
@@ -294,8 +293,6 @@ function SectionEditorPanel({
   onSave: (values: SectionEditorValues) => void;
 }) {
   const [values, setValues] = useState<SectionEditorValues>({
-    eyebrow: section.eyebrow ?? "",
-    eyebrowAr: section.eyebrowAr ?? "",
     title: section.title ?? "",
     titleAr: section.titleAr ?? "",
     config: section.config ?? {},

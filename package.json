@@ -14,10 +14,12 @@
     "db:migrate": "tsx --env-file=.env.local drizzle/migrate.ts",
     "db:studio": "node --env-file=.env.local node_modules/drizzle-kit/bin.cjs studio",
     "db:seed": "tsx --env-file=.env.local scripts/seed-admins.ts && tsx --env-file=.env.local scripts/seed-content.ts",
+    "db:import-public": "tsx --env-file=.env.local scripts/import-public-content.ts",
     "admin:reset-password": "tsx --env-file=.env.local scripts/reset-admin-password.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
+    "@neondatabase/serverless": "^1.2.1",
     "@radix-ui/react-accordion": "^1.2.12",
     "@radix-ui/react-alert-dialog": "^1.1.15",
     "@radix-ui/react-aspect-ratio": "^1.1.8",
