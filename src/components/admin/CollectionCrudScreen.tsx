@@ -4,6 +4,7 @@ import { ChevronDown, ChevronUp, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import {
   AlertDialog,
@@ -22,8 +23,11 @@ export type CrudRow = { id: string; sortOrder: number; [key: string]: unknown };
 export type CrudFieldConfig = {
   name: string;
   label: string;
-  type?: "text" | "textarea";
+  /** "switch" is an on/off toggle saved as a boolean. */
+  type?: "text" | "textarea" | "switch";
   required?: boolean;
+  /** Small hint shown under the field. */
+  hint?: string;
 };
 
 export function CollectionCrudScreen({
@@ -57,7 +61,7 @@ export function CollectionCrudScreen({
   function openAddDialog() {
     setEditingRow(null);
     const initial: Record<string, string> = {};
-    for (const f of fields) initial[f.name] = "";
+    for (const f of fields) initial[f.name] = f.type === "switch" ? "false" : "";
     setFormValues(initial);
     setFormError(null);
     setDialogOpen(true);
@@ -103,13 +107,19 @@ export function CollectionCrudScreen({
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setFormError(null);
-    const missing = fields.find((f) => f.required !== false && !(formValues[f.name] ?? "").trim());
+    const missing = fields.find(
+      (f) => f.type !== "switch" && f.required !== false && !(formValues[f.name] ?? "").trim(),
+    );
     if (missing) {
       setFormError(`حقل «${missing.label}» مطلوب.`);
       return;
     }
-    const payload: Record<string, string | undefined> = {};
+    const payload: Record<string, string | boolean | undefined> = {};
     for (const f of fields) {
+      if (f.type === "switch") {
+        payload[f.name] = formValues[f.name] === "true";
+        continue;
+      }
       const value = (formValues[f.name] ?? "").trim();
       payload[f.name] = value === "" ? undefined : value;
     }
@@ -202,7 +212,21 @@ export function CollectionCrudScreen({
             <DialogTitle>{editingRow ? `تعديل ${title}` : `إضافة ${title}`}</DialogTitle>
           </DialogHeader>
           <form onSubmit={handleSubmit} className="space-y-4">
-            {fields.map((f) => (
+            {fields.map((f) =>
+              f.type === "switch" ? (
+                <div key={f.name} className="space-y-1">
+                  <label className="flex items-center gap-2 text-sm font-medium">
+                    <Switch
+                      checked={formValues[f.name] === "true"}
+                      onCheckedChange={(v) =>
+                        setFormValues((vals) => ({ ...vals, [f.name]: String(v) }))
+                      }
+                    />
+                    {f.label}
+                  </label>
+                  {f.hint && <p className="text-xs text-muted-foreground">{f.hint}</p>}
+                </div>
+              ) : (
               <div key={f.name} className="space-y-1.5">
                 <label className="text-sm font-medium">{f.label}</label>
                 {f.type === "textarea" ? (
@@ -217,8 +241,10 @@ export function CollectionCrudScreen({
                     onChange={(e) => setFormValues((v) => ({ ...v, [f.name]: e.target.value }))}
                   />
                 )}
+                {f.hint && <p className="text-xs text-muted-foreground">{f.hint}</p>}
               </div>
-            ))}
+              ),
+            )}
             {formError && <p className="text-sm text-destructive">{formError}</p>}
             <div className="flex justify-end gap-2 pt-2">
               <Button type="button" variant="outline" onClick={() => setDialogOpen(false)}>

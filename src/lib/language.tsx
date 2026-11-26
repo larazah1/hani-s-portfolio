@@ -32,7 +32,12 @@ const dictionary = {
   anOverview: { en: "An overview", ar: "نظرة عامة" },
   currentRole: { en: "Current Role", ar: "المنصب الحالي" },
   career: { en: "Career", ar: "المسيرة المهنية" },
-  careerHighlights: { en: "Career highlights", ar: "أبرز محطات المسيرة المهنية" },
+  careerHighlights: {
+    en: "Three decades from field geophysics to national hazard leadership.",
+    ar: "ثلاثة عقود من الجيوفيزياء الميدانية إلى قيادة إدارة المخاطر الوطنية.",
+  },
+  viewCareer: { en: "Full career history", ar: "المسيرة المهنية كاملة" },
+  keyFigures: { en: "Key figures", ar: "أرقام رئيسية" },
   researchCollaboration: { en: "Research Collaboration", ar: "تعاون بحثي" },
   expertise: { en: "Expertise", ar: "مجالات الخبرة" },
   keyExpertise: { en: "Key expertise", ar: "أبرز مجالات الخبرة" },
@@ -225,6 +230,13 @@ const dictionary = {
   journalArticles: { en: "Journal Articles", ar: "المقالات العلمية" },
   scientificBooks: { en: "Scientific Books", ar: "الكتب العلمية" },
   reportsOther: { en: "Reports & Other", ar: "التقارير وغيرها" },
+  carouselPrev: { en: "Previous", ar: "السابق" },
+  carouselNext: { en: "Next", ar: "التالي" },
+  previewOpen: { en: "Open in browser", ar: "فتح في المتصفح" },
+  previewClose: { en: "Close", ar: "إغلاق" },
+  previewLoading: { en: "Loading preview…", ar: "جارٍ تحميل المعاينة…" },
+  videoInterviews: { en: "Video interviews", ar: "مقابلات مصوّرة" },
+  pressArticles: { en: "Press articles", ar: "مقالات صحفية" },
 } as const;
 
 export type DictionaryKey = keyof typeof dictionary;

@@ -1,4 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
+import { getRequestUrl } from "@tanstack/react-start/server";
 import { and, asc, eq, inArray, sql } from "drizzle-orm";
 import { z } from "zod";
 import { db } from "@/db/client";
@@ -47,7 +48,14 @@ export const getSiteChrome = createServerFn({ method: "GET" }).handler(async () 
     throw new Error("Site is not fully set up yet (missing profile or settings row).");
   }
 
-  return { profile: profileRow, settings: settingsRow, navPages, socialLinks: socialLinkRows };
+  return {
+    profile: profileRow,
+    settings: settingsRow,
+    navPages,
+    socialLinks: socialLinkRows,
+    // Used for absolute share-image URLs (og:image needs a full URL).
+    origin: getRequestUrl().origin,
+  };
 });
 
 const LIST_BLOCK_TABLES = {

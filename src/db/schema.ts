@@ -137,6 +137,8 @@ export const careerEntries = pgTable("career_entries", {
   endLabel: text("end_label").notNull(),
   description: text("description"),
   descriptionAr: text("description_ar"),
+  /** Shown as a step in the home page's career highlights. */
+  highlight: boolean("highlight").notNull().default(false),
 });
 
 export const collaborations = pgTable("collaborations", {

@@ -23,16 +23,26 @@ const careerFields = [
   },
 ];
 
+const careerEntryFields = [
+  ...careerFields,
+  {
+    name: "highlight",
+    label: "إظهار في أبرز المحطات (الصفحة الرئيسية)",
+    type: "switch" as const,
+    hint: "تظهر المناصب المميزة كخطوات مرقّمة في الصفحة الرئيسية. إن لم يُميَّز أي منصب، تظهر كلها.",
+  },
+];
+
 function CareerPage() {
   return (
     <div className="space-y-14">
       <CollectionCrudScreen
         queryKey="career-entries"
         title="أبرز المسيرة المهنية"
-        description="المناصب التي تظهر في الجدول الزمني بالصفحة الرئيسية وقائمة الخبرات في صفحة نبذة عني."
-        fields={careerFields}
+        description="كل المناصب تظهر في صفحة نبذة عني؛ المناصب المميزة (★) تظهر كخطوات في الصفحة الرئيسية."
+        fields={careerEntryFields}
         api={careerCrud}
-        getRowTitle={(row: CrudRow) => String(row["position"])}
+        getRowTitle={(row: CrudRow) => `${row["highlight"] ? "★ " : ""}${String(row["position"])}`}
         getRowSubtitle={(row: CrudRow) =>
           `${row["organization"]} · ${row["startLabel"]} — ${row["endLabel"]}`
         }

@@ -33,6 +33,7 @@ export const stats: Stat[] = [
   { label: "Citations", labelAr: "الاستشهادات", value: "1,218" },
   { label: "H-Index", labelAr: "مؤشر H", value: "22" },
   { label: "Scientific Books", labelAr: "الكتب العلمية", value: "2" },
+  { label: "Interviews & Articles", labelAr: "مقابلات ومقالات", value: "45+" },
 ];
 
 export type CareerEntry = {
@@ -44,6 +45,8 @@ export type CareerEntry = {
   end: string;
   description?: string;
   descriptionAr?: string;
+  /** Shown as a step in the home page's career highlights. */
+  highlight?: boolean;
 };
 
 const SGS = "Saudi Geological Survey";
@@ -51,6 +54,7 @@ const SGS_AR = "الهيئة السعودية للمساحة الجيولوجي�
 
 export const career: CareerEntry[] = [
   {
+    highlight: true,
     position: "Technical Advisor for the Vice President of Geological Programs",
     positionAr: "مستشار فني لنائب رئيس البرامج الجيولوجية",
     organization: SGS,
@@ -67,6 +71,7 @@ export const career: CareerEntry[] = [
     end: "Jul 2026",
   },
   {
+    highlight: true,
     position: "Manager of the Disaster and Crisis Center",
     positionAr: "مدير مركز الكوارث والأزمات",
     organization: SGS,
@@ -83,6 +88,7 @@ export const career: CareerEntry[] = [
     end: "Sep 2021",
   },
   {
+    highlight: true,
     position: "General Manager, National Center for Earthquake and Volcanoes",
     positionAr: "المدير العام للمركز الوطني للزلازل والبراكين",
     organization: SGS,
@@ -95,6 +101,7 @@ export const career: CareerEntry[] = [
       "قاد برامج المملكة العربية السعودية الوطنية لمراقبة الزلازل والبراكين، بما في ذلك تطوير الشبكة الوطنية السعودية لرصد الزلازل.",
   },
   {
+    highlight: true,
     position: "Head of Geophysical Exploration Department",
     positionAr: "رئيس قسم المسح الجيوفيزيائي",
     organization: SGS,
@@ -119,6 +126,7 @@ export const career: CareerEntry[] = [
     end: "1999",
   },
   {
+    highlight: true,
     position: "Geophysicist",
     positionAr: "جيوفيزيائي",
     organization: "French Geological Survey (BRGM)",
@@ -1156,3 +1164,11 @@ export const biography: string[] = [
   "He began his career as a Geophysicist with the French Geological Survey (BRGM) from 1993 to 1999, and has served as a Research Collaborator with the United States Geological Survey (USGS) since 2015. He holds a PhD in Geophysics and Seismology from King Abdulaziz University.",
   '"Understanding the forces that shape our planet not only prepares us for today\'s challenges but also empowers safeguarding the future."',
 ];
+
+// Shown as a highlighted quote band on the About page.
+export const quote = {
+  en: "Understanding the forces that shape our planet not only prepares us for the challenges of today but also empowers us to safeguard the future. Through rigorous research and collaboration, we unlock the potential to transform natural hazards into opportunities for growth and resilience.",
+  ar: "إن فهم القوى التي تُشكّل كوكبنا لا يُهيّئنا لتحديات اليوم فحسب، بل يُمكّننا من حماية المستقبل. ومن خلال البحث الدقيق والتعاون، نُطلق إمكانية تحويل المخاطر الطبيعية إلى فرص للنمو والصمود.",
+  attribution: "Dr. Hani Zahran",
+  attributionAr: "د. هاني زهران",
+};

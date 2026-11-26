@@ -19,6 +19,7 @@ export const SECTION_TYPES = [
   "publications-full-list",
   "media-full-grid",
   "rich-text",
+  "quote",
   "contact-block",
   "recommendation-form",
 ] as const;
@@ -41,6 +42,7 @@ export const SECTION_TYPE_LABELS: Record<SectionType, string> = {
   "publications-full-list": "القائمة الكاملة للمنشورات (مع الفلاتر)",
   "media-full-grid": "الشبكة الكاملة للوسائط",
   "rich-text": "كتلة نص منسق",
+  quote: "اقتباس مميز",
   "contact-block": "نموذج ومعلومات التواصل",
   "recommendation-form": "نموذج إرسال توصية",
 };
@@ -58,5 +60,6 @@ export const GENERAL_PURPOSE_SECTION_TYPES: SectionType[] = [
   "media-carousel",
   "recommendations-grid",
   "rich-text",
+  "quote",
   "recommendation-form",
 ];

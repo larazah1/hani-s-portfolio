@@ -5,6 +5,48 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
+ * Thmanyah (ثمانية) typeface, bundled by Vite from src/assets/fonts/thmanyah/
+ * (hashed into the build rather than served as plain public files).
+ * Source: thmanyah.com. See its license before reusing the files elsewhere.
+ */
+@font-face {
+  font-family: "Thmanyah Sans";
+  src: url("./assets/fonts/thmanyah/thmanyahsans-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Thmanyah Sans";
+  src: url("./assets/fonts/thmanyah/thmanyahsans-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Thmanyah Sans";
+  src: url("./assets/fonts/thmanyah/thmanyahsans-Bold.woff2") format("woff2");
+  font-weight: 600 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Thmanyah Serif Display";
+  src: url("./assets/fonts/thmanyah/thmanyahserifdisplay-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Thmanyah Serif Display";
+  src: url("./assets/fonts/thmanyah/thmanyahserifdisplay-Medium.woff2") format("woff2");
+  font-weight: 500 600;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Thmanyah Serif Display";
+  src: url("./assets/fonts/thmanyah/thmanyahserifdisplay-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-display: swap;
+}
+
+/*
  * Design system definition.
  *
  * The @theme inline block maps CSS custom properties to Tailwind utility
@@ -22,6 +64,7 @@
   --font-display: var(--font-display);
   --font-body: var(--font-body);
   --color-surface-deep: var(--surface-deep);
+  --color-brand-blue: var(--brand-blue);
   --color-surface-deep-foreground: var(--surface-deep-foreground);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -87,9 +130,11 @@
   --input: oklch(0.9 0.012 90);
   --ring: oklch(0.72 0.09 75);
   --surface-deep: oklch(0.22 0.035 258);
+  /* Brighter version of the hero navy, for figures that should stand out. */
+  --brand-blue: oklch(0.45 0.14 258);
   --surface-deep-foreground: oklch(0.95 0.01 95);
-  --font-display: "Instrument Serif", Georgia, serif;
-  --font-body: "Work Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
   --shadow-soft:
     0 1px 2px oklch(0.24 0.03 255 / 0.05), 0 8px 24px -16px oklch(0.24 0.03 255 / 0.25);
   --chart-1: oklch(0.646 0.222 41.116);
@@ -105,11 +150,6 @@
   --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
   --sidebar-border: oklch(0.929 0.013 255.508);
   --sidebar-ring: oklch(0.704 0.04 256.788);
-}
-
-html[dir="rtl"] {
-  --font-display: "Cairo", "Work Sans", ui-sans-serif, system-ui, sans-serif;
-  --font-body: "Cairo", ui-sans-serif, system-ui, sans-serif;
 }
 
 .dark {
@@ -163,15 +203,8 @@ html[dir="rtl"] {
   h2,
   h3 {
     font-family: var(--font-display);
-    font-weight: 400;
-    letter-spacing: -0.01em;
-  }
-
-  html[dir="rtl"] h1,
-  html[dir="rtl"] h2,
-  html[dir="rtl"] h3 {
-    font-weight: 600;
-    letter-spacing: 0;
+    font-weight: 500;
+    letter-spacing: -0.02em;
   }
 }
 
@@ -182,30 +215,224 @@ html[dir="rtl"] {
   color: var(--muted-foreground);
 }
 
-/* Letter-spacing and uppercase transforms break Arabic glyph joining. */
-html[dir="rtl"] .eyebrow {
+/* Arabic uses Thmanyah, falling back to IBM Plex Sans Arabic while it loads. */
+html[lang="ar"] {
+  --font-display: "Thmanyah Serif Display", "IBM Plex Sans Arabic", "IBM Plex Sans", sans-serif;
+  --font-body: "Thmanyah Sans", "IBM Plex Sans Arabic", "IBM Plex Sans", sans-serif;
+}
+
+/* Arabic: letter-spacing and uppercase break connected Arabic script. */
+[dir="rtl"] h1,
+[dir="rtl"] h2,
+[dir="rtl"] h3 {
+  letter-spacing: 0;
+  line-height: 1.4;
+}
+
+[dir="rtl"] .eyebrow {
   letter-spacing: 0;
   text-transform: none;
+  font-size: 0.8rem;
 }
 
-/* Restrained topographic-contour motif for dark surfaces. */
-@utility bg-contour-pattern {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='160' viewBox='0 0 240 160'%3E%3Cg fill='none' stroke='%23ffffff' stroke-opacity='0.05' stroke-width='1'%3E%3Cpath d='M-20 30 Q 40 5 100 30 T 220 30 T 340 30'/%3E%3Cpath d='M-20 70 Q 40 45 100 70 T 220 70 T 340 70'/%3E%3Cpath d='M-20 110 Q 40 85 100 110 T 220 110 T 340 110'/%3E%3Cpath d='M-20 150 Q 40 125 100 150 T 220 150 T 340 150'/%3E%3C/g%3E%3C/svg%3E");
-  background-repeat: repeat;
+[dir="rtl"] body {
+  line-height: 1.8;
 }
 
-/* Continuous horizontal scroll for the homepage stats ticker. Content is
-   rendered twice back-to-back and the track slides exactly one copy's
-   width (-50%) so the loop point is invisible. */
-@keyframes marquee {
-  from {
-    transform: translateX(0);
-  }
+/* Key-figures row under the hero: seamless, continuous loop. */
+@keyframes marquee-ltr {
   to {
     transform: translateX(-50%);
   }
 }
+@keyframes marquee-rtl {
+  to {
+    transform: translateX(50%);
+  }
+}
+.marquee-track {
+  animation: marquee-ltr 45s linear infinite;
+}
+[dir="rtl"] .marquee-track {
+  animation-name: marquee-rtl;
+}
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+  }
+}
 
-@utility animate-marquee {
-  animation: marquee 22s linear infinite;
+/* Career steps (home): numbered dots on a line that fills as you scroll.
+   Vertical on phones, a single row on desktop. */
+.steps-eyebrow {
+  display: inline-flex;
+  gap: 0.375rem;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+.steps-list {
+  position: relative;
+  display: grid;
+  gap: 2.5rem;
+  margin-top: 4rem;
+  padding-inline-start: 3.5rem;
+  list-style: none;
+}
+.steps-line,
+.steps-progress {
+  position: absolute;
+  inset-inline-start: 19px;
+  top: 0.5rem;
+  bottom: 0.5rem;
+  width: 1px;
+  background: var(--border);
+}
+.steps-progress {
+  background: var(--surface-deep);
+  transform-origin: top;
+}
+.steps-item {
+  position: relative;
+}
+.steps-dot {
+  position: absolute;
+  inset-inline-start: -3.5rem;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  border: 1px solid var(--surface-deep);
+  background: var(--surface-deep);
+  color: var(--surface-deep-foreground);
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 12px;
+}
+.steps-list.is-animated .steps-dot {
+  background: var(--background);
+  color: var(--muted-foreground);
+  border-color: var(--border);
+  transition:
+    background-color 0.4s,
+    color 0.4s,
+    border-color 0.4s;
+}
+.steps-list.is-animated .steps-dot.is-on {
+  background: var(--surface-deep);
+  color: var(--surface-deep-foreground);
+  border-color: var(--surface-deep);
+}
+.steps-list:not(.is-animated) .steps-progress {
+  transform: none !important;
+}
+.steps-reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition:
+    opacity 1.1s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 1.1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.steps-reveal.is-shown {
+  opacity: 1;
+  transform: none;
+}
+@media (min-width: 64rem) {
+  .steps-list {
+    grid-template-columns: repeat(var(--steps, 4), minmax(0, 1fr));
+    gap: 2rem;
+    padding-inline-start: 0;
+    padding-top: 4rem;
+    margin-top: 5rem;
+  }
+  .steps-line,
+  .steps-progress {
+    inset-inline: 0;
+    top: 19px;
+    bottom: auto;
+    width: auto;
+    height: 1px;
+  }
+  .steps-progress {
+    transform-origin: left;
+  }
+  [dir="rtl"] .steps-progress {
+    transform-origin: right;
+  }
+  .steps-dot {
+    inset-inline-start: 0;
+    top: -4rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .steps-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+[dir="rtl"] .steps-eyebrow {
+  letter-spacing: 0;
+  text-transform: none;
+  font-family: var(--font-body);
+}
+
+/* Side layout (About): one column of steps filling downwards; on desktop the
+   heading stays in view beside it. */
+.steps-side .steps-list {
+  gap: 2rem;
+}
+.steps-side .steps-dot {
+  top: -0.4rem;
+}
+@media (min-width: 64rem) {
+  .steps-side .steps-wrap {
+    display: grid;
+    grid-template-columns: 5fr 7fr;
+    gap: 4rem;
+    align-items: start;
+  }
+  .steps-side .steps-head {
+    position: sticky;
+    top: 8rem;
+  }
+  .steps-side .steps-list {
+    grid-template-columns: none;
+    margin-top: 0;
+    padding-top: 0;
+    padding-inline-start: 3.5rem;
+  }
+  .steps-side .steps-line,
+  .steps-side .steps-progress {
+    inset-inline: auto;
+    inset-inline-start: 19px;
+    top: 0.5rem;
+    bottom: 0.5rem;
+    width: 1px;
+    height: auto;
+  }
+  .steps-side .steps-progress,
+  [dir="rtl"] .steps-side .steps-progress {
+    transform-origin: top;
+  }
+  .steps-side .steps-dot {
+    inset-inline-start: -3.5rem;
+    top: -0.4rem;
+  }
+}
+.steps-side .steps-item p {
+  max-width: none;
+}
+
+/* Restrained topographic-contour motif for dark surfaces (footer). */
+@utility bg-contour-pattern {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='160' viewBox='0 0 240 160'%3E%3Cg fill='none' stroke='%23ffffff' stroke-opacity='0.05' stroke-width='1'%3E%3Cpath d='M-20 30 Q 40 5 100 30 T 220 30 T 340 30'/%3E%3Cpath d='M-20 70 Q 40 45 100 70 T 220 70 T 340 70'/%3E%3Cpath d='M-20 110 Q 40 85 100 110 T 220 110 T 340 110'/%3E%3Cpath d='M-20 150 Q 40 125 100 150 T 220 150 T 340 150'/%3E%3C/g%3E%3C/svg%3E");
+  background-repeat: repeat;
 }

@@ -16,6 +16,7 @@ import { SiteFooter } from "../components/site/SiteFooter";
 import { Toaster } from "../components/ui/sonner";
 import { LanguageProvider, useLanguage } from "../lib/language";
 import { getSiteChrome } from "../server-fns/public-content";
+import { PreviewProvider } from "../components/site/LinkPreview";
 
 // Runs before hydration so a stored Arabic preference applies immediately,
 // avoiding a flash of LTR content on repeat visits. Skipped for /admin/* —
@@ -88,7 +89,7 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
 }
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
-  head: () => ({
+  head: ({ loaderData }) => ({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
@@ -100,20 +101,28 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { name: "author", content: "Dr. Hani Mahmoud Zahran" },
       { property: "og:type", content: "website" },
+      { property: "og:site_name", content: "Dr. Hani Mahmoud Zahran" },
+      { property: "og:image", content: `${loaderData?.origin ?? ""}/og-image.jpg` },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:image", content: `${loaderData?.origin ?? ""}/og-image.jpg` },
+      { name: "theme-color", content: "#1b2333" },
     ],
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Work+Sans:wght@300;400;500;600&family=Cairo:wght@400;500;600;700&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@400;500;600&display=swap",
       },
       {
         rel: "stylesheet",
         href: appCss,
       },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "icon", href: "/favicon.ico", sizes: "32x32" },
+      { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
+      { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
     ],
   }),
   loader: async () => await getSiteChrome(),
@@ -154,18 +163,20 @@ function RootComponent() {
           // (or the shared admin layout) supplies its own chrome.
           <Outlet />
         ) : (
-          <div className="flex min-h-screen flex-col">
-            <SiteHeader profile={chrome.profile} navPages={chrome.navPages} />
-            <main className="flex-1">
-              {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-              <Outlet />
-            </main>
-            <SiteFooter
-              profile={chrome.profile}
-              navPages={chrome.navPages}
-              socialLinks={chrome.socialLinks}
-            />
-          </div>
+          <PreviewProvider>
+            <div className="flex min-h-screen flex-col">
+              <SiteHeader profile={chrome.profile} navPages={chrome.navPages} />
+              <main className="flex-1">
+                {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+                <Outlet />
+              </main>
+              <SiteFooter
+                profile={chrome.profile}
+                navPages={chrome.navPages}
+                socialLinks={chrome.socialLinks}
+              />
+            </div>
+          </PreviewProvider>
         )}
         <Toaster />
       </LanguageProvider>

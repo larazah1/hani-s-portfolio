@@ -26,8 +26,8 @@ import {
   researchSpecialties,
   socialLinks,
   stats,
-  summary,
   biography,
+  quote,
 } from "../src/content/site";
 import { importedMedia, importedPublications } from "./public-content-data";
 
@@ -103,6 +103,7 @@ async function main() {
       endLabel: c.end,
       description: c.description ?? null,
       descriptionAr: c.descriptionAr ?? null,
+      highlight: c.highlight ?? false,
       sortOrder: i,
     })),
   );
@@ -345,7 +346,6 @@ async function main() {
       "Portfolio of Dr. Hani Mahmoud Zahran: research in seismology, seismic hazard assessment, volcanology and disaster risk reduction.",
     sectionRows: [
       { type: "hero" },
-      { type: "summary", config: { contentEn: summary } },
       { type: "stats-row" },
       { type: "career-timeline", config: { showCollaborations: true } },
       { type: "expertise-grid" },
@@ -364,12 +364,21 @@ async function main() {
     sortOrder: 1,
     metaTitle: "About — Dr. Hani Mahmoud Zahran",
     metaDescription:
-      "Biography, education, experience, research specialties, memberships and scientific activities of Dr. Hani Mahmoud Zahran.",
+      "Biography, experience, education, expertise, memberships and scientific activities of Dr. Hani Mahmoud Zahran.",
     sectionRows: [
-      { type: "rich-text", config: { contentEn: biography } },
-      { type: "education-grid" },
+      { type: "rich-text", config: { contentEn: biography, showPortrait: true } },
+      {
+        type: "quote",
+        config: {
+          textEn: quote.en,
+          textAr: quote.ar,
+          attributionEn: quote.attribution,
+          attributionAr: quote.attributionAr,
+        },
+      },
       { type: "experience-timeline" },
-      { type: "list-block", config: { collection: "researchSpecialties" } },
+      { type: "education-grid" },
+      { type: "expertise-grid", config: { layout: "chips" } },
       { type: "memberships-list" },
       { type: "list-block", config: { collection: "activities" } },
       { type: "list-block", config: { collection: "languagesList" } },

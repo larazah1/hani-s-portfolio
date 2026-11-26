@@ -24,6 +24,7 @@ const insertSchema = z.object({
   endLabel: safeString(50, 1),
   description: safeString(4000).optional(),
   descriptionAr: safeString(4000).optional(),
+  highlight: z.boolean().optional(),
 });
 const updateSchema = insertSchema.partial().and(z.object({ id: z.string().uuid() }));
 const idSchema = z.object({ id: z.string().uuid() });
